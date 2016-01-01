@@ -45,9 +45,10 @@ class ToolsController extends Controller {
 	{
 		$target_path = normalize_path(APPPATH.'../static');
 		$link_path = normalize_path(APPPATH . 'static/common');
+		@$this->_symlink($target_path, $link_path);
 
-		@unlink($link_path);@rmdir($link_path);
-
+		$target_path = normalize_path(PLUGINSPATH.'static');
+		$link_path = normalize_path(APPPATH . 'static/plugins');
 		@$this->_symlink($target_path, $link_path);
 
 		return $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功'), FALSE);
@@ -55,6 +56,7 @@ class ToolsController extends Controller {
 
 	private function _symlink($target_path, $link_path)
 	{
+		@unlink($link_path);@rmdir($link_path);
 		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' && version_compare(php_uname('r'), '6.0', '<')) { //Windows Vista以下
 			exec('"'.APPPATH.'../static/bin/junction.exe" -d "'.$link_path.'"');
 			exec('"'.APPPATH.'../static/bin/junction.exe" '.$link_path.'" "'.$target_path.'"');

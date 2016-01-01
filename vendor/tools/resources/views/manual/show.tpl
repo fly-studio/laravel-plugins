@@ -1,7 +1,7 @@
 <{extends file="extends/main.block.tpl"}>
 
 <{block "head-styles-plus"}>
-<link rel="stylesheet" href="<{'static/css/bootstrap-sidebar/sb-admin-2.css'|url}>" />
+<link rel="stylesheet" href="<{'plugins/css/tools/bootstrap-sidebar/sb-admin-2.css'|url}>" />
 <link rel="stylesheet" href="<{'static/js/editor.md/css/editormd.preview.css'|url}>" />
 <link rel="stylesheet" href="<{'static/css/font-awesome.min.css'|url}>" />
 <style>
