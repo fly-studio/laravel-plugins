@@ -1,0 +1,43 @@
+<?php
+namespace Plugins\Attachment;
+
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+
+class ServiceProvider extends BaseServiceProvider
+{
+	/**
+	 * 指定是否延缓提供者加载。
+	 *
+	 * @var bool
+	 */
+	protected $defer = true;
+	/**
+	 * Register the service provider.
+	 *
+	 * @return void
+	 */
+	public function register()
+	{
+		$this->mergeConfigFrom(__DIR__ . '/config/attachment.php', 'attachment');
+	}
+	/**
+	 * Bootstrap the application events.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+
+		
+	}
+
+	/**
+	 * Get the services provided by the provider.
+	 *
+	 * @return array
+	 */
+	public function provides()
+	{
+		return [];
+	}
+}
