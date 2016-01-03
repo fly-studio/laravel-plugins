@@ -9,4 +9,7 @@ return [
 	'routeMiddleware' => [
 		'wechat.account' => \Plugins\Wechat\App\Http\Middleware\WechatAccount::class,
 	],
+	'injectViews' => [
+		'admin/sidebar.inc.tpl',
+	],
 ];
