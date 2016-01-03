@@ -40,7 +40,7 @@ class AttachmentController extends Controller {
 		$attachment = $this->model->get($id);
 
 		if (empty($attachment))
-			return $this->failure('attachment.failure_noexists')->setStatusCode(404);
+			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
 	
 		//获取远程文件
 		$attachment->sync();
@@ -64,7 +64,7 @@ class AttachmentController extends Controller {
 
 		$attachment = $this->model->get($id);
 		if (empty($attachment))
-			return $this->failure('attachment.failure_noexists')->setStatusCode(404);
+			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
 
 		return $this->success('', TRUE, $attachment->toArray());
 	}
@@ -78,7 +78,7 @@ class AttachmentController extends Controller {
 		$attachment = $this->model->get($id);
 
 		if (empty($attachment))
-			return $this->failure('attachment.failure_noexists')->setStatusCode(404);
+			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
 		
 
 		if ($attachment->file_type() == 'image')
@@ -108,11 +108,11 @@ class AttachmentController extends Controller {
 		$attachment = $this->model->get($id);
 
 		if (empty($attachment))
-			return $this->failure('attachment.failure_noexists')->setStatusCode(404);
+			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
 		
 
 		if ($attachment->file_type() != 'image')
-			return $this->failure('attachment.failure_resize');
+			return $this->failure('attachment::attachment.failure_resize');
 
 
 		//获取远程文件
@@ -149,7 +149,7 @@ class AttachmentController extends Controller {
 		$attachment = $this->model->get($id);
 
 		if (empty($attachment))
-			return $this->failure('attachment.failure_noexists')->setStatusCode(404);
+			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
 		
 
 		if ($attachment->file_type() == 'image')
@@ -167,7 +167,7 @@ class AttachmentController extends Controller {
 		$attachment = $this->model->get($id);
 
 		if (empty($attachment))
-			return $this->failure('attachment.failure_noexists')->setStatusCode(404);
+			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
 
 		//获取远程文件
 		$attachment->sync();
@@ -190,7 +190,7 @@ class AttachmentController extends Controller {
 		$link_path = $this->model->get($id)->get_symlink_url();
 
 		if (empty($link_path))
-			return $this->failure('attachment.failure_noexists')->setStatusCode(404);
+			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
 
 		return redirect($link_path);
 	}
@@ -409,6 +409,6 @@ class AttachmentController extends Controller {
 	{
 		$_config = config('attachment');
 		$_data =  ['maxsize' => $_config['maxsize'], 'ext' => implode(',', $_config['ext'])];
-		return Lang::has($message = 'attachment.'.$message_field.'.content') ? trans($message, $_data) : trans('core::common.'.$message.'.content', $_data);
+		return Lang::has($message = 'attachment.'.$message_field.'.content') ? trans($message, $_data) : trans('attachment::'.$message.'.content', $_data);
 	}
 }
