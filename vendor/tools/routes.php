@@ -1,7 +1,7 @@
 <?php
 
 $router->resource('manual', 'ManualController');
-$router->addUnActionRoutes([
+$router->addAnyActionRoutes([
 	'tools',
 	'placeholder',
 	'qr',

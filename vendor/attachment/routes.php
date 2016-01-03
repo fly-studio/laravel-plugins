@@ -6,6 +6,6 @@ $router->get('attachment/{id}/{filename}', function($id, $filename){
 	return $obj->callAction('index', [$id]);
 });
 
-$router->addUnActionRoutes([
+$router->addAnyActionRoutes([
 	'attachment',
 ]);
