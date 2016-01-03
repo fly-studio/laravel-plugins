@@ -9,4 +9,3 @@
 		<li><a href="<{'admin/wechat/message'|url}>" name="wechat/message/list">消息管理</a></li>
 	</ul>
 </li>
-<{pluginclude }>
