@@ -14,6 +14,7 @@ $router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['au
 			'menu' => 'MenuController',
 			'message' => 'MessageController',
 			'reply' => 'ReplyController',
+			'statement' => 'StatementController',
 		]);
 	});
 });
