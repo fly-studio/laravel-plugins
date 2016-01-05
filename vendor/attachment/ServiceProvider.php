@@ -18,7 +18,7 @@ class ServiceProvider extends BaseServiceProvider
 	 */
 	public function register()
 	{
-		$this->mergeConfigFrom(__DIR__ . '/config/attachment.php', 'attachment');
+
 	}
 	/**
 	 * Bootstrap the application events.
@@ -27,7 +27,6 @@ class ServiceProvider extends BaseServiceProvider
 	 */
 	public function boot()
 	{
-
 		
 	}
 

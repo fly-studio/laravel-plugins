@@ -5,5 +5,9 @@ return [
 		'translator' => true,
 		'router' => true,
 		'validation' => false,
+		'config' => true,
+	],
+	'config' => [
+		'attachment'
 	],
 ];
