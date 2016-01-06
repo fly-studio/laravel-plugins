@@ -74,7 +74,7 @@
 					<div class="form-group">
 						<label class="col-md-3 control-label" for="name">待转移的组名</label>
 						<div class="col-md-9">
-							<select class="form-control select-model" style="width:80%" name="role_id" id="role_id" data-model="role" data-id="{id}" data-text="{display_name}({name})" ></select>
+							<select class="form-control select-model" style="width:80%" name="role_id" id="role_id" data-model="admin/role" data-text="{display_name}({name})" ></select>
 							<span class="help-block">(*) 删除用户组，需要将组下的用户转移到其它组</span>
 						</div>
 					</div>		
