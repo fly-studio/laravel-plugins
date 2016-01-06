@@ -6,6 +6,7 @@ use App\Role;
 use Plugins\Wechat\App\WechatAccount;
 use Plugins\Wechat\App\Tools\API;
 use Plugins\Wechat\App\Tools\OAuth2;
+use Plugins\Wechat\App\Tools\Js;
 class WechatOAuth2Controller extends Controller {
 
 	public $wechat_oauth2_account = NULL;
@@ -40,6 +41,14 @@ class WechatOAuth2Controller extends Controller {
 	public function getWechatUser()
 	{
 		return $this->wechatUser;
+	}
+
+	public function getJsParameters($url = NULL)
+	{
+		$account = WechatAccount::findOrFail($this->wechat_oauth2_account);
+		$js = new Js($account->toArray(), $account->getKey());
+
+		return $js->getConfig($url);
 	}
 
 }
