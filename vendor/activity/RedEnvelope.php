@@ -17,7 +17,7 @@ class RedEnvelope {
     //商品SIZE显示
     function product_size_decorate(ProductSize $size,$htmlShow=false){
        if($htmlShow)
-           $size->price = $size->price.'(红包可抵券)';
+           $size->price = $size->price.'(可使用红包)';
         return $size;
     }
     //商品显示
