@@ -1,5 +1,5 @@
 <?php
-namespace Addons\Core\Controllers;
+namespace Plugins\Wechat\App\Http\Controllers;
 
 use Addons\Core\Controllers\Controller;
 use App\Role;
