@@ -6,4 +6,7 @@ return [
 		'router' => true,
 		'validation' => true,
 	],
+	'routeMiddleware' => [
+		'local' => '\\Plugins\\Tools\\App\\Http\\Middleware\\Local',
+	],
 ];

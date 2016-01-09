@@ -1,0 +1,17 @@
+.console {position: fixed;bottom:0;left: 0;right: 0;width: 100%;height:200px;background-color: #000;z-index:99999;}
+.console .toolbar {height:25px;background-color: #fff;border: 2px #ccc solid;font-weight: block;font-size: 12px;line-height: 23px;padding: 0 10px;}
+
+.console .view {position: absolute;top:27px;left:0;right:0;width:100%;bottom: 35px;overflow: auto;}
+.console .view code {width: 100%;display: block;background-color: transparent;white-space: nowrap}
+.console .view code .command{color:lightgreen;}
+.console .view code .command{color:lightgreen;}
+
+.console .control {position: absolute;left:0;right:0;width:100%;bottom:0px;height: 35px;}
+.console .control .form-group {height: 34px;width: 100%;color:lightgreen;border:0 none;border-top:#ccc solid 1px;}
+.console .control .form-group .input-group{border:0 none;}
+.console .control .form-group .input-group-addon{background-color: transparent;color:lightgreen;border:0 none;border-radius:0;}
+.console .control .form-group .form-control{background-color: transparent;color:lightgreen;border:0 none;border-radius:0;}
+.console .control .form-group input::-webkit-input-placeholder {color: green;}
+.console .control .form-group input:-moz-placeholder {color: green !important;}
+.console .control .form-group input::-moz-placeholder {color: green !important;}
+.console .control .form-group input:-ms-input-placeholder {color: green !important;}
