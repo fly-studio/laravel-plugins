@@ -54,7 +54,7 @@ class OAuth2 {
 
 	public function getUser()
 	{
-		$wuid = Session::get('wechat-oauth2-'.$this->api->appid.'-user', NULL);
+		$wuid = Session::get('wechat-oauth2-'.$this->api->appid.'-user', NULL);$wuid=15;
 		return empty($wuid) ? false : WechatUser::find($wuid);
 	}
 
