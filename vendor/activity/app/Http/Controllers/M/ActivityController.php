@@ -35,7 +35,7 @@ class ActivityController extends WechatOAuth2Controller
 	}
 	
 	//专题页
-	public function special(Request $request,$activity_id)
+	public function special(Request $request,$activity_id=0)
 	{
 	    $stores_ids = $this->user->stores->pluck('id');
 	    $this->_brands = Brand::join('store_brand as s','s.bid','=','brands.id')->whereIn('s.sid',$stores_ids)->get(['brands.*']);

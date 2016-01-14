@@ -20,6 +20,6 @@ $router->group(['namespace' => 'Factory','prefix' => 'factory', 'middleware' => 
 
 
 $router->group(['namespace' => 'M','prefix' => 'm'], function($router) {
-    $router->get('special/{activity_id}','ActivityController@special');
+    $router->get('special/{activity_id?}','ActivityController@special');
     $router->get('discount','ActivityController@discount');
 });
