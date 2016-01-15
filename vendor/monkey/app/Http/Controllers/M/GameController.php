@@ -51,6 +51,8 @@ class GameController extends WechatOAuth2Controller
 	    $this->_bonus_cnt = ActivityBonus::where('uid',$this->user->getKey())->where('status',0)->count();
 	    $stores_ids = $this->user->stores->pluck('id')->toArray();$stores_id = array_pop($stores_ids);
 	    $this->_share_url = url('m/home?sid='.$stores_id.'&redirect_url='.urlencode(url('m/game').'?uid='.$this->_uid));
+	    $this->_save_put_code = str_random(40); $save_code_key ='save_put_code_'.$this->user->getKey();
+	    session([$save_code_key=>$this->_save_put_code]);
 	    return $this->view('monkey::m.game_start');
 	}
 
@@ -62,7 +64,9 @@ class GameController extends WechatOAuth2Controller
 	    $fids = Product::whereIn('bid',$this->_brands->pluck('id'))->pluck('fid');
 	    $key = 'bonus_'.$this->user->getKey().'_game';
 	    $times = intval(session($key));
-	    if(!empty($fids)&&$times>0){
+	    $save_code_key ='save_put_code_'.$this->user->getKey();
+	    $ver_code = $request->get('ver_code');
+	    if(session($save_code_key) == $ver_code && !empty($fids) && $times>0){
 	        $fids = array_unique((array)$fids);
 	        //把关注店铺，相关的厂商都加红包
 	        $score = $request->get('score');//分数
@@ -76,11 +80,11 @@ class GameController extends WechatOAuth2Controller
 	            $activity_bouns->uid = $this->user->getKey();
 	            $activity_bouns->fid = $fid;
 	            $activity_bouns->activity_id = with(Activity::where('fid',$fid)->where('type_id',$type_id)->first())->id;
-	            $activity_bouns->bonus = intval($score)>80?80:intval($score);
+	            $activity_bouns->bonus = intval($score)>98?98:intval($score);
 	            $activity_bouns->status = 0;
 	            $activity_bouns->save();
 	        }
-	        session([$key=>--$times]);
+	        session([$key=>--$times]);session([$save_code_key=>'']);
 	        //红包的个数
 	        $bonus_cnt = ActivityBonus::where('uid',$this->user->getKey())->where('status',0)->count();
 	        $data = ['times'=>$times,'bonus_cnt'=>$bonus_cnt];

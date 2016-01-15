@@ -13,7 +13,7 @@
     <script type="text/javascript" src="<{'static/js/monkey/wave.js'|url}>"></script>
     <script type="text/javascript" src="<{'static/js/monkey/youxi_V3.js'|url}>"></script>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script>var type_id = <{$_type_id}>;var save_score_url='<{"/m/game/save_score"|url}>';</script>
+    <script>var type_id = <{$_type_id}>;var save_score_url='<{"/m/game/save_score"|url}>';var ver_code='<{$_save_put_code}>';</script>
 <{/block}>
 <{block "body-container"}>
 	 <!-- 游戏开始，弹出页面 -->
@@ -156,7 +156,7 @@
                <div class="share"><a class="btn btn-danger" href="#" role="button">分享红包</a></div>
 
                <p class="text-muted">您现在共有<span class="text-danger" id="bonus_cnt"><{$_bonus_cnt}></span>个现金红包</p>
-               <div class=""><a class="btn btn-warning" href="<{'m/activity/special?type_id=3'|url}>" role="button">使用红包</a></div>
+               <div class=""><a class="btn btn-warning" href="<{'m/special?type_id=3'|url}>" role="button">使用红包</a></div>
 
             </div>
          </div>
