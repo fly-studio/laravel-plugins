@@ -51,9 +51,10 @@ class ActivityController extends BaseController
 	public function export(Request $request)
 	{
 		$activity = new Activity;
+		$builder = $activity->newQuery()->with('activity_type')->where('fid', $this->factory->getKey());
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $activity::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -63,7 +64,6 @@ class ActivityController extends BaseController
 			return $this->view('activity::factory-backend.activity.export');
 		}
 
-		$builder = $activity->newQuery()->with('activity_type')->where('fid', $this->factory->getKey());
 		$data = $this->_getExport($request, $builder);
 		return $this->success('', FALSE, $data);
 	}

@@ -48,9 +48,10 @@ class UserController extends Controller
 	public function export(Request $request, Account $account)
 	{
 		$user = new WechatUser;
+		$builder = $user->newQuery()->with('_gender')->where('waid', $account->getAccountID());
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $user::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -60,7 +61,6 @@ class UserController extends Controller
 			return $this->view('wechat::admin.wechat.user.export');
 		}
 
-		$builder = $user->newQuery()->with('_gender')->where('waid', $account->getAccountID());
 		$data = $this->_getExport($request, $builder, function(&$v){
 			$v['_gender'] = !empty($v['_gender']) ? $v['_gender']['title'] : NULL;
 		});

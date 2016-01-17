@@ -45,9 +45,10 @@ class StatementController extends Controller
 	public function export(Request $request)
 	{
 		$bill = new WechatBill;
+		$builder = $bill->newQuery();
 		$page = $bill->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $bill::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -57,7 +58,6 @@ class StatementController extends Controller
 			return $this->view('wechat::admin.wechat.statement.export');
 		}
 
-		$builder = $bill->newQuery();
 		$data = $this->_getExport($request, $builder);
 		return $this->success('', FALSE, $data);
 	}

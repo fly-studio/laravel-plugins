@@ -50,9 +50,10 @@ class ActivityBonusController extends Controller
 	public function export(Request $request)
 	{
 		$activity = new ActivityBonus;
+		$builder = $activity->newQuery()->with(['users','factory','activity']);
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $activity::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -62,7 +63,6 @@ class ActivityBonusController extends Controller
 			return $this->view('monkey::admin.activity-bonus.export');
 		}
 
-		$builder = $activity->newQuery()->with(['users','factory','activity']);
 		$data = $this->_getExport($request, $builder);
 		return $this->success('', FALSE, $data);
 	}
