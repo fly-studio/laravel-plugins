@@ -11,6 +11,7 @@
     <script type="text/javascript" src="<{'static/js/monkey/jquery.easing.min.js'|url}>"></script>
     <script type="text/javascript" src="<{'static/js/monkey/jquery.rotate.min.js'|url}>"></script>
     <script type="text/javascript" src="<{'static/js/monkey/wave.js'|url}>"></script>
+    <script type="text/javascript" src="<{'static/js/monkey/youxi_V3.js'|url}>"></script>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script>var type_id = <{$_type_id}>;var save_score_url='<{"/m/game/save_score"|url}>';var ver_code='<{$_save_put_code}>';</script>
 	<script type="text/javascript" src="<{'static/js/monkey/youxi_V3.js'|url}>"></script>
@@ -18,49 +19,56 @@
 <{block "body-container"}>
 	 <!-- 游戏开始，弹出页面 -->
     <div class="game_start">
-        <div class="container-fluid">
+<!--       <div class="container-fluid">
             <div class="row">
-                <div class="col-xs-12 bgimg"><img src="<{'static/img/m/monkey/monkey_main.jpg'|url}>" class="img-responsive"></div>
+                <div class="col-xs-12 bgimg"><img src="<{'static/img/m/monkey/welcome.png'|url}>" class="img-responsive"></div>
                 <div class="col-xs-12 hplogo"><img src="<{'static/img/m/monkey/hplogo.png'|url}>" class="img-responsive center-block"></div>
                 <div class="rule"><img src="<{'static/img/m/monkey/monkey_rule.png'|url}>" class="img-responsive" data-toggle="modal" data-target=".bs-example-modal-sm"></div>
                 <div id="begin" class="start col-xs-12"><a><img src="<{'static/img/m/monkey/monkey_start.png'|url}>" class="img-responsive center-block"></a></div>
             </div>
-        </div>
+        </div>-->
         <script type="text/javascript">
             (function($){
                 //让图片满屏
-                $('.bgimg').find('img').css({'height':$(window).height(),'width':$(window).width()});
+                //$('.bgimg').find('img').css({'height':$(window).height(),'width':$(window).width()});
             })(jQuery);
         </script>
-    
-    
-        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-            <div class="container-fluid box">
-                <div class="row">
-                    <div class="rule-content">
-                        <h5>游戏规则</h5>
-                        <div class="close"><a href="" class=""><img src="<{'static/img/m/monkey/monkey_close.png'|url}>" class="img-responsive"></a></div>
-                        <div class="img-line"><img src="<{'static/img/m/monkey/monley_line.png'|url}>" class="img-responsive"></div>
-                        <ol>
-                            <li>游戏说明：通过手指下滑屏幕控制美猴抓取物品，获取相应积分;</li>
-                            <li>新用户有一次玩游戏捞红包的机会，分享游戏给好友，可获取多次捞红包机会;</li>
-                            <li>每次游戏获得的积分将兑换成红包放入您的账号，1积分=1元现金</li>
-                            <li>获得的红包在购买“美猴捞红包”促销页面商品时使用;</li>
-                            <li>每单仅限使用一个红包，可分多单购买;</li>
-                            <li>本活动最终解释权在汉派商城</li>
-                        </ol>
         
-                     </div>
-                 </div>
+        <div class="welcome"><img src="<{'static/img/m/monkey/welcome.png'|url}>"></div>
+        <div class="start_bt" id="begin"><img src="<{'static/img/m/monkey/star_bt.png'|url}>" /></div>
+        <div class="reward_bt"><img src="<{'static/img/m/monkey/reward_bt.png'|url}>" /></div>
+        <p class="fenxiang"><a href=""><img src="<{'static/img/m/monkey/fenxiang.png'|url}>" /></a></p>
+        <div class="lucky_chart">
+        	<div class="lucky_box">
+                <ul class="lucky_team1">
+                    <li>恭喜<span class="winning_user">某某某某某</span>抢到<span class="prize_amount">100</span>元红包</li>
+                    <li>恭喜<span class="winning_user">某某某某某</span>抢到<span class="prize_amount">100</span>元红包</li>
+                    <li>恭喜<span class="winning_user">某某某某某</span>抢到<span class="prize_amount">100</span>元红包</li>              
+                </ul>
+                <ul class="lucky_team2">
+                    <li>恭喜<span class="winning_user">某某某某某</span>抢到<span class="prize_amount">200</span>元红包</li>
+                    <li>恭喜<span class="winning_user">某某某某某</span>抢到<span class="prize_amount">200</span>元红包</li>
+                    <li>恭喜<span class="winning_user">某某某某某</span>抢到<span class="prize_amount">200</span>元红包</li>             
+                </ul>
+                <ul class="lucky_team3">
+                    <li>恭喜<span class="winning_user">某某某某某</span>抢到<span class="prize_amount">300</span>元红包</li>
+                    <li>恭喜<span class="winning_user">某某某某某</span>抢到<span class="prize_amount">300</span>元红包</li>
+                    <li>恭喜<span class="winning_user">某某某某某</span>抢到<span class="prize_amount">300</span>元红包</li>             
+                </ul>
+                
             </div>
-        </div>
+        </div>    
     </div>
-
+	<div class="game_rule">
+    	<img src="<{'static/img/m/monkey/game_rule.png'|url}>" />
+    </div>
     <div class="end"></div>
     <div class="prompt">
-    	<div class="sign"><img src="<{'static/img/m/monkey/sign.png'|url}>" /></div>
         <div class="arrow"><img src="<{'static/img/m/monkey/arrow.png'|url}>" /></div>
         <div class="hand"><img src="<{'static/img/m/monkey/hand.png'|url}>" /></div>
+        <div class="countdown countdown1"><img src="<{'static/img/m/monkey/countdown1.png'|url}>" /></div>
+        <div class="countdown countdown2"><img src="<{'static/img/m/monkey/countdown2.png'|url}>" /></div>
+        <div class="countdown countdown3"><img src="<{'static/img/m/monkey/countdown3.png'|url}>" /></div>        
     </div>
 	<div class="main">
     	<div class="button_stop"></div>
@@ -74,8 +82,9 @@
         <h1 class="jiafen"></h1>
         <a class="lao">捞</a>
         <div id="wave">
-        	<input type="range" id="range" min="0" max="1" step="0.01" />			
+        	<input type="range" id="range" min="0" max="1" step="0.01" />
         </div>
+        <div class="wave_bg"></div>
         <div class="zhuanpan">
             <div class="monkey">
                 <div class="rope"></div>
@@ -119,12 +128,12 @@
 		</audio>
         <audio id="music1" src="<{'static/img/m/monkey/gain.wav'|url}>" controls="">		  
 		</audio>
-        <div class="fubao_say say"></div>
-        <div class="hongbao_say say"></div>
-        <div class="yuanbao_say say"></div>
-        <div class="star_say say"></div>
-        <div class="moon_say say"></div>
-        <div class="kong_say say"></div>       
+        <div class="fubao_say say"><img src="<{'static/img/m/monkey/fubao_say.png'|url}>"/></div>
+        <div class="hongbao_say say"><img src="<{'static/img/m/monkey/hongbao_say.png'|url}>"/></div>
+        <div class="yuanbao_say say"><img src="<{'static/img/m/monkey/yuanbao_say.png'|url}>"/></div>
+        <div class="star_say say"><img src="<{'static/img/m/monkey/star_say.png'|url}>"/></div>
+        <div class="moon_say say"><img src="<{'static/img/m/monkey/yue_say.png'|url}>"/></div>
+        <div class="kong_say say"><img src="<{'static/img/m/monkey/kong_say.png'|url}>"/></div>       
         <span class="baby baby1" name="hongbao"><b>1</b></span>
         <span class="baby baby2" name="hongbao"><b>2</b></span>
         <span class="baby baby3" name="hongbao"><b>3</b></span>
@@ -146,22 +155,31 @@
         <span class="half half_moon3" name="halfM3"></span>
     </div>
     <!-- 游戏结束，弹出页面 -->
-    <div class="end-box">
+<!--<div class="end-box">
         <div class="container-fluid">
             <div class="row text-center">
                <h5 class="">恭喜您！</h5>
                <h6 class="">您本次获得<span></span>红包</h6>
-               <div class="restart"><a class="btn btn-success" href="<{'game/start'|url}>" role="button">再玩一次</a></div>
+          <div class="restart"><a class="btn btn-success" href="<{'game/start'|url}>" role="button">再玩一次</a></div>    
                <small class="text-muted">您现在还有<span class="text-danger"><{$_times}></span>次红包游戏机会<br/>点击下面"分享红包"获取更多红包</small>
                <div class="share"><a class="btn btn-danger" href="#" role="button">分享红包</a></div>
 
                <p class="text-muted">您现在共有<span class="text-danger" id="bonus_cnt"><{$_bonus_cnt}></span>个现金红包</p>
-               <div class=""><a class="btn btn-warning" href="<{'m/special?type_id=3'|url}>" role="button">使用红包</a></div>
+               <div class=""><a class="btn btn-warning" href="<{'m/activity/special?type_id=3'|url}>" role="button">使用红包</a></div>
 
             </div>
          </div>
-        </div>
+	</div> -->
+    
+    <div class="game_over">
+    	<div class="prize1">100</div>
+        <div class="prize2">100</div>
+        <div class="hb_bt"><a href="<{'m/activity/special?type_id=3'|url}>"><img src="<{'static/img/m/monkey/hb_bt.png'|url}>" /></a></div>
+        <div class="restart_bt"><a class="rs_start" href="<{'game/start'|url}>"><img src="<{'static/img/m/monkey/restart_bt.png'|url}>" /></a></div>
+        <div class="hb_num"><{$_bonus_cnt}></div>
+        <div class="share_tip"></div>            
     </div>
+    
     <div class="tip"><p><span>请点击右上角</span><span>选择“发送给朋友”</span><span>然后点击“发送”</span></p></div>
 <{/block}>
 <{block "body-scripts-jquery"}>
