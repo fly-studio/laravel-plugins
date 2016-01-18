@@ -164,28 +164,12 @@
         <span class="half half_moon2" name="halfM2"></span>
         <span class="half half_moon3" name="halfM3"></span>
     </div>
-    <!-- 游戏结束，弹出页面 -->
-<!--<div class="end-box">
-        <div class="container-fluid">
-            <div class="row text-center">
-               <h5 class="">恭喜您！</h5>
-               <h6 class="">您本次获得<span></span>红包</h6>
-          <div class="restart"><a class="btn btn-success" href="<{'game'|url}>" role="button">再玩一次</a></div>    
-               <small class="text-muted">您现在还有<span class="text-danger"><{$_times}></span>次红包游戏机会<br/>点击下面"分享红包"获取更多红包</small>
-               <div class="share"><a class="btn btn-danger" href="#" role="button">分享红包</a></div>
-
-               <p class="text-muted">您现在共有<span class="text-danger" id="bonus_cnt"><{$_bonus_cnt}></span>个现金红包</p>
-               <div class=""><a class="btn btn-warning" href="<{'m/activity/special?type_id=3'|url}>" role="button">使用红包</a></div>
-
-            </div>
-         </div>
-	</div> -->
-    
+    <!-- 游戏结束，弹出页面 -->    
     <div class="game_over">
     	<div class="prize1">100</div>
         <div class="prize2">100</div>
-        <div class="hb_bt"><a href="<{'m/activity/special?type_id=3'|url}>"><img src="<{'static/img/m/monkey/hb_bt.png'|url}>" /></a></div>
-        <div class="restart_bt"><a class="rs_start" href="<{'game/start'|url}>"><img src="<{'static/img/m/monkey/restart_bt.png'|url}>" /></a></div>
+        <div class="hb_bt"><a href="<{'m/special?type_id=3'|url}>"><img src="<{'static/img/m/monkey/hb_bt.png'|url}>" /></a></div>
+        <div class="restart_bt"><a class="rs_start" href="<{'game'|url}>"><img src="<{'static/img/m/monkey/restart_bt.png'|url}>" /></a></div>
         <div class="hb_num"><{$_bonus_cnt}></div>
         <div class="share_tip"></div>            
     </div>
