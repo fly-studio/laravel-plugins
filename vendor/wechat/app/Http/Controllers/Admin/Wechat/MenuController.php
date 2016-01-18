@@ -61,9 +61,10 @@ class MenuController extends Controller
 	public function export(Request $request, Account $account)
 	{
 		$menu = new WechatMenu;
+		$builder = $menu->newQuery()->where('waid', $account->getAccountID())->where('pid',$this->pid);
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $menu::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -73,7 +74,6 @@ class MenuController extends Controller
 			return $this->view('wechat::admin.wechat.menu.export');
 		}
 
-		$builder = $menu->newQuery()->where('waid', $account->getAccountID())->where('pid',$this->pid);
 		$data = $this->_getExport($request, $builder);
 		return $this->success('', FALSE, $data);
 	}

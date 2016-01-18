@@ -52,9 +52,10 @@ class MessageController extends Controller
 	public function export(Request $request, Account $account)
 	{
 		$message = new WechatMessage;
+		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('waid', $account->getAccountID());
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $message::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -64,7 +65,6 @@ class MessageController extends Controller
 			return $this->view('wechat::admin.wechat.message.export');
 		}
 
-		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('waid', $account->getAccountID());
 		$data = $this->_getExport($request, $builder);
 		return $this->success('', FALSE, $data);
 	}

@@ -51,9 +51,10 @@ class AccountController extends Controller
 	public function export(Request $request)
 	{
 		$account = new WechatAccount;
+		$builder = $account->newQuery();
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $account::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -63,7 +64,6 @@ class AccountController extends Controller
 			return $this->view('wechat::admin.wechat.account.export');
 		}
 
-		$builder = $account->newQuery();
 		$data = $this->_getExport($request, $builder);
 		return $this->success('', FALSE, $data);
 	}

@@ -49,9 +49,10 @@ class ReplyController extends Controller
 	public function export(Request $request, Account $account)
 	{
 		$reply = new WechatReply;
+		$builder = $reply->newQuery();
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $reply::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -61,7 +62,6 @@ class ReplyController extends Controller
 			return $this->view('wechat::admin.wechat.reply.export');
 		}
 
-		$builder = $reply->newQuery();
 		$data = $this->_getExport($request, $builder)->where('waid', $account->getAccountID());
 		return $this->success('', FALSE, $data);
 	}

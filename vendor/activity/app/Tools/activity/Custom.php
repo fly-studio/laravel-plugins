@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Activity;
+namespace Plugins\Activity\App\Tools\Activity;
 
 use App\Product;
 use App\ProductSize;
