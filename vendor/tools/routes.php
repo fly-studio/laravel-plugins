@@ -6,7 +6,7 @@ $router->addAnyActionRoutes([
 	'placeholder',
 	'qr',
 	'tools'
-
+]);
 $router->get('artisans', 'ArtisansController@index');
 $router->group(['middleware' => 'local'], function($router){
 	$router->addAnyActionRoutes([
