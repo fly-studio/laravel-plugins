@@ -169,7 +169,7 @@
     	<div class="prize1">100</div>
         <div class="prize2">100</div>
         <div class="hb_bt"><a href="<{'m/special?type_id=3'|url}>"><img src="<{'static/img/m/monkey/hb_bt.png'|url}>" /></a></div>
-        <div class="restart_bt"><a class="rs_start" href="<{'game'|url}>"><img src="<{'static/img/m/monkey/restart_bt.png'|url}>" /></a></div>
+        <div class="restart_bt"><a class="rs_start" href="<{'m/game'|url}>"><img src="<{'static/img/m/monkey/restart_bt.png'|url}>" /></a></div>
         <div class="hb_num"><{$_bonus_cnt}></div>
         <div class="share_tip"></div>            
     </div>
