@@ -93,10 +93,4 @@ class GameController extends WechatOAuth2Controller
             return $this->failure(NULL,false,$data,true);
 	    } 
 	}
-
-
-	public function monkey(Request $request)
-	{
-	   return $this->view('monkey::m.monkey');
-	}
 }
