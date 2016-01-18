@@ -47,9 +47,10 @@ class PermissionController extends Controller
 	public function export(Request $request)
 	{
 		$permission = new Permission;
+		$builder = $permission->newQuery();
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $permission::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -59,7 +60,6 @@ class PermissionController extends Controller
 			return $this->view('system::admin.permission.export');
 		}
 
-		$builder = $permission->newQuery();
 		$data = $this->_getExport($request, $builder);
 		return $this->success('', FALSE, $data);
 	}

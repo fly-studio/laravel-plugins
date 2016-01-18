@@ -47,9 +47,10 @@ class ActivityTypeController extends Controller
 	public function export(Request $request)
 	{
 		$activity_type = new ActivityType;
+		$builder = $activity_type->newQuery();
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $activity_type::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -59,7 +60,6 @@ class ActivityTypeController extends Controller
 			return $this->view('activity::admin.activity-type.export');
 		}
 
-		$builder = $activity_type->newQuery();
 		$data = $this->_getExport($request, $builder);
 		return $this->success('', FALSE, $data);
 	}

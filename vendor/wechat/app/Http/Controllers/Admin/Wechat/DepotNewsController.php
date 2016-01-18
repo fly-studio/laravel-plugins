@@ -48,9 +48,10 @@ class DepotNewsController extends Controller
 	public function export(Request $request, Account $account)
 	{
 		$news = new WechatDepotNews;
+		$builder = $news->newQuery();
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $news::count();
+		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
@@ -60,7 +61,6 @@ class DepotNewsController extends Controller
 			return $this->view('wechat::admin.wechat.news.export');
 		}
 
-		$builder = $news->newQuery();
 		$data = $this->_getExport($request, $builder)->where('waid', $account->getAccountID());
 		return $this->success('', FALSE, $data);
 	}
