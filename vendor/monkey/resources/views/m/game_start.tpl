@@ -76,7 +76,7 @@
     	<form name="input">
             <div class="fenshu">当前分数：<input type="text" name="Score" value="0" size="5" readonly></div>  
             <div class="yonghu_Id"> <input type="text" name="user_Id" value="<{$_uid}>" size="5" readonly></div> 
-            <div class="youxi_Num"> <input type="text" name="game_Num" value="1" size="5" readonly></div>     
+            <div class="youxi_Num"> <input type="text" name="game_Num" value="<{$_times}>" size="5" readonly></div>     
             <h2 class="time">时间：<span></span></h2>
         </form> 
         <h1 class="jiafen"></h1>
