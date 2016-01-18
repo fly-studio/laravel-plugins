@@ -5,4 +5,5 @@ $router->addAnyActionRoutes([
 	'tools',
 	'placeholder',
 	'qr',
+	'loading',
 ]);
