@@ -58,9 +58,9 @@ class ActivityController extends WechatOAuth2Controller
 	    }
 	    
 	    if(empty($activity)){
-	        return $this->failure('activity.no_activity');
+	        return $this->failure('activity::activity.no_activity');
 	    }elseif($activity->start_date > $now || $activity->end_date < $now || $activity->status !=1){
-	    	return $this->failure('activity.failure_activity');
+	    	return $this->failure('activity::activity.failure_activity');
 	    }
 	    
 	    //查看当前以以和店铺 猴子捞月 活动所有商品
