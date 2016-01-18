@@ -11,10 +11,9 @@
     <script type="text/javascript" src="<{'static/js/monkey/jquery.easing.min.js'|url}>"></script>
     <script type="text/javascript" src="<{'static/js/monkey/jquery.rotate.min.js'|url}>"></script>
     <script type="text/javascript" src="<{'static/js/monkey/wave.js'|url}>"></script>
-    <script type="text/javascript" src="<{'static/js/monkey/youxi_v3.js'|url}>"></script>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script>var type_id = <{$_type_id}>;var save_score_url='<{"/m/game/save_score"|url}>';var ver_code='<{$_save_put_code}>';</script>
-	<script type="text/javascript" src="<{'static/js/monkey/youxi_V3.js'|url}>"></script>
+	<script type="text/javascript" src="<{'static/js/monkey/youxi_v3.js'|url}>"></script>
 <{/block}>
 <{block "body-container"}>
 	 <!-- 游戏开始，弹出页面 -->
