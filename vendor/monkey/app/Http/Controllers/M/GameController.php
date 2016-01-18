@@ -7,40 +7,37 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WechatOAuth2Controller;
 use DB;
+use Cache;
 use App\Cart;
 use App\ProductSize;
 use Plugins\Monkey\App\ActivityBonus;
 use Plugins\Activity\App\Activity;
 use App\Brand;
 use App\Product;
+use Plugins\Monkey\App\Http\Controllers\Admin\ActivityBonusController;
 
 class GameController extends WechatOAuth2Controller
 {
 	//游戏初始化
 	public function index(Request $request)
 	{
-	   $uid = $request->get('uid');
-	   if(!empty($uid)){
+	    $uid = $request->get('uid');
+	    if(!empty($uid)){
 	       $share_key = "share_".$uid."_".$this->user->getKey();
-	       if(session($share_key) === NULL){
+	       if(!Cache::has($share_key)){
 	          	$key = 'bonus_'.$uid.'_game';
-        	    $times = intval(session($key));
-        	    session([$key=>$times+1]);
+        	    Cache::increment($key);
         	    //说明这个东西已经分享过
-        	    session([$share_key=>1]);
+        	    Cache::forever($share_key,1);
 	       }
-	   }
-	   return $this->view('monkey::m.game');
-	}
-	//游戏开始
-	public function start(Request $request)
-	{
+	    }
+
 	    $key = 'bonus_'.$this->user->getKey().'_game';
-	    if(session($key) === NULL){
+	    if(!Cache::has($key)){
 	        $times = 1;
-	        session([$key=>$times]);
+	        Cache::forever($key,$times);
 	    }else{
-	        $times = intval(session($key));
+	        $times = intval(Cache::get($key,0));
 	    }
 
 	    $this->_wechat = $this->getJsParameters();
@@ -53,7 +50,9 @@ class GameController extends WechatOAuth2Controller
 	    $this->_share_url = url('m/home?sid='.$stores_id.'&redirect_url='.urlencode(url('m/game').'?uid='.$this->_uid));
 	    $this->_save_put_code = str_random(40); $save_code_key ='save_put_code_'.$this->user->getKey();
 	    session([$save_code_key=>$this->_save_put_code]);
-	    return $this->view('monkey::m.game_start');
+	    //查找中奖列表
+	    $this->_bonus_list = ActivityBonus::with(['users'])->orderBy('created_at','desc')->take(9)->get();
+	    return $this->view('monkey::m.game');
 	}
 
 	//保存游戏积分
@@ -63,7 +62,7 @@ class GameController extends WechatOAuth2Controller
 	    $this->_brands = Brand::join('store_brand as s','s.bid','=','brands.id')->whereIn('s.sid',$stores_ids)->get(['brands.*']);
 	    $fids = Product::whereIn('bid',$this->_brands->pluck('id'))->pluck('fid');
 	    $key = 'bonus_'.$this->user->getKey().'_game';
-	    $times = intval(session($key));
+	    $times = intval(Cache::get($key,0));
 	    $save_code_key ='save_put_code_'.$this->user->getKey();
 	    $ver_code = $request->get('ver_code');
 	    if(session($save_code_key) == $ver_code && !empty($fids) && $times>0){
@@ -84,10 +83,10 @@ class GameController extends WechatOAuth2Controller
 	            $activity_bouns->status = 0;
 	            $activity_bouns->save();
 	        }
-	        session([$key=>--$times]);session([$save_code_key=>'']);
+	        Cache::decrement($key);session([$save_code_key=>'']);
 	        //红包的个数
 	        $bonus_cnt = ActivityBonus::where('uid',$this->user->getKey())->where('status',0)->count();
-	        $data = ['times'=>$times,'bonus_cnt'=>$bonus_cnt];
+	        $data = ['times'=>--$times,'bonus_cnt'=>$bonus_cnt];
 	        return $this->success(NULL,false,$data);
 	    }else{
 	        $data = ['err_msg'=>'暂时没添加相关活动。'];
