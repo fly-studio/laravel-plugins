@@ -15,5 +15,6 @@ $router->group(['namespace' => 'Factory','prefix' => 'factory', 'middleware' => 
 
 $router->group(['namespace' => 'M','prefix' => 'm'], function($router) {
     $router->get('game','GameController@index');
+    $router->get('game/loading','GameController@loading');
     $router->any('game/save_score','GameController@saveScore');
 });
