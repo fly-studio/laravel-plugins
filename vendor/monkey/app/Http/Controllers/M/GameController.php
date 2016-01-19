@@ -22,7 +22,7 @@ class GameController extends WechatOAuth2Controller
     public function loading(Request $request)
     {
        $this->_shareTimes($request);
-       return with(new LoadingController)->index(['static/img/m/monkey'],'ball-pulse','/m/game','游戏加载中...');
+       return with(new LoadingController)->index(['plugins/img/m/monkey'],'ball-pulse','/m/game','游戏加载中...');
     }
 	//游戏初始化
 	public function index(Request $request)
@@ -41,7 +41,7 @@ class GameController extends WechatOAuth2Controller
 	    $this->_times = $times;
 	    $this->_uid = $this->user->getKey();
 	    $this->_type_id = 3;
-	    $this->_data = ['title'=>'美猴捞红包','imgUrl'=>'static/img/m/monkey/monkey_main.jpg','desc'=>'参加游戏，赢取猴子新年红包。'];
+	    $this->_data = ['title'=>'美猴捞红包','imgUrl'=>'plugins/img/m/monkey/monkey_main.jpg','desc'=>'参加游戏，赢取猴子新年红包。'];
 	    $this->_bonus_cnt = ActivityBonus::where('uid',$this->user->getKey())->where('status',0)->count();
 	    $stores_ids = $this->user->stores->pluck('id')->toArray();$stores_id = array_pop($stores_ids);
 	    $this->_share_url = url('m/home?sid='.$stores_id.'&redirect_url='.urlencode(url('m/game/loading').'?uid='.$this->_uid));
