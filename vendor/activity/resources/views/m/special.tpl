@@ -9,7 +9,7 @@
 
 <{block "body-container"}>
 	<div class="topimg">
-		<{if $_activity->type_id ==3}><a href="<{'loading?folders=static/img/m/monkey&url=/m/game&style=ball-pulse'|url}>"><{/if}>
+		<{if $_activity->type_id ==3}><a href="<{'m/game/loading'|url}>"><{/if}>
 		<img src="<{'attachment/resize'|url}>?id=<{$_activity->aid}>" class="img-responsive center-block">
 		<{if $_activity->type_id ==3}></a><{/if}>
 	</div>
