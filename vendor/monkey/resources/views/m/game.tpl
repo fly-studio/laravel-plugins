@@ -33,10 +33,11 @@
             })(jQuery);
         </script>
         
-        <div class="welcome"><img src="<{'static/img/m/monkey/welcome.png'|url}>"></div>
+        <div class="welcome"></div>
         <div class="start_bt" id="begin"><img src="<{'static/img/m/monkey/star_bt.png'|url}>" /></div>
         <div class="reward_bt"><img src="<{'static/img/m/monkey/reward_bt.png'|url}>" /></div>
-        <p class="fenxiang"><a href="javascript:;"><img src="<{'static/img/m/monkey/fenxiang.png'|url}>" /></a></p>
+        <p class="use_hb"><a href="<{'m/special?type_id=3'|url}>"><img src="<{'static/img/m/monkey/use_hb.png'|url}>" /></a></p>
+        <div class="tip1"></div>
         <div class="lucky_chart">
         	<div class="lucky_box">
         		<{if !empty($_bonus_list)}>
@@ -86,7 +87,7 @@
     	<form name="input">
             <div class="fenshu">当前分数：<input type="text" name="Score" value="0" size="5" readonly></div>  
             <div class="yonghu_Id"> <input type="text" name="user_Id" value="<{$_uid}>" size="5" readonly></div> 
-            <div class="youxi_Num"> <input type="text" name="game_Num" value=1 size="5" readonly></div>     
+            <div class="youxi_Num"> <input type="text" name="game_Num" value="<{$_times}>" size="5" readonly></div>     
             <h2 class="time">时间：<span></span></h2>
         </form> 
         <h1 class="jiafen"></h1>
@@ -174,7 +175,7 @@
         <div class="share_tip"></div>            
     </div>
     
-    <div class="tip"><p><span>请点击右上角</span><span>选择“发送给朋友”</span><span>然后点击“发送”</span></p></div>
+    <div class="tip"></div>
 <{/block}>
 <{block "body-scripts-jquery"}>
 	wx.config(js = {
