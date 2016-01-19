@@ -22,7 +22,7 @@ class GameController extends WechatOAuth2Controller
     public function loading(Request $request)
     {
        $this->_shareTimes($request);
-       return with(new LoadingController)->index(['plugins/img/m/monkey'],'ball-pulse','/m/game','游戏加载中...');
+       return with(new LoadingController)->index(['static/plugins/img/m/monkey'],'ball-pulse','/m/game','游戏加载中...');
     }
 	//游戏初始化
 	public function index(Request $request)
