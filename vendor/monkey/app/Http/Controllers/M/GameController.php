@@ -21,6 +21,7 @@ class GameController extends WechatOAuth2Controller
 	//游戏初始化
 	public function index(Request $request)
 	{
+	    ///loading?folders=static/img/m/monkey&url=/m/game&style=ball-pulse
 	    $uid = $request->get('uid');
 	    if(!empty($uid)){
 	       $share_key = "share_".$uid."_".$this->user->getKey();
@@ -47,7 +48,8 @@ class GameController extends WechatOAuth2Controller
 	    $this->_data = ['title'=>'美猴捞红包','imgUrl'=>'static/img/m/monkey/monkey_main.jpg','desc'=>'关注“汉派商城”，参加游戏，赢取猴子新年红包。'];
 	    $this->_bonus_cnt = ActivityBonus::where('uid',$this->user->getKey())->where('status',0)->count();
 	    $stores_ids = $this->user->stores->pluck('id')->toArray();$stores_id = array_pop($stores_ids);
-	    $this->_share_url = url('m/home?sid='.$stores_id.'&redirect_url='.urlencode(url('m/game').'?uid='.$this->_uid));
+	    $redirect_url = url('loading?folders=static/img/m/monkey&style=ball-pulse&url=/m/game'.urlencode('?uid='.$this->_uid));
+	    $this->_share_url = url('m/home?sid='.$stores_id.'&redirect_url=').urlencode($redirect_url);
 	    $this->_save_put_code = str_random(40); $save_code_key ='save_put_code_'.$this->user->getKey();
 	    session([$save_code_key=>$this->_save_put_code]);
 	    //查找中奖列表
