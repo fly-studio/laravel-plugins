@@ -36,8 +36,7 @@
         <div class="welcome"></div>
         <div class="start_bt" id="begin"><img src="<{'plugins/img/m/monkey/star_bt.png'|url}>" /></div>
         <div class="reward_bt"><img src="<{'plugins/img/m/monkey/reward_bt.png'|url}>" /></div>
-        <p class="use_hb"><a href="<{'m/special?type_id=3'|url}>"><img src="<{'plugins/img/m/monkey/use_hb.png'|url}>" /></a></p>
-        <div class="tip1"></div>
+        <p class="use_hb"><a href="<{'m/special?type_id=3'|url}>"><img src="<{'plugins/img/m/monkey/use_hb.png'|url}>" /></a></p>        
         <div class="lucky_chart">
         	<div class="lucky_box">
         		<{if !empty($_bonus_list)}>

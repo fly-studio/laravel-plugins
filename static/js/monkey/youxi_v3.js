@@ -543,8 +543,7 @@ function Laoyue () {
 			if(times<=0)
 			{
 				$(".game_start").css("display","block");
-				$(".tip1").css("display","block");
-				$(".welcome").css("display","none");
+				$(".tip").toggleClass("active");
 			} 
 			function Delay(){
 				c=30;	
