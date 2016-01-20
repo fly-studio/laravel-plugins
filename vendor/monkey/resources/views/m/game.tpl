@@ -185,18 +185,6 @@
 		signature: '<{$_wechat.signature|escape}>',// 必填，签名，见附录1
 		jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','hideMenuItems'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 	});
-	//分享朋友圈
-	wxTimeLineData = {
-		imgUrl:'<{$_data.imgUrl|url}>',
-		link:'<{$_share_url nofilter}>',
-		title:'<{$_data.title|escape}>',
-		success: function () { 
-			// 用户确认分享后执行的回调函数
-		},
-		cancel: function () { 
-			// 用户取消分享后执行的回调函数
-		}
-	};
 	
 	//分享朋友
 	wxMenuShareData = {
@@ -216,10 +204,9 @@
 	
 	
 	wx.ready(function(){
-		wx.onMenuShareTimeline(wxTimeLineData);
 		wx.onMenuShareAppMessage(wxMenuShareData);
 		wx.hideMenuItems({
-			menuList: ['menuItem:share:qq','menuItem:share:weiboApp'] // 要隐藏的菜单项，所有menu项见附录3
+			menuList: ['menuItem:share:qq','menuItem:share:weiboApp','menuItem:share:timeline'] // 要隐藏的菜单项，所有menu项见附录3
             
 		});
         
