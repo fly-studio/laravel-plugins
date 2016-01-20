@@ -14,24 +14,21 @@ use Plugins\Monkey\App\ActivityBonus;
 use Plugins\Activity\App\Activity;
 use App\Brand;
 use App\Product;
-use Plugins\Monkey\App\Http\Controllers\Admin\ActivityBonusController;
+use Plugins\Tools\App\Http\Controllers\LoadingController;
 
 class GameController extends WechatOAuth2Controller
 {
+    //游戏素材加载
+    public function loading(Request $request)
+    {
+       $this->_shareTimes($request);
+       return with(new LoadingController)->index(['static/plugins/img/m/monkey'],'ball-pulse','/m/game','游戏加载中...');
+    }
 	//游戏初始化
 	public function index(Request $request)
 	{
-	    $uid = $request->get('uid');
-	    if(!empty($uid)){
-	       $share_key = "share_".$uid."_".$this->user->getKey();
-	       if(!Cache::has($share_key)){
-	          	$key = 'bonus_'.$uid.'_game';
-        	    Cache::increment($key);
-        	    //说明这个东西已经分享过
-        	    Cache::forever($share_key,1);
-	       }
-	    }
-
+	    //处理分享次数加1
+	    $this->_shareTimes($request);
 	    $key = 'bonus_'.$this->user->getKey().'_game';
 	    if(!Cache::has($key)){
 	        $times = 1;
@@ -44,10 +41,10 @@ class GameController extends WechatOAuth2Controller
 	    $this->_times = $times;
 	    $this->_uid = $this->user->getKey();
 	    $this->_type_id = 3;
-	    $this->_data = ['title'=>'美猴捞红包','imgUrl'=>'static/img/m/monkey/monkey_main.jpg','desc'=>'关注“汉派商城”，参加游戏，赢取猴子新年红包。'];
+	    $this->_data = ['title'=>'美猴捞红包','imgUrl'=>'plugins/img/m/monkey/monkey_main.jpg','desc'=>'参加游戏，赢取猴子新年红包。'];
 	    $this->_bonus_cnt = ActivityBonus::where('uid',$this->user->getKey())->where('status',0)->count();
 	    $stores_ids = $this->user->stores->pluck('id')->toArray();$stores_id = array_pop($stores_ids);
-	    $this->_share_url = url('m/home?sid='.$stores_id.'&redirect_url='.urlencode(url('m/game').'?uid='.$this->_uid));
+	    $this->_share_url = url('m/home?sid='.$stores_id.'&redirect_url='.urlencode(url('m/game/loading').'?uid='.$this->_uid));
 	    $this->_save_put_code = str_random(40); $save_code_key ='save_put_code_'.$this->user->getKey();
 	    session([$save_code_key=>$this->_save_put_code]);
 	    //查找中奖列表
@@ -93,10 +90,18 @@ class GameController extends WechatOAuth2Controller
             return $this->failure(NULL,false,$data,true);
 	    } 
 	}
-
-
-	public function monkey(Request $request)
+	//分享加次数1
+	private function _shareTimes(Request $request)
 	{
-	   return $this->view('monkey::m.monkey');
+	    $uid = $request->get('uid');
+	    if(!empty($uid)){
+	        $share_key = "share_".$uid."_".$this->user->getKey();
+	        if(!Cache::has($share_key)){
+	            $key = 'bonus_'.$uid.'_game';
+	            Cache::increment($key);
+	            //说明这个东西已经分享过
+	            Cache::forever($share_key,1);
+	        }
+	    }
 	}
 }
