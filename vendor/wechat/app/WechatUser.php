@@ -14,7 +14,7 @@ class WechatUser extends Model{
 
 	public function user()
 	{
-		return $this->hasOne(.config('auth.model'), 'id', 'uid');
+		return $this->hasOne(config('auth.model'), 'id', 'uid');
 	}
 
 	public function _gender()
