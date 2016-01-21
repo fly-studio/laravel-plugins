@@ -710,6 +710,21 @@ body>div.prompt {
 	left:44.22%;
 	top:18.75%;
 	display:block;
+	
+}
+.arrow.active {
+	animation:arrowframes 0.95s ease 3;
+	-webkit-animation:arrowframes 0.95s ease 3;
+	animation-fill-mode:forwards;
+	-webkit-animation-fill-mode:forwards;
+}
+@keyframes arrowframes{
+	0%{top:18.75%;}
+	100%{top:48.85%;}
+}
+@-webkit-keyframes arrowframes{
+	0%{top:18.75%;}
+	100%{top:48.85%;}
 }
 .arrow img {
 	width:100%;
@@ -723,6 +738,22 @@ body>div.prompt {
 	top:24.58%;
 	display:block;
 }
+.hand.active {
+	animation:handframes 0.95s ease 3;
+	-webkit-animation:handframes 0.95s ease 3;
+	animation-fill-mode:forwards;
+	-webkit-animation-fill-mode:forwards;
+}
+@keyframes handframes{
+	0%{top:24.58%;}
+	70%{top:55%;}
+	100%{top:55%;}
+}
+@-webkit-keyframes handframes{
+	0%{top:24.58%;}
+	70%{top:55%;}
+	100%{top:55%;}
+}
 .hand img{
 	width:100%;
 }
@@ -733,11 +764,46 @@ body>div.prompt {
 	z-index:902;
 	left:45.31%;
 	top:69.24%;
-	display:none;
+	display:block;
+	opacity:0;
 }
 .countdown img{
 	width:100%;
 }
+.countdown3 {
+	opacity:1;
+}
+.countdown2 {
+	z-index:903;
+}
+.countdown2.active{
+	animation:showframes1 0.02s ease 1s;
+	-webkit-animation:showframes1 0.02s ease 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation-fill-mode:forwards;
+}
+@keyframes showframes1{
+	100%{opacity:1;}
+}
+@-webkit-keyframes showframes1{
+	100%{opacity:1;}
+}
+.countdown1 {
+	z-index:904;
+}
+.countdown1.active{
+	animation:showframes2 0.02s ease 2s;
+	-webkit-animation:showframes2 0.02s ease 2s;
+	animation-fill-mode:forwards;
+	-webkit-animation-fill-mode:forwards;
+}
+@keyframes showframes2{	
+	100%{opacity:1;}
+}
+@-webkit-keyframes showframes2{
+	100%{opacity:1;}
+}
+
 .main>span {
 	background-color:transparent;
 	position:absolute;
