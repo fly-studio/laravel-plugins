@@ -19,7 +19,7 @@ class WechatUser extends Model{
 
 	public function _gender()
 	{
-		return $this->hasOne(get_namespace($this).'\\Field', 'id', 'gender');
+		return $this->hasOne('App\\Field', 'id', 'gender');
 	}
 
 }

@@ -3,7 +3,7 @@ namespace Plugins\Activity\App\Tools\Activity;
 
 use App\Product;
 use App\ProductSize;
-use App\ActivityBonus;
+use Plugins\Monkey\App\ActivityBonus;
 class RedEnvelope {
     public function config($config){return $this;}
     //显示
