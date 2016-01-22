@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="<{'static/css/m/common.css'|url}>">
 <{/block}>
 <{block "head-scripts-plus"}>
-	<script>var $ = jQuery.noConflict();</script> 
     <script type="text/javascript" src="<{'plugins/js/monkey/jquery.touchSwipe.min.js'|url}>"></script>
     <script type="text/javascript" src="<{'plugins/js/monkey/jquery.easing.min.js'|url}>"></script>
     <script type="text/javascript" src="<{'plugins/js/monkey/jquery.rotate.min.js'|url}>"></script>
@@ -159,7 +158,7 @@
         <span class="baby baby13" name="star"><b>13</b><img src="<{'plugins/img/m/monkey/star.png'|url}>"/></span>
         <span class="baby baby14" name="star"><b>14</b><img src="<{'plugins/img/m/monkey/star.png'|url}>"/></span>
         <span class="baby baby15" name="star"><b>15</b><img src="<{'plugins/img/m/monkey/star.png'|url}>"/></span>
-        <span class="full_moon" name="fullM"></span>
+        <span class="baby full_moon" name="fullM"></span>
         <span class="half half_moon1" name="halfM1"></span>
         <span class="half half_moon2" name="halfM2"></span>
         <span class="half half_moon3" name="halfM3"></span>
