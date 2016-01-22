@@ -1,20 +1,20 @@
 <?php
-namespace APlugins\Wechat\App\Tools;
+namespace Plugins\Wechat\App\Tools;
 
-use APlugins\Wechat\App\Tools\API;
-use APlugins\Wechat\App\Tools\Pay\BizPayUrl;
-use APlugins\Wechat\App\Tools\Pay\CloseOrder;
-use APlugins\Wechat\App\Tools\Pay\DownloadBill;
-use APlugins\Wechat\App\Tools\Pay\MicroPay;
-use APlugins\Wechat\App\Tools\Pay\NotifyReply;
-use APlugins\Wechat\App\Tools\Pay\OrderQuery;
-use APlugins\Wechat\App\Tools\Pay\Refund;
-use APlugins\Wechat\App\Tools\Pay\RefundQuery;
-use APlugins\Wechat\App\Tools\Pay\Report;
-use APlugins\Wechat\App\Tools\Pay\Results;
-use APlugins\Wechat\App\Tools\Pay\Reverse;
-use APlugins\Wechat\App\Tools\Pay\ShortUrl;
-use APlugins\Wechat\App\Tools\Pay\UnifiedOrder;
+use Plugins\Wechat\App\Tools\API;
+use Plugins\Wechat\App\Tools\Pay\BizPayUrl;
+use Plugins\Wechat\App\Tools\Pay\CloseOrder;
+use Plugins\Wechat\App\Tools\Pay\DownloadBill;
+use Plugins\Wechat\App\Tools\Pay\MicroPay;
+use Plugins\Wechat\App\Tools\Pay\NotifyReply;
+use Plugins\Wechat\App\Tools\Pay\OrderQuery;
+use Plugins\Wechat\App\Tools\Pay\Refund;
+use Plugins\Wechat\App\Tools\Pay\RefundQuery;
+use Plugins\Wechat\App\Tools\Pay\Report;
+use Plugins\Wechat\App\Tools\Pay\Results;
+use Plugins\Wechat\App\Tools\Pay\Reverse;
+use Plugins\Wechat\App\Tools\Pay\ShortUrl;
+use Plugins\Wechat\App\Tools\Pay\UnifiedOrder;
 
 use Exception;
 use Closure;
