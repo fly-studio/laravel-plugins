@@ -23,6 +23,7 @@ class ArtisansController extends Controller {
 
 		if (Str::startsWith($command, 'php artisan'))
 		{
+			set_time_limit(120);
 			exec($command, $out);
 			$result = implode(PHP_EOL, $out);
 		}
@@ -35,6 +36,7 @@ class ArtisansController extends Controller {
 		$keys = 'content';
 		$data = $this->autoValidate($request, 'artisans.store', $keys);
 		try {
+			set_time_limit(120);
 			DB::transaction(function () use ($data){
 					DB::statement($data['content']);
 			});
@@ -51,6 +53,7 @@ class ArtisansController extends Controller {
 		$data = $this->autoValidate($request, 'artisans.store', $keys);
 
 		try {
+			set_time_limit(120);
 			eval('use Illuminate\Database\Schema\Blueprint;use Illuminate\Database\Migrations\Migration;' .$data['content'] );
 		} catch (Exception $e) {
 			$error = error_get_last();

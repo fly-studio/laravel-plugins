@@ -16,7 +16,33 @@ $().ready(function(){
 
 	$('li.nav-artisan','#navigation').addClass('active');
 
-	$('#schema-form,#sql-form').query();
+	$('#schema-form,#sql-form').query(function(json){
+		if (json.result == 'success')
+			$('[name="content"]').val('');
+	});
+
+	$('[name="console"]').on('click', function(){
+		var cmd = $(this).data('console');
+		var submit = function() {
+			$('#console-command').val(cmd);
+			$('#console-form').trigger('submit');
+		}
+		var parse = function(){
+			var patt = new RegExp('\{(.*?)\}','g');
+			if ((result = patt.exec(cmd)) != null)
+				$.prompt(result[1], function(text){
+					cmd = cmd.replace(result[0], text);
+					parse();
+				}, function(){
+					$.alert('操作取消！');
+				});
+			else
+				submit();
+				
+		}
+		parse();
+		return false;
+	});
 });
 })(jQuery);
 </script>
@@ -36,7 +62,7 @@ $().ready(function(){
 		<h1>数据库</h1>
 	</div>
 	<ul class="artisan">
-		<li><a href="">导入数据库(需要先建库)</a> <small>php artisan migrate</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan migrate">导入数据库(需要先建库)</a> <small>php artisan migrate</small></li>
 		<li><a href="#sql-modal" data-toggle="modal" data-backdrop="static">执行SQL语句</a> <small>可以执行任意SQL语句</small></li>
 		<li><a href="#schema-modal" data-toggle="modal" data-backdrop="static">执行Schema</a> <small>可以在此处执行<code>Schema::create</code>、<code>Schema::drop</code>、<code>Schema::table</code>等php语句（参：\Illuminate\Database\Schema\Builder）</small></li>
 	</ul>
@@ -44,13 +70,13 @@ $().ready(function(){
 		<h1>创建</h1>
 	</div>
 	<ul class="artisan">
-		<li><a href="">控制器 Controller</a> <small>php make:controller ControllerName</small></li>
-		<li><a href="">数据库 表模型 Model</a> <small>php make:model ModelName</small></li>
-		<li><a href="">中间件 Middleware</a> <small>php make:middleware MiddlewareName</small></li>
-		<li><a href="">任务队列 Job</a> <small>php make:job JobName</small></li>
-		<li><a href="">命令 Command</a> <small>php make:command CommandName</small></li>
-		<li><a href="">数据库 迁移 Migration</a> <small>php make:migration MigrationName</small></li>
-		<li><a href="">数据库 测试数据 Seeder</a> <small>php make:seeder SeederName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:controller {请输入控制器的类名}">控制器 Controller</a> <small>php artisan make:controller ControllerName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:model {请输入表模型的类名}">数据库 表模型 Model</a> <small>php artisan make:model ModelName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:middleware {请输入中间件的类名}">中间件 Middleware</a> <small>php artisan make:middleware MiddlewareName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:job {请输入任务队列的类名}">任务队列 Job</a> <small>php artisan make:job JobName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:command {请输入命令的类名}">命令 Command</a> <small>php artisan make:command CommandName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:migration {请输入数据库迁移的类名}">数据库 迁移 Migration</a> <small>php artisan make:migration MigrationName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:seeder {请输入数据库测试数据的类名}">数据库 测试数据 Seeder</a> <small>php artisan make:seeder SeederName</small></li>
 	</ul>
 	<p></p>
 	<p></p>
@@ -64,7 +90,7 @@ $().ready(function(){
 				<h4 class="modal-title">Schema脚本（PHP）</h4>
 			</div>
 			<div class="modal-body">
-				<textarea name="content" id="content" cols="30" rows="10" class="form-control" placeholder="Schema::create('notices', function(Blueprint $table) {
+				<textarea name="content" cols="30" rows="10" class="form-control" placeholder="Schema::create('notices', function(Blueprint $table) {
 	$table->increments('id');
 	...
 	$table->timestamps();
@@ -73,10 +99,10 @@ $().ready(function(){
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-primary">提交</button>
 			</div>
-		</div><!-- /.modal-content -->
+		</div>
 		</form>
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+	</div>
+</div>
 <div class="modal fade" id="sql-modal">
 	<div class="modal-dialog">
 		<form action="<{'artisans/sql-query'|url}>" method="POST" id="sql-form">
@@ -86,7 +112,7 @@ $().ready(function(){
 				<h4 class="modal-title">SQL脚本</h4>
 			</div>
 			<div class="modal-body">
-				<textarea name="content" id="content" cols="30" rows="10" class="form-control" placeholder="CREATE TABLE `table` (
+				<textarea name="content" cols="30" rows="10" class="form-control" placeholder="CREATE TABLE `table` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -95,10 +121,28 @@ $().ready(function(){
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-primary">提交</button>
 			</div>
-		</div><!-- /.modal-content -->
+		</div>
 		</form>
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+	</div>
+</div>
+<div class="modal fade" id="artisan-modal">
+	<div class="modal-dialog">
+		<form action="<{'artisans/artisan-query'|url}>" method="POST" id="artisan-form">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">类名</h4>
+			</div>
+			<div class="modal-body">
+				<input type="text" class="form-control" name="classname" value="" placeholder="请输入类名，每个单词的首字母都必须大写，如：ClassA">
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary">提交</button>
+			</div>
+		</div>
+		</form>
+	</div>
+</div>
 <{/block}>
 
 <{block "body-plus"}>
