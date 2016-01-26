@@ -5,6 +5,7 @@ use Addons\Core\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Addons\Core\Validation\ValidatesRequests;
+use Symfony\Component\Console\Input\StringInput;
 use DB;
 class ArtisansController extends Controller {
 	use ValidatesRequests;
@@ -24,8 +25,14 @@ class ArtisansController extends Controller {
 		if (Str::startsWith($command, 'php artisan'))
 		{
 			set_time_limit(120);
-			exec($command, $out);
-			$result = implode(PHP_EOL, $out);
+			$kernel = app('Addons\\Core\\Console\\Kernel');
+			try {
+				$out = $kernel->run($command);
+			} catch (Exception $e) {
+				return $this->failure('', FALSE, compact('command', 'result'), TRUE);
+			}
+			
+			$result = $out->fetch();
 		}
 
 		return $this->success('', FALSE, compact('command', 'result'));
