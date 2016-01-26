@@ -1,6 +1,6 @@
 <{extends file="extends/main.block.tpl"}>
 
-<{block "head-title"}><title>System Tools</title><{/block}>
+<{block "head-title"}><title>Artisan Tools</title><{/block}>
 <{block "head-styles-plus"}>
 <style>
 .artisan {}
@@ -70,12 +70,12 @@ $().ready(function(){
 		<h1>创建</h1>
 	</div>
 	<ul class="artisan">
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:controller {请输入控制器的类名}">控制器 Controller</a> <small>php artisan make:controller ControllerName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:model {请输入表模型的类名}">数据库 表模型 Model</a> <small>php artisan make:model ModelName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:controller {请输入控制器的类名，比如：UserController}">控制器 Controller</a> <small>php artisan make:controller ControllerName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:model {请输入表模型的类名，比如：User}">数据库 表模型 Model</a> <small>php artisan make:model ModelName</small></li>
 		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:middleware {请输入中间件的类名}">中间件 Middleware</a> <small>php artisan make:middleware MiddlewareName</small></li>
 		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:job {请输入任务队列的类名}">任务队列 Job</a> <small>php artisan make:job JobName</small></li>
 		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:command {请输入命令的类名}">命令 Command</a> <small>php artisan make:command CommandName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:migration {请输入数据库迁移的类名}">数据库 迁移 Migration</a> <small>php artisan make:migration MigrationName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:migration {请输入数据库迁移的类名，比如：CreateUserTables}">数据库 迁移 Migration</a> <small>php artisan make:migration MigrationName</small></li>
 		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:seeder {请输入数据库测试数据的类名}">数据库 测试数据 Seeder</a> <small>php artisan make:seeder SeederName</small></li>
 	</ul>
 	<p></p>
@@ -90,7 +90,7 @@ $().ready(function(){
 				<h4 class="modal-title">Schema脚本（PHP）</h4>
 			</div>
 			<div class="modal-body">
-				<textarea name="content" cols="30" rows="10" class="form-control" placeholder="Schema::create('notices', function(Blueprint $table) {
+				<textarea name="content" cols="30" rows="10" class="form-control" placeholder="Schema::create('table', function(Blueprint $table) {
 	$table->increments('id');
 	...
 	$table->timestamps();
@@ -114,27 +114,10 @@ $().ready(function(){
 			<div class="modal-body">
 				<textarea name="content" cols="30" rows="10" class="form-control" placeholder="CREATE TABLE `table` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  ...
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 "></textarea>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary">提交</button>
-			</div>
-		</div>
-		</form>
-	</div>
-</div>
-<div class="modal fade" id="artisan-modal">
-	<div class="modal-dialog">
-		<form action="<{'artisans/artisan-query'|url}>" method="POST" id="artisan-form">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">类名</h4>
-			</div>
-			<div class="modal-body">
-				<input type="text" class="form-control" name="classname" value="" placeholder="请输入类名，每个单词的首字母都必须大写，如：ClassA">
 			</div>
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-primary">提交</button>
