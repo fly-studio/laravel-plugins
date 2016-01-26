@@ -16,7 +16,7 @@ $().ready(function(){
 
 	$('li.nav-artisan','#navigation').addClass('active');
 
-	$('#schema-form').query();
+	$('#schema-form,#sql-form').query();
 });
 })(jQuery);
 </script>
@@ -37,8 +37,8 @@ $().ready(function(){
 	</div>
 	<ul class="artisan">
 		<li><a href="">导入数据库(需要先建库)</a> <small>php artisan migrate</small></li>
-		<li><a href="">执行SQL语句</a> <small>可以执行任意SQL语句</small></li>
-		<li><a href="#schema-modal" data-toggle="modal">执行Schema</a> <small>可以在此处执行<code>Schema::create</code>、<code>Schema::drop</code>、<code>Schema::table</code>等php语句（参：\Illuminate\Database\Schema\Builder）</small></li>
+		<li><a href="#sql-modal" data-toggle="modal" data-backdrop="static">执行SQL语句</a> <small>可以执行任意SQL语句</small></li>
+		<li><a href="#schema-modal" data-toggle="modal" data-backdrop="static">执行Schema</a> <small>可以在此处执行<code>Schema::create</code>、<code>Schema::drop</code>、<code>Schema::table</code>等php语句（参：\Illuminate\Database\Schema\Builder）</small></li>
 	</ul>
 	<div class="page-header">
 		<h1>创建</h1>
@@ -69,6 +69,28 @@ $().ready(function(){
 	...
 	$table->timestamps();
 });"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary">提交</button>
+			</div>
+		</div><!-- /.modal-content -->
+		</form>
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="sql-modal">
+	<div class="modal-dialog">
+		<form action="<{'artisans/sql-query'|url}>" method="POST" id="sql-form">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">SQL脚本</h4>
+			</div>
+			<div class="modal-body">
+				<textarea name="content" id="content" cols="30" rows="10" class="form-control" placeholder="CREATE TABLE `table` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+"></textarea>
 			</div>
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-primary">提交</button>

@@ -5,7 +5,7 @@ use Addons\Core\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Addons\Core\Validation\ValidatesRequests;
-
+use DB;
 class ArtisansController extends Controller {
 	use ValidatesRequests;
 
@@ -32,7 +32,17 @@ class ArtisansController extends Controller {
 
 	public function sqlQuery(Request $request)
 	{
-
+		$keys = 'content';
+		$data = $this->autoValidate($request, 'artisans.store', $keys);
+		try {
+			DB::transaction(function () use ($data){
+					DB::statement($data['content']);
+			});
+		} catch (Exception $e) {
+			$error = error_get_last();
+			return $this->failure('tools:artisans.failure_sql', FALSE, $error);
+		}
+		return $this->success('tools::artisans.success_sql', FALSE);
 	}
 
 	public function schemaQuery(Request $request)
@@ -47,6 +57,6 @@ class ArtisansController extends Controller {
 			return $this->failure('tools:artisans.failure_schema', FALSE, $error);
 		}
 		
-		return $this->success('tools::artisans.success_schema', FALSE, compact('command', 'result'));
+		return $this->success('tools::artisans.success_schema', FALSE);
 	}
 }
