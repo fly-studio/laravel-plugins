@@ -4,7 +4,10 @@ namespace Plugins\Tools\App\Http\Controllers;
 use Addons\Core\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Addons\Core\Validation\ValidatesRequests;
+
 class ArtisansController extends Controller {
+	use ValidatesRequests;
 
 	public function index()
 	{
@@ -25,5 +28,25 @@ class ArtisansController extends Controller {
 		}
 
 		return $this->success('', FALSE, compact('command', 'result'));
+	}
+
+	public function sqlQuery(Request $request)
+	{
+
+	}
+
+	public function schemaQuery(Request $request)
+	{
+		$keys = 'content';
+		$data = $this->autoValidate($request, 'artisans.store', $keys);
+
+		try {
+			eval('use Illuminate\Database\Schema\Blueprint;use Illuminate\Database\Migrations\Migration;' .$data['content'] );
+		} catch (Exception $e) {
+			$error = error_get_last();
+			return $this->failure('tools:artisans.failure_schema', FALSE, $error);
+		}
+		
+		return $this->success('tools::artisans.success_schema', FALSE, compact('command', 'result'));
 	}
 }

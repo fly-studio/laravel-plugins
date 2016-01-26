@@ -15,6 +15,8 @@ $().ready(function(){
 	$('a[method]').query();
 
 	$('li.nav-artisan','#navigation').addClass('active');
+
+	$('#schema-form').query();
 });
 })(jQuery);
 </script>
@@ -36,7 +38,7 @@ $().ready(function(){
 	<ul class="artisan">
 		<li><a href="">导入数据库(需要先建库)</a> <small>php artisan migrate</small></li>
 		<li><a href="">执行SQL语句</a> <small>可以执行任意SQL语句</small></li>
-		<li><a href="">执行Schema</a> <small>可以在此处执行<code>Schema::create</code>、<code>Schema::drop</code>、<code>Schema::table</code>等php语句（参：\Illuminate\Database\Schema\Builder）</small></li>
+		<li><a href="#schema-modal" data-toggle="modal">执行Schema</a> <small>可以在此处执行<code>Schema::create</code>、<code>Schema::drop</code>、<code>Schema::table</code>等php语句（参：\Illuminate\Database\Schema\Builder）</small></li>
 	</ul>
 	<div class="page-header">
 		<h1>创建</h1>
@@ -53,7 +55,28 @@ $().ready(function(){
 	<p></p>
 	<p></p>
 </div>
-
+<div class="modal fade" id="schema-modal">
+	<div class="modal-dialog">
+		<form action="<{'artisans/schema-query'|url}>" method="POST" id="schema-form">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Schema脚本（PHP）</h4>
+			</div>
+			<div class="modal-body">
+				<textarea name="content" id="content" cols="30" rows="10" class="form-control" placeholder="Schema::create('notices', function(Blueprint $table) {
+	$table->increments('id');
+	...
+	$table->timestamps();
+});"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary">提交</button>
+			</div>
+		</div><!-- /.modal-content -->
+		</form>
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <{/block}>
 
 <{block "body-plus"}>
