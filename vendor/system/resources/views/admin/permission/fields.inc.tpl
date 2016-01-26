@@ -1,8 +1,10 @@
+
 <div class="form-group">
 	<label class="col-md-3 control-label" for="name">名称</label>
 	<div class="col-md-9">
 		<input type="text" id="name" name="name" class="form-control" placeholder="请输入名称" value="<{$_data.name}>">
 		<span class="help-block">(*) 只能为英文、下划线，比如：member.create、order.view，不可重名，提交后不可修改</span>
+		<span class="help-block" id="name-example"></span>
 	</div>
 </div>
 <div class="form-group">

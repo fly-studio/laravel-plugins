@@ -81,8 +81,23 @@ class PermissionController extends Controller
 	{
 		$keys = 'name,display_name,description';
 		$data = $this->autoValidate($request, 'permission.store', $keys);
-
-		Permission::create($data);
+		if (strpos($data['name'], '*') !== FALSE) //添加多个
+		{
+			foreach([
+				'view' => '查看',
+				'create' => '新建',
+				'edit' => '编辑',
+				'destroy' => '删除',
+				'export' => '导出'
+			] as $k1 => $v1) {
+				Permission::create([
+					'name' => str_replace('*', $k1, $data['name']),
+					'display_name' => '允许'.$v1.$data['display_name'],
+					'description' => $data['description'],
+				]);
+			}
+		} else
+			Permission::create($data);
 		return $this->success('', url('admin/permission'));
 	}
 
