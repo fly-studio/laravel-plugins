@@ -51,7 +51,7 @@ class ToolsController extends Controller {
 		$link_path = normalize_path(APPPATH . 'static/plugins');
 		@$this->_symlink($target_path, $link_path);
 
-		return $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功'), FALSE);
+		return $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功'), TRUE);
 	}
 
 	private function _symlink($target_path, $link_path)
