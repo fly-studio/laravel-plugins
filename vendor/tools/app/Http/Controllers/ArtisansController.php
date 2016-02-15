@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\StringInput;
 use DB;
 class ArtisansController extends Controller {
 	use ValidatesRequests;
+	public $withInit = FALSE;
 
 	public function index()
 	{

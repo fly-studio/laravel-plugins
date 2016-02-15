@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Cache;
 class ToolsController extends Controller {
 
+	public $withInit = FALSE;
 	public function index()
 	{
 		return $this->view('tools::system.tools');

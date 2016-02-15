@@ -75,7 +75,7 @@ $().ready(function(){
 		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:middleware {请输入中间件的类名}">中间件 Middleware</a> <small>php artisan make:middleware MiddlewareName</small></li>
 		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:job {请输入任务队列的类名}">任务队列 Job</a> <small>php artisan make:job JobName</small></li>
 		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:command {请输入命令的类名}">命令 Command</a> <small>php artisan make:command CommandName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:migration {请输入数据库迁移的类名，比如：CreateUserTables}">数据库 迁移 Migration</a> <small>php artisan make:migration MigrationName</small></li>
+		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:migration {请输入数据库迁移的类名，比如：create_user_tables}">数据库 迁移 Migration</a> <small>php artisan make:migration MigrationName</small></li>
 		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:seeder {请输入数据库测试数据的类名}">数据库 测试数据 Seeder</a> <small>php artisan make:seeder SeederName</small></li>
 	</ul>
 	<p></p>
