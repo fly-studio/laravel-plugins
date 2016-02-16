@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Cache;
 class ToolsController extends Controller {
 
+	public $withInit = FALSE;
 	public function index()
 	{
 		return $this->view('tools::system.tools');
@@ -51,7 +52,7 @@ class ToolsController extends Controller {
 		$link_path = normalize_path(APPPATH . 'static/plugins');
 		@$this->_symlink($target_path, $link_path);
 
-		return $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功'), FALSE);
+		return $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功'), TRUE);
 	}
 
 	private function _symlink($target_path, $link_path)
