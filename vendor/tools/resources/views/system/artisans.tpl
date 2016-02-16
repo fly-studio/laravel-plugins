@@ -62,22 +62,52 @@ $().ready(function(){
 		<h1>数据库</h1>
 	</div>
 	<ul class="artisan">
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan migrate">导入数据库(需要先建库)</a> <small>php artisan migrate</small></li>
-		<li><a href="#sql-modal" data-toggle="modal" data-backdrop="static">执行SQL语句</a> <small>可以执行任意SQL语句</small></li>
-		<li><a href="#schema-modal" data-toggle="modal" data-backdrop="static">执行Schema</a> <small>可以在此处执行<code>Schema::create</code>、<code>Schema::drop</code>、<code>Schema::table</code>等php语句（参：\Illuminate\Database\Schema\Builder）</small></li>
+		<li>
+			<a href="javascript:void(0);" name="console" data-console="php artisan migrate">导入数据库(需要先建库)</a> <small>php artisan migrate</small>
+		</li>
+		<li>
+			<a href="#sql-modal" data-toggle="modal" data-backdrop="static">执行SQL语句</a> <small>可以执行任意SQL语句</small>
+		</li>
+		<li>
+			<a href="#schema-modal" data-toggle="modal" data-backdrop="static">执行Schema</a> <small>可以在此处执行<code>Schema::create</code>、<code>Schema::drop</code>、<code>Schema::table</code>等php语句（参：\Illuminate\Database\Schema\Builder）</small>
+		</li>
 	</ul>
 	<div class="page-header">
 		<h1>创建</h1>
 	</div>
 	<ul class="artisan">
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:controller {请输入控制器的类名，比如：UserController}">控制器 Controller</a> <small>php artisan make:controller ControllerName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:model {请输入表模型的类名，比如：User}">数据库 表模型 Model</a> <small>php artisan make:model ModelName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:middleware {请输入中间件的类名}">中间件 Middleware</a> <small>php artisan make:middleware MiddlewareName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:job {请输入任务队列的类名}">任务队列 Job</a> <small>php artisan make:job JobName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:console {请输入控制台的类名}">控制台 Console</a> <small>php artisan make:command ConsoleName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:command {请输入命令的类名}">命令 Command</a> <small>php artisan make:command CommandName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:migration {请输入数据库迁移的类名，比如：create_user_tables}">数据库 迁移 Migration</a> <small>php artisan make:migration MigrationName</small></li>
-		<li><a href="javascript:void(0);" name="console" data-console="php artisan make:seeder {请输入数据库测试数据的类名}">数据库 测试数据 Seeder</a> <small>php artisan make:seeder SeederName</small></li>
+		<li>
+			<a href="javascript:void(0);" name="console" data-console="php artisan make:controller {请输入控制器的类名，比如：UserController}">控制器 Controller</a> <small>php artisan make:controller <b>ControllerName</b></small>
+			<small class="help-block">生成文件在：app/Http/Controllers</small>
+		</li>
+		<li>
+			<a href="javascript:void(0);" name="console" data-console="php artisan make:model {请输入表模型的类名，比如：User}">数据库 表模型 Model</a> <small>php artisan make:model <b>ModelName</b></small>
+			<small class="help-block">生成文件在：app</small>
+		</li>
+		<li>
+			<a href="javascript:void(0);" name="console" data-console="php artisan make:middleware {请输入中间件的类名}">中间件 Middleware</a> <small>php artisan make:middleware <b>MiddlewareName</b></small>
+			<small class="help-block">生成文件在：app/Http/Middleware</small>
+		</li>
+		<li>
+			<a href="javascript:void(0);" name="console" data-console="php artisan make:job {请输入任务队列的类名}">任务队列 Job</a> <small>php artisan make:job <b>JobName</b></small>
+			<small class="help-block">生成文件在：app/Jobs</small>
+		</li>
+		<li>
+			<a href="javascript:void(0);" name="console" data-console="php artisan make:console {请输入控制台的类名} --command={Artisan命令行，如：send:mails}">控制台 Console</a> <small>php artisan make:console <b>ConsoleName</b> --command=<b>send:mails</b></small>
+			<small class="help-block">此项为自定义artisan的控制台命令，生成文件在：app/Console/Commands，也就是可以使用php artisan xx:xx 执行的命令，需要在app/Console/Kernel.php中注册</small>
+		</li>
+		<li>
+			<a href="javascript:void(0);" name="console" data-console="php artisan make:command {请输入命令的类名}">命令 Command</a> <small>php artisan make:command <b>CommandName</b></small>
+			<small class="help-block">区别于make:console，服务于Job队列或自动任务，生成文件在：app/Console</small>
+		</li>
+		<li>
+			<a href="javascript:void(0);" name="console" data-console="php artisan make:migration {请输入数据库迁移的类名，比如：create_user_tables}">数据库 迁移 Migration</a> <small>php artisan make:migration <b>MigrationName</b></small>
+			<small class="help-block">生成文件在：database/migrations</small>
+		</li>
+		<li>
+			<a href="javascript:void(0);" name="console" data-console="php artisan make:seeder {请输入数据库测试数据的类名}">数据库 测试数据 Seeder</a> <small>php artisan make:seeder <b>SeederName</b></small>
+			<small class="help-block">生成文件在：database/seeds</small>
+		</li>
 	</ul>
 	<p></p>
 	<p></p>

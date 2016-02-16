@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="<{'plugins/css/tools/console.css'|url nofilter}>">
 <script src="<{'plugins/js/tools/console.js'|url nofilter}>"></script>
+<div class="console-fixed-blank"></div>
 <div class="container console" id="console">
 	<div class="row toolbar">
 		<span><i class="glyphicon glyphicon-console"></i> &nbsp;&nbsp;控制台</span>

@@ -27,6 +27,7 @@ class ArtisansController extends Controller {
 		{
 			set_time_limit(120);
 			$kernel = app('Addons\\Core\\Console\\Kernel');
+			$commands = app('App\\Console\\Kernel')->commands;$kernel->setCommands($commands);
 			try {
 				$out = $kernel->run($command);
 			} catch (Exception $e) {
