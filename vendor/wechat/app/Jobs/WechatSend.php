@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Wechat\App;
+namespace Plugins\Wechat\App\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
