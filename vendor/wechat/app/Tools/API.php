@@ -1052,12 +1052,13 @@ class API
 		curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1 );
 		$sContent = curl_exec($oCurl);
 		$aStatus = curl_getinfo($oCurl);
-		curl_close($oCurl);
 		if(intval($aStatus["http_code"])==200){
 			$this->log($sContent, $url);
+			curl_close($oCurl);
 			return $sContent;
 		}else{
 			$this->log(json_encode($aStatus). PHP_EOL . curl_errno($oCurl) .':'. curl_error($oCurl) .PHP_EOL. $sContent, $url);
+			curl_close($oCurl);
 			return false;
 		}
 	}
