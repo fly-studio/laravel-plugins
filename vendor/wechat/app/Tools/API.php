@@ -1057,6 +1057,7 @@ class API
 			$this->log($sContent, $url);
 			return $sContent;
 		}else{
+			$this->log($aStatus .PHP_EOL. $sContent, $url);
 			return false;
 		}
 	}
@@ -2246,7 +2247,8 @@ class API
 		$code = isset($_GET['code'])?$_GET['code']:'';
 		if (!$code) return false;
 		$this->log($code);
-		$result = $this->http_get(self::API_BASE_URL_PREFIX.self::OAUTH_TOKEN_URL.'appid='.$this->appid.'&secret='.$this->appsecret.'&code='.$code.'&grant_type=authorization_code');
+		$result = $this->http_get($url = self::API_BASE_URL_PREFIX.self::OAUTH_TOKEN_URL.'appid='.$this->appid.'&secret='.$this->appsecret.'&code='.$code.'&grant_type=authorization_code');
+		$this->log($result, $url);
 		if ($result)
 		{
 			$json = json_decode($result,true);
