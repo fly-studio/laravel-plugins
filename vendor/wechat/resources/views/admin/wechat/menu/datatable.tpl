@@ -21,7 +21,7 @@
 <!-- DataTable的Block -->
 
 <{block "datatable-columns-options-plus"}>
-    if(full['level']<1)
+    if(full['level']<2)
 		var columns_options_plus = [
 	'<a href="<{''|url}>/<{block "namespace"}>admin<{/block}>/<{block "name"}><{/block}>/?pid='+full['id']+'" data-toggle="tooltip" title="子项" class="btn btn-xs btn-default"><i class="fa fa-adjust"></i></a>'
 	+'<a href="<{''|url}>/<{block "namespace"}>admin<{/block}>/<{block "name"}><{/block}>/create?pid='+full['id']+'" data-toggle="tooltip" title="增加子项" class="btn btn-xs btn-default"><i class="fa fa-info"></i></a>'
