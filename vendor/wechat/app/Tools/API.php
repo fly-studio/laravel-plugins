@@ -1057,7 +1057,7 @@ class API
 			$this->log($sContent, $url);
 			return $sContent;
 		}else{
-			$this->log($aStatus .PHP_EOL. $sContent, $url);
+			$this->log(json_encode($aStatus) .PHP_EOL. $sContent, $url);
 			return false;
 		}
 	}
