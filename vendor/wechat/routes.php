@@ -7,6 +7,7 @@ $router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['au
 	]);
 
 	$router->group(['namespace' => 'Wechat', 'prefix' => 'wechat', 'middleware' => 'wechat.account'], function($router) {
+	    $router->any('menu/takeEffect','MenuController@takeEffect');
 		$router->addAdminRoutes([
 			'user' => 'UserController',
 			'depot' => 'DepotController',
