@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Plugins\Wechat\App\Attachment;
+use Plugins\Attachment\App\Attachment;
 use Plugins\Wechat\App\WechatAccount;
 use Plugins\Wechat\App\WechatMessage;
 use Plugins\Wechat\App\WechatDepot;
