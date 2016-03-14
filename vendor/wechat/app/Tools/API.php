@@ -1052,11 +1052,13 @@ class API
 		curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1 );
 		$sContent = curl_exec($oCurl);
 		$aStatus = curl_getinfo($oCurl);
-		curl_close($oCurl);
 		if(intval($aStatus["http_code"])==200){
 			$this->log($sContent, $url);
+			curl_close($oCurl);
 			return $sContent;
 		}else{
+			$this->log(json_encode($aStatus). PHP_EOL . curl_errno($oCurl) .':'. curl_error($oCurl) .PHP_EOL. $sContent, $url);
+			curl_close($oCurl);
 			return false;
 		}
 	}
@@ -2246,7 +2248,8 @@ class API
 		$code = isset($_GET['code'])?$_GET['code']:'';
 		if (!$code) return false;
 		$this->log($code);
-		$result = $this->http_get(self::API_BASE_URL_PREFIX.self::OAUTH_TOKEN_URL.'appid='.$this->appid.'&secret='.$this->appsecret.'&code='.$code.'&grant_type=authorization_code');
+		$result = $this->http_get($url = self::API_BASE_URL_PREFIX.self::OAUTH_TOKEN_URL.'appid='.$this->appid.'&secret='.$this->appsecret.'&code='.$code.'&grant_type=authorization_code');
+		$this->log($result, $url);
 		if ($result)
 		{
 			$json = json_decode($result,true);

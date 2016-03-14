@@ -6,10 +6,10 @@ trait WechatMessageTrait{
 	public static function bootWechatMessageMediaTrait()
 	{
 		static::deleting(function($message){
-			$depot->media()->delete();
-			$depot->link()->delete();
-			$depot->text()->delete();
-			$depot->location()->delete();
+			$message->media()->delete();
+			$message->link()->delete();
+			$message->text()->delete();
+			$message->location()->delete();
 		});
 	}
 }
