@@ -73,7 +73,7 @@
 			</div>
 			<div class="clearfix"></div>
 			<div class="menu-publish">
-				<h4>已修改菜单：<small>修改之后必须「发布菜单」</small></h4>
+				<h4>已修改菜单：<small>所有修改完毕之后，必须「发布菜单」</small></h4>
 				<ol>
 					<li>asdasdasd</li>
 				</ol>
