@@ -1,4 +1,10 @@
 <div class="form-group">
+	<label class="col-md-3 control-label" for="name">配置网址</label>
+	<div class="col-md-9">
+		<p class="form-control-static"><code><{'wechat/push'|url}>?id=<i><{$_data.id|default:'ID'}></i></code>，（对应公众号的ID）</p>
+	</div>
+</div>
+<div class="form-group">
 	<label class="col-md-3 control-label" for="name">名称</label>
 	<div class="col-md-9">
 		<input type="text" id="name" name="name" class="form-control" placeholder="请输入名称" value="<{$_data.name}>">
