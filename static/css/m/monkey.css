@@ -146,7 +146,7 @@ body>div.game_start {
 	29.7%{top:-84px;opacity:1;}
 	31.35%{top:-84px;opacity:0;}
 	32.34%{top:84px;opacity:0;}
-	33%{top:84px;opacity:1;}
+	33%{top:84px;opacity:0;}
 	84.15%{top:84px;opacity:1;}
 	85.8%{top:0px;opacity:1;}
 	100%{opacity:1;top:0px;}
@@ -157,7 +157,7 @@ body>div.game_start {
 	29.7%{top:-84px;opacity:1;}
 	31.35%{top:-84px;opacity:0;}
 	32.34%{top:84px;opacity:0;}
-	33%{top:84px;opacity:1;}
+	33%{top:84px;opacity:0;}
 	84.15%{top:84px;opacity:1;}
 	85.8%{top:0px;opacity:1;}
 	100%{opacity:1;top:0px;}
@@ -177,7 +177,7 @@ body>div.game_start {
 	57.75%{top:-84px;opacity:1;}
 	59.4%{top:-84px;opacity:0;}
 	60.39%{top:84px;opacity:0;}
-	61.05%{top:84px;opacity:1;}
+	61.05%{top:84px;opacity:0;}
 	100%{top:84px;opacity:1;}	
 }
 @-webkit-keyframes lucky_frame2 {
@@ -188,7 +188,7 @@ body>div.game_start {
 	57.75%{top:-84px;opacity:1;}
 	59.4%{top:-84px;opacity:0;}
 	60.39%{top:84px;opacity:0;}
-	61.05%{top:84px;opacity:1;}
+	61.05%{top:84px;opacity:0;}
 	100%{top:84px;opacity:1;}	
 }
 
@@ -207,7 +207,7 @@ body>div.game_start {
 	85.8%{top:-84px;opacity:1;}	
 	87.45%{top:-84px;opacity:0;}
 	88.44%{top:84px;opacity:0;}
-	89.1%{top:84px;opacity:1;}
+	89.1%{top:84px;opacity:0;}
 	100%{top:84px;opacity:1;}
 	
 }
@@ -219,7 +219,7 @@ body>div.game_start {
 	85.8%{top:-84px;opacity:1;}	
 	87.45%{top:-84px;opacity:0;}
 	88.44%{top:84px;opacity:0;}
-	89.1%{top:84px;opacity:1;}
+	89.1%{top:84px;opacity:0;}
 	100%{top:84px;opacity:1;}
 }
 .lucky_chart div.lucky_box ul li {
