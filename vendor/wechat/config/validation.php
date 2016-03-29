@@ -212,14 +212,27 @@ return [
 				'rules' => 'required|ansi:2|regex:/^[a-z\x{4e00}-\x{9fa5}\x{f900}-\x{fa2d}\s]*$/iu|max:50|min:3',
 				'message' => ['regex' => '菜单必须为汉字、英文'],
 			],
-			'url' => [
-				'name' => '链接',
-				'rules' => 'url',
-			],
-			'order'=>[
-				'name'=>'排序',
+			'pid' => [
+				'name' => '父菜单',
 				'rules' => 'required|numeric',
 			],
+			'type' => [
+				'name' => '类型',
+				'rules' => 'required|in:view,click,event',
+			],
+			'event' => [
+				'name' => '事件',
+				'rules' => 'required_if:type,event|in:pic_sysphoto,pic_photo_or_album,pic_weixin,location_select,scancode_waitmsg,scancode_push',
+			],
+			'url' => [
+				'name' => '链接',
+				'rules' => 'required_if:type,view|url',
+			],
+			'wdid' => [
+				'name' => '素材ID',
+				'rules' => 'required_if:type,click|numeric',
+			],
+			
 		 ],
 	],
 ];

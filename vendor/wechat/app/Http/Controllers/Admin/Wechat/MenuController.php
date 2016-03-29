@@ -17,12 +17,10 @@ class MenuController extends Controller
 {
 	use AdminTrait;
 	//public $RESTful_permission = 'wechat-menu';
-	public $pid;
 	
 	public function __construct()
 	{
 		parent::__construct();
-		$this->pid = session('wechat-menu-pid');
 	}
 	/**
 	 * Display a listing of the resource.
@@ -31,25 +29,18 @@ class MenuController extends Controller
 	 */
 	public function index(Request $request, Account $account)
 	{
-		$this->pid = $request->get('pid',0); 
-		session(['wechat-menu-pid'=>$this->pid]);
 		$menu = new WechatMenu;
-		$builder = $menu->newQuery()->where('waid', $account->getAccountID())->where('pid',$this->pid)->orderBy('order','asc');
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$menu->getTable(), $this->site['pagesize']['common']);
-		$base = boolval($request->input('base')) ?: false;
+		$builder = $menu->newQuery()->with('children')->where('waid', $account->getAccountID())->where('pid', 0)->orderBy('order','ASC');
 
 		//view's variant
-		$this->_base = $base;
-		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $base ? $this->_getPaginate($request, $builder, ['*'], ['base' => $base]) : [];
-		return $this->view('wechat::admin.wechat.menu.'. ($base ? 'list' : 'datatable'));
+		$this->_table_data = $this->_getPaginate($request, $builder, ['*']);
+		return $this->view('wechat::admin.wechat.menu.list');
 	}
 
 	public function data(Request $request, Account $account)
 	{
 		$menu = new WechatMenu;
-		$builder = $menu->newQuery()->where('waid', $account->getAccountID())->where('pid',$this->pid)->orderBy('order','asc');
+		$builder = $menu->newQuery()->with('children')->where('waid', $account->getAccountID())->where('pid', 0)->orderBy('order','ASC');
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
@@ -58,62 +49,24 @@ class MenuController extends Controller
 		return $this->success('', FALSE, $data);
 	}
 
-	public function export(Request $request, Account $account)
-	{
-		$menu = new WechatMenu;
-		$builder = $menu->newQuery()->where('waid', $account->getAccountID())->where('pid',$this->pid);
-		$page = $request->input('page') ?: 0;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $this->_getCount($request, $builder);
-
-		if (empty($page)){
-			$this->_of = $request->input('of');
-			$this->_table = $menu->getTable();
-			$this->_total = $total;
-			$this->_pagesize = $pagesize > $total ? $total : $pagesize;
-			return $this->view('wechat::admin.wechat.menu.export');
-		}
-
-		$data = $this->_getExport($request, $builder);
-		return $this->success('', FALSE, $data);
-	}
-
 	public function show($id)
 	{
 		return '';
 	}
 
-	public function create(Request $request)
-	{
-		$this->pid = $request->get('pid',0);
-		session(['wechat-menu-pid'=>$this->pid]);
-		$menu = WechatMenu::find($this->pid);
-
-		$keys = 'title,url,order';
-		$this->_data = $menu?['upname'=>$menu->title,'pid'=>$this->pid]:[];
-		$this->_validates = $this->getScriptValidate('wechat-menu.store', $keys);
-		return $this->view('wechat::admin.wechat.menu.create');
-	}
-
 	public function store(Request $request, Account $account)
 	{
-		$keys = 'title,url,order';
+		$pid = $request->input('pid');
+		$menus = WechatMenu::with('children')->where('waid', $account->getAccountID())->where('pid', $pid)->orderBy('order','ASC')->get();
+		if ((empty($pid) && count($menus) >= 3) || (!empty($pid) && count($menus) >= 5)) //已经超出了
+			return $this->failure('wechat.failure_menu_overflow');
+
+		$keys = 'title,pid,type,event,url,wdid';
 		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
 
-		WechatMenu::create($data + ['waid' => $account->getAccountID(),'type' => 'view','pid' => $this->pid]);
+		$menu = WechatMenu::create($data + ['waid' => $account->getAccountID(), 'order' => count($menus) + 1]);
+		$menu->event_key = 'key-' . $menu->getKey();$menu->save();
 		return $this->success('', url('admin/wechat/menu'));
-	}
-
-	public function edit($id)
-	{
-		$menu = WechatMenu::with(['parent'])->find($id);
-		if (empty($menu))
-			return $this->failure_noexists();
-
-		$keys = 'title,url,order';
-		$this->_validates = $this->getScriptValidate('wechat-menu.store', $keys);
-		$this->_data = $menu;
-		return $this->view('wechat::admin.wechat.menu.edit');
 	}
 
 	public function update(Request $request, $id)
@@ -122,8 +75,9 @@ class MenuController extends Controller
 		if (empty($menu))
 			return $this->failure_noexists();
 
-		$keys = 'title,url,order';
+		$keys = 'title,type,event,url,wdid';
 		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
+
 		$menu->update($data);
 		return $this->success();
 	}

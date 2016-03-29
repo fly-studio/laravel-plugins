@@ -8,7 +8,9 @@
 .menu-items .menu-item {line-height: 40px;display: block; padding: 0 10px 0 10px;border-bottom: 1px #f6f6f6 solid;}
 .menu-items .menu-subitem {line-height: 40px;display: block;padding:0 10px 0 30px;border-bottom: 1px #f6f6f6 solid;}
 .menu-items .menu-plus {height:40px;margin-top: 30px;}
-.menu-tools a {margin: 0 0 0 10px;}
+.menu-tools a {}
 
 .menu-publish {border-top: 1px #ccc solid;padding: 15px;}
 .menu-publish-buttons {}
+
+.menu-forms .tips {padding: 0 20px;}
