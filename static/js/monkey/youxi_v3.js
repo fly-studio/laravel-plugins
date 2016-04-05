@@ -365,7 +365,7 @@
 			}
 			else
 			{
-				$(".tip").toggleClass("active");	
+				$(".tip").toggleClass("active1");	
 			}	
 		});
 		
