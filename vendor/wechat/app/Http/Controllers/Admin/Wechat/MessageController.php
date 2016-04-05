@@ -27,7 +27,8 @@ class MessageController extends Controller
 	public function index(Request $request, Account $account)
 	{
 		$message = new WechatMessage;
-		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('transport_type','receive')->where('waid', $account->getAccountID());
+//		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('transport_type','receive')->where('waid', $account->getAccountID());
+		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('waid', $account->getAccountID());
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$message->getTable(), $this->site['pagesize']['common']);
 		$base = boolval($request->input('base')) ?: false;
 
@@ -41,7 +42,8 @@ class MessageController extends Controller
 	public function data(Request $request, Account $account)
 	{
 		$message = new WechatMessage;
-		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('transport_type','receive')->where('waid', $account->getAccountID());
+//		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('transport_type','receive')->where('waid', $account->getAccountID());
+		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('waid', $account->getAccountID());
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
