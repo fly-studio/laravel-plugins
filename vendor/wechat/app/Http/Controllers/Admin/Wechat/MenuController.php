@@ -66,7 +66,7 @@ class MenuController extends Controller
 
 		$menu = WechatMenu::create($data + ['waid' => $account->getAccountID(), 'order' => count($menus) + 1]);
 		$menu->event_key = 'key-' . $menu->getKey();$menu->save();
-		return $this->success('', url('admin/wechat/menu'));
+		return $this->success('', FALSE, $menu->toArray());
 	}
 
 	public function update(Request $request, $id)
@@ -79,7 +79,7 @@ class MenuController extends Controller
 		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
 
 		$menu->update($data);
-		return $this->success();
+		return $this->success('', FALSE, $menu->toArray());
 	}
 
 	public function destroy(Request $request, $id)
@@ -91,68 +91,66 @@ class MenuController extends Controller
 			$menu = WechatMenu::destroy($v);
 		return $this->success('', count($id) > 5, compact('id'));
 	}
-	
-	public function takeEffect(Account $account)
-	{
-// 	    $menu_data = array (
-// 	        'button' => array (
-// 	            0 => array (
-// 	                'name' => '新品特惠',
-// 	                'sub_button' => array (
-// 	                    0 => array (
-// 	                        'type' => 'view',
-// 	                        'name' => '优惠列表',
-// 	                        'url' => 'http://www.hanpaimall.com/m/classify',
-// 	                    ),
-// 	                ),
-// 	            ),
-// 	            1 => array (
-// 	                'type' => 'view',
-// 	                'name' => '汉派商城',
-// 	                'url' => 'http://www.hanpaimall.com/m',
-	                 
-// 	            ),
-// 	            2 => array (
-// 	                'name' => '我的中心',
-// 	                'sub_button' => array (
-// 	                    0 => array (
-// 	                        'type' => 'view',
-// 	                        'name' => '管理中心',
-// 	                        'url' => 'http://www.hanpaimall.com/auth',
-// 	                    ),
-// 	                    1 => array (
-// 	                        'type' => 'view',
-// 	                        'name' => '个人中心',
-// 	                        'url' => 'http://www.hanpaimall.com/m/ucenter',
-// 	                    )
-// 	                )
-// 	            )
-// 	        )
-// 	    );
-	    $menu_data = ['button'=>[]];
-	    $menulist = WechatMenu::with('children')->newQuery()->where('waid', $account->getAccountID())->where('pid',0)->orderBy('order','asc')->get();
 
-	    foreach ($menulist as $menu)
-	    {
-	        $menu_item_data = [];
-	        if($menu->children->count()>0){
-	            $menu_item_data['name'] = $menu->title;
-	            foreach ($menu->children as $sub_menu)
-	            {
-	                $menu_item_data['sub_button'][] = ['type'=>'view','name'=>$sub_menu->title,'url'=>$sub_menu->url];
-	            } 
-	        }else{
-	            $menu_item_data = ['type'=>'view','name'=>$menu->title,'url'=>$menu->url];
-	        }
-	        $menu_data['button'][]= $menu_item_data;
-	    }
-//           var_export($menu_data);exit;
-	    $account = WechatAccount::findOrFail($account->getAccountID());
-	    $api = new API($account->toArray(), $account->getKey());
-	    if($api->createMenu($menu_data)){
-	        return $this->success('wechat::wechat.menu_create_succerss', url('admin/wechat/menu'));
-	    }else{
-	        return $this->failure('wechat::wechat.menu_create_failure', url('admin/wechat/menu'));
-	    }
+	public function publishQuery(Request $request, Account $account)
+	{
+		if (!empty($request->input('id')))
+		{
+			$id = $request->input('id');
+			$id = (array) $id;
+			foreach ($id as $v)
+				WechatDepot::destroy($v);
+		} 
+		
+		return $this->publishToWechat($account);
+	}
+	
+	public function publishToWechat(Account $account)
+	{
+		$menu_data = ['button'=>[]];
+		$menulist = WechatMenu::with('children')->newQuery()->where('waid', $account->getAccountID())->where('pid', 0)->orderBy('order', 'ASC')->get();
+
+		foreach ($menulist as $menu)
+		{
+			$menu_item_data = [];
+			if(!empty($menu->children)) //有子项
+			{
+				$menu_item_data['name'] = $menu->title;
+				foreach ($menu->children as $sub_menu)
+					$menu_item_data['sub_button'][] = $this->getMenuData($sub_menu);
+			}
+			else
+				$menu_item_data = $this->getMenuData($menu);
+
+			$menu_data['button'][]= $menu_item_data;
+		}
+
+		$account = WechatAccount::findOrFail($account->getAccountID());
+		$api = new API($account->toArray(), $account->getKey());
+		if($api->createMenu($menu_data))
+			return $this->success('wechat::wechat.menu_created_success', TRUE);
+		else
+			return $this->failure('wechat::wechat.menu_created_failure', FALSE, ['error_no' => $api->errCode, 'error_message' => $api->errMsg]);
+	}
+
+	private function getMenuData(WechatMenu $menu)
+	{
+		$result = [
+			'name' => $menu->title,
+			'type' => $menu->type,
+		];
+		switch($menu->type) {
+			case 'view':
+				$result['url'] = $menu->url;
+				break;
+			case 'click':
+				$result['key'] = $menu->event_key;
+				break;
+			case 'event':
+				$result['key'] = $menu->event_key;
+				$result['type'] = $menu->event;
+				break;
+		}
+		return $result;
 	}
 }

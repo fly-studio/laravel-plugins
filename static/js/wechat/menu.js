@@ -33,11 +33,21 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 	$scope.submiting = false;
 	$scope.dataList = menuList ? menuList.data : [];
 	$scope.menuSelected = null;
+	$scope.deletedList = [];
+	//设定index
+	for(var i = 0; i < $scope.dataList.length; ++i)
+	{
+		$scope.dataList[i].index = (i+1);
+		if ($scope.dataList[i].children)
+			for (var j = 0; j < $scope.dataList[i].children.length; j++)
+				$scope.dataList[i].children[j].index = (i+1) * 10 + (j+1);
+	}
+
 	$scope.select = function(item) {
 		$scope.menuSelected = item;
 	}
 	var newID = -1;
-	$scope.create = function(parentItem, pid) {
+	$scope.create = function(parentItem, pid, index) {
 		var item = {
 			id: newID--,
 			pid: pid.toString(),
@@ -45,10 +55,11 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 			type: 'view',
 			url: '',
 			order: parentItem.length + 1,
-			children: []
+			children: [],
+			index: index * 10 + (parentItem.length + 1)
 		}
 		parentItem.push(item);
-		$scope.select(parentItem[parentItem.length - 1]);
+		$scope.select(parentItem[parentItem.length - 1]); //选中最后一个
 		//console.log($scope.form);
 	}
 	$scope.saveMenus = function()
@@ -61,11 +72,11 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 			var $form = jQuery('[name="'+form.$name+'"]');
 
 			querys.push($query.form($form, function(json){
-				if (json.data) {
-					form.from.$modelValue.id = json.data.id; //如果是新建，则改变id
-					angular.forEach(form.from.$modelValue.children, function(item){
-						item.pid = form.from.$modelValue.id;
-					});
+				if (json.result == 'success') {
+					var item = index > 10 ? $scope.dataList[ parseInt(index / 10) - 1 ].children[ index % 10 - 1 ] : $scope.dataList[ index - 1 ]; 
+					item.id = json.data.id; //如果是新建，则改变id
+					if (item.children) for (var i = 0; i < item.children.length; i++) 
+						item.children[i].pid = item.id;
 					form.$setPristine();
 					$scope.$apply();
 				}
@@ -81,21 +92,11 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 	}
 	$scope.save = function()
 	{
-
-		var modified = false;
-		for(var i in $scope.forms.menu)
-			if ( !!$scope.forms.menu[i].modified )
-				modified = true;
-		if (!modified)
-		{
-			jQuery.alert('您没有修改任何内容，无需保存！');
-			return false;
-		}
 		//提交到服务器
 		var submit = function(){
 			
-			$query.form(jQuery('[name="forms.menu"]')).done(function(json){
-				
+			$query.form(jQuery('[name="forms.publish"]')).done(function(json){
+				$.showtips(json);
 			}).always(function(){
 				$scope.submiting = false;
 			});
@@ -106,5 +107,16 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 			$scope.submiting = false;
 		});
 
+	}
+	$scope.destroy = function(item, parentItem)
+	{
+		jQuery.confirm('您确定删除此项吗？').done(function(){
+			for (var i = 0; i < parentItem.length; i++)
+				if (parentItem[i].index > item.index) parentItem[i].index--;
+			if (item.id > 0 ) $scope.deletedList.push(item.id);
+			parentItem.splice(item.index % 10 - 1, 1);
+			$scope.$apply();
+			delete $scope.forms.menu[item.index];
+		});
 	}
 });

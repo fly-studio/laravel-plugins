@@ -154,6 +154,7 @@ return [
 			'url' => [
 				'name' => '原文网址',
 				'rules' => 'required_if:redirect,1|url|max:250',
+				'message' => ['required_if' => '请输入原文网址，以便跳转。']
 			],
 			'redirect' => [
 				'name' => '直接跳转',
@@ -223,14 +224,17 @@ return [
 			'event' => [
 				'name' => '事件',
 				'rules' => 'required_if:type,event|in:pic_sysphoto,pic_photo_or_album,pic_weixin,location_select,scancode_waitmsg,scancode_push',
+				'message' => ['required_if' => '请选择具体的事件。']
 			],
 			'url' => [
 				'name' => '链接',
 				'rules' => 'required_if:type,view|url',
+				'message' => ['required_if' => '请输入跳转网址。']
 			],
 			'wdid' => [
 				'name' => '素材ID',
 				'rules' => 'required_if:type,click|numeric',
+				'message' => ['required_if' => '请选择素材。']
 			],
 			
 		 ],
