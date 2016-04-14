@@ -70,10 +70,10 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 		var querys = [];
 		angular.forEach($scope.forms.menu, function(form, index){
 			var $form = jQuery('[name="'+form.$name+'"]');
+			var item = index > 10 ? $scope.dataList[ parseInt(index / 10) - 1 ].children[ index % 10 - 1 ] : $scope.dataList[ index - 1 ]; 
 
 			querys.push($query.form($form, function(json){
 				if (json.result == 'success') {
-					var item = index > 10 ? $scope.dataList[ parseInt(index / 10) - 1 ].children[ index % 10 - 1 ] : $scope.dataList[ index - 1 ]; 
 					item.id = json.data.id; //如果是新建，则改变id
 					if (item.children) for (var i = 0; i < item.children.length; i++) 
 						item.children[i].pid = item.id;
@@ -81,7 +81,7 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 					$scope.$apply();
 				}
 			}, false).fail(function(json){
-				$scope.select(form.from.$modelValue);
+				$scope.select(item);
 				jQuery.showtips(json);
 			}).done(function(json){
 				

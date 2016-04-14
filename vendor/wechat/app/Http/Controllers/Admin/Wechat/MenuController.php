@@ -64,7 +64,7 @@ class MenuController extends Controller
 		$keys = 'title,pid,type,event,url,wdid';
 		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
 
-		$menu = WechatMenu::create($data + ['waid' => $account->getAccountID(), 'order' => count($menus) + 1]);
+		$menu = WechatMenu::create($data + ['waid' => $account->getAccountID(), 'order' => intval($menus->max('order')) + 1]);
 		$menu->event_key = 'key-' . $menu->getKey();$menu->save();
 		return $this->success('', FALSE, $menu->toArray());
 	}
@@ -99,7 +99,7 @@ class MenuController extends Controller
 			$id = $request->input('id');
 			$id = (array) $id;
 			foreach ($id as $v)
-				WechatDepot::destroy($v);
+				WechatMenu::destroy($v);
 		} 
 		
 		return $this->publishToWechat($account);

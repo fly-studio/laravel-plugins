@@ -111,7 +111,7 @@
 
 <script type="text/ng-template" id="wechat/menu/modified">
 <form action="<{'admin/wechat/menu/publish-query'|url}>" name="forms.publish" method="POST">
-<div ng-repeat="id in deleteList" style="display: none;">
+<div ng-repeat="id in deletedList" style="display: none;">
 	<input type="text" name="id[]" value="{{id}}">
 </div>
 </form>
