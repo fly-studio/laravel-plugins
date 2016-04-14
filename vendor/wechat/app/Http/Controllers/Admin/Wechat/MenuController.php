@@ -113,7 +113,7 @@ class MenuController extends Controller
 		foreach ($menulist as $menu)
 		{
 			$menu_item_data = [];
-			if(!empty($menu->children)) //有子项
+			if($menu->children->count() > 0) //有子项
 			{
 				$menu_item_data['name'] = $menu->title;
 				foreach ($menu->children as $sub_menu)
