@@ -17,12 +17,10 @@ class MenuController extends Controller
 {
 	use AdminTrait;
 	//public $RESTful_permission = 'wechat-menu';
-	public $pid;
 	
 	public function __construct()
 	{
 		parent::__construct();
-		$this->pid = session('wechat-menu-pid');
 	}
 	/**
 	 * Display a listing of the resource.
@@ -31,25 +29,18 @@ class MenuController extends Controller
 	 */
 	public function index(Request $request, Account $account)
 	{
-		$this->pid = $request->get('pid',0); 
-		session(['wechat-menu-pid'=>$this->pid]);
 		$menu = new WechatMenu;
-		$builder = $menu->newQuery()->where('waid', $account->getAccountID())->where('pid',$this->pid)->orderBy('order','asc');
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$menu->getTable(), $this->site['pagesize']['common']);
-		$base = boolval($request->input('base')) ?: false;
+		$builder = $menu->newQuery()->with('children')->where('waid', $account->getAccountID())->where('pid', 0)->orderBy('order','ASC');
 
 		//view's variant
-		$this->_base = $base;
-		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $base ? $this->_getPaginate($request, $builder, ['*'], ['base' => $base]) : [];
-		return $this->view('wechat::admin.wechat.menu.'. ($base ? 'list' : 'datatable'));
+		$this->_table_data = $this->_getPaginate($request, $builder, ['*']);
+		return $this->view('wechat::admin.wechat.menu.list');
 	}
 
 	public function data(Request $request, Account $account)
 	{
 		$menu = new WechatMenu;
-		$builder = $menu->newQuery()->where('waid', $account->getAccountID())->where('pid',$this->pid)->orderBy('order','asc');
+		$builder = $menu->newQuery()->with('children')->where('waid', $account->getAccountID())->where('pid', 0)->orderBy('order','ASC');
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
@@ -58,62 +49,24 @@ class MenuController extends Controller
 		return $this->success('', FALSE, $data);
 	}
 
-	public function export(Request $request, Account $account)
-	{
-		$menu = new WechatMenu;
-		$builder = $menu->newQuery()->where('waid', $account->getAccountID())->where('pid',$this->pid);
-		$page = $request->input('page') ?: 0;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
-		$total = $this->_getCount($request, $builder);
-
-		if (empty($page)){
-			$this->_of = $request->input('of');
-			$this->_table = $menu->getTable();
-			$this->_total = $total;
-			$this->_pagesize = $pagesize > $total ? $total : $pagesize;
-			return $this->view('wechat::admin.wechat.menu.export');
-		}
-
-		$data = $this->_getExport($request, $builder);
-		return $this->success('', FALSE, $data);
-	}
-
 	public function show($id)
 	{
 		return '';
 	}
 
-	public function create(Request $request)
-	{
-		$this->pid = $request->get('pid',0);
-		session(['wechat-menu-pid'=>$this->pid]);
-		$menu = WechatMenu::find($this->pid);
-
-		$keys = 'title,url,order';
-		$this->_data = $menu?['upname'=>$menu->title,'pid'=>$this->pid]:[];
-		$this->_validates = $this->getScriptValidate('wechat-menu.store', $keys);
-		return $this->view('wechat::admin.wechat.menu.create');
-	}
-
 	public function store(Request $request, Account $account)
 	{
-		$keys = 'title,url,order';
+		$pid = $request->input('pid');
+		$menus = WechatMenu::with('children')->where('waid', $account->getAccountID())->where('pid', $pid)->orderBy('order','ASC')->get();
+		if ((empty($pid) && count($menus) >= 3) || (!empty($pid) && count($menus) >= 5)) //已经超出了
+			return $this->failure('wechat.failure_menu_overflow');
+
+		$keys = 'title,pid,type,event,url,wdid';
 		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
 
-		WechatMenu::create($data + ['waid' => $account->getAccountID(),'type' => 'view','pid' => $this->pid]);
-		return $this->success('', url('admin/wechat/menu'));
-	}
-
-	public function edit($id)
-	{
-		$menu = WechatMenu::with(['parent'])->find($id);
-		if (empty($menu))
-			return $this->failure_noexists();
-
-		$keys = 'title,url,order';
-		$this->_validates = $this->getScriptValidate('wechat-menu.store', $keys);
-		$this->_data = $menu;
-		return $this->view('wechat::admin.wechat.menu.edit');
+		$menu = WechatMenu::create($data + ['waid' => $account->getAccountID(), 'order' => intval($menus->max('order')) + 1]);
+		$menu->event_key = 'key-' . $menu->getKey();$menu->save();
+		return $this->success('', FALSE, $menu->toArray());
 	}
 
 	public function update(Request $request, $id)
@@ -122,10 +75,11 @@ class MenuController extends Controller
 		if (empty($menu))
 			return $this->failure_noexists();
 
-		$keys = 'title,url,order';
+		$keys = 'title,type,event,url,wdid';
 		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
+
 		$menu->update($data);
-		return $this->success();
+		return $this->success('', FALSE, $menu->toArray());
 	}
 
 	public function destroy(Request $request, $id)
@@ -137,68 +91,66 @@ class MenuController extends Controller
 			$menu = WechatMenu::destroy($v);
 		return $this->success('', count($id) > 5, compact('id'));
 	}
-	
-	public function takeEffect(Account $account)
-	{
-// 	    $menu_data = array (
-// 	        'button' => array (
-// 	            0 => array (
-// 	                'name' => '新品特惠',
-// 	                'sub_button' => array (
-// 	                    0 => array (
-// 	                        'type' => 'view',
-// 	                        'name' => '优惠列表',
-// 	                        'url' => 'http://www.hanpaimall.com/m/classify',
-// 	                    ),
-// 	                ),
-// 	            ),
-// 	            1 => array (
-// 	                'type' => 'view',
-// 	                'name' => '汉派商城',
-// 	                'url' => 'http://www.hanpaimall.com/m',
-	                 
-// 	            ),
-// 	            2 => array (
-// 	                'name' => '我的中心',
-// 	                'sub_button' => array (
-// 	                    0 => array (
-// 	                        'type' => 'view',
-// 	                        'name' => '管理中心',
-// 	                        'url' => 'http://www.hanpaimall.com/auth',
-// 	                    ),
-// 	                    1 => array (
-// 	                        'type' => 'view',
-// 	                        'name' => '个人中心',
-// 	                        'url' => 'http://www.hanpaimall.com/m/ucenter',
-// 	                    )
-// 	                )
-// 	            )
-// 	        )
-// 	    );
-	    $menu_data = ['button'=>[]];
-	    $menulist = WechatMenu::with('children')->newQuery()->where('waid', $account->getAccountID())->where('pid',0)->orderBy('order','asc')->get();
 
-	    foreach ($menulist as $menu)
-	    {
-	        $menu_item_data = [];
-	        if($menu->children->count()>0){
-	            $menu_item_data['name'] = $menu->title;
-	            foreach ($menu->children as $sub_menu)
-	            {
-	                $menu_item_data['sub_button'][] = ['type'=>'view','name'=>$sub_menu->title,'url'=>$sub_menu->url];
-	            } 
-	        }else{
-	            $menu_item_data = ['type'=>'view','name'=>$menu->title,'url'=>$menu->url];
-	        }
-	        $menu_data['button'][]= $menu_item_data;
-	    }
-//           var_export($menu_data);exit;
-	    $account = WechatAccount::findOrFail($account->getAccountID());
-	    $api = new API($account->toArray(), $account->getKey());
-	    if($api->createMenu($menu_data)){
-	        return $this->success('wechat::wechat.menu_create_succerss', url('admin/wechat/menu'));
-	    }else{
-	        return $this->failure('wechat::wechat.menu_create_failure', url('admin/wechat/menu'));
-	    }
+	public function publishQuery(Request $request, Account $account)
+	{
+		if (!empty($request->input('id')))
+		{
+			$id = $request->input('id');
+			$id = (array) $id;
+			foreach ($id as $v)
+				WechatMenu::destroy($v);
+		} 
+		
+		return $this->publishToWechat($account);
+	}
+	
+	public function publishToWechat(Account $account)
+	{
+		$menu_data = ['button'=>[]];
+		$menulist = WechatMenu::with('children')->newQuery()->where('waid', $account->getAccountID())->where('pid', 0)->orderBy('order', 'ASC')->get();
+
+		foreach ($menulist as $menu)
+		{
+			$menu_item_data = [];
+			if($menu->children->count() > 0) //有子项
+			{
+				$menu_item_data['name'] = $menu->title;
+				foreach ($menu->children as $sub_menu)
+					$menu_item_data['sub_button'][] = $this->getMenuData($sub_menu);
+			}
+			else
+				$menu_item_data = $this->getMenuData($menu);
+
+			$menu_data['button'][]= $menu_item_data;
+		}
+
+		$account = WechatAccount::findOrFail($account->getAccountID());
+		$api = new API($account->toArray(), $account->getKey());
+		if($api->createMenu($menu_data))
+			return $this->success('wechat::wechat.menu_created_success', TRUE);
+		else
+			return $this->failure('wechat::wechat.menu_created_failure', FALSE, ['error_no' => $api->errCode, 'error_message' => $api->errMsg]);
+	}
+
+	private function getMenuData(WechatMenu $menu)
+	{
+		$result = [
+			'name' => $menu->title,
+			'type' => $menu->type,
+		];
+		switch($menu->type) {
+			case 'view':
+				$result['url'] = $menu->url;
+				break;
+			case 'click':
+				$result['key'] = $menu->event_key;
+				break;
+			case 'event':
+				$result['key'] = $menu->event_key;
+				$result['type'] = $menu->event;
+				break;
+		}
+		return $result;
 	}
 }

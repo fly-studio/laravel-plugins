@@ -5,7 +5,8 @@ $router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['au
 	$router->addAdminRoutes([
 		'role' => 'RoleController',
 		'permission' => 'PermissionController',
-		//'change-password' => 'ChangePasswordController',
+		'password' => 'PasswordController',
+		'profile' => 'ProfileController',
 		//'field' => 'FieldController',
 	]);
 
