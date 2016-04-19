@@ -489,7 +489,7 @@ abstract class WechatController extends Controller {
 		if (!empty($depots)) return false;
 		$send = new Send($wechatUser);
 		foreach($depots as $depot)
-			$send->add($depot)；
+			$send->add($depot);
 		$send->send($random);
 	}
 
