@@ -4,20 +4,9 @@
 
 <{block "name"}>wechat/menu<{/block}>
 
-<{block "head-styles-plus"}>
-<link rel="stylesheet" href="<{'plugins/css/wechat/menu.css'|url}>">
-<link rel="stylesheet" href="<{'plugins/css/wechat/depot.css'|url}>">
-<{/block}>
 <{block "head-scripts-plus"}>
-<script src="<{'static/js/angular/angular-1.4.8.min.js'|url}>"></script>
-<script src="<{'static/js/angular/ui-bootstrap-tpls-0.14.3.min.js'|url}>"></script>
-<script src="<{'static/js/angular/angular-input-modified.min.js'|url}>"></script>
-<script src="<{'static/js/angular/common.js'|url}>"></script>
-<script src="<{'plugins/js/wechat/depot.js'|url}>"></script>
-<script>
-	var menuList = <{$_table_data->toArray()|json_encode nofilter}>
-</script>
-<script src="<{'plugins/js/wechat/menu.js'|url}>"></script>
+<{include file="admin/wechat/menu/depot-selector.tpl"}>
+
 <script>
 (function($){
 	$().ready(function(){
@@ -46,13 +35,5 @@
 	</div>
 	<div class="clearfix"></div>
 
-<div depot-controller111="news" mode="selector"></div>
-
-
-
 </div>
-
-<{include file="[wechat]admin/wechat/menu/ng-template/menu-controller.tpl"}>
-<{include file="[wechat]admin/wechat/depot/ng-template/depot-controller.tpl"}>
-<{include file="[wechat]admin/wechat/depot/ng-template/depot-list.tpl"}>
 <{/block}>

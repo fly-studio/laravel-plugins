@@ -128,9 +128,9 @@ class MenuController extends Controller
 		$account = WechatAccount::findOrFail($account->getAccountID());
 		$api = new API($account->toArray(), $account->getKey());
 		if($api->createMenu($menu_data))
-			return $this->success('wechat::wechat.menu_created_success', TRUE);
+			return $this->success('wechat::wechat.menu_created_success', TRUE, $menu_data);
 		else
-			return $this->failure('wechat::wechat.menu_created_failure', FALSE, ['error_no' => $api->errCode, 'error_message' => $api->errMsg]);
+			return $this->failure('wechat::wechat.menu_created_failure', FALSE, $menu_data + ['error_no' => $api->errCode, 'error_message' => $api->errMsg], TRUE);
 	}
 
 	private function getMenuData(WechatMenu $menu)
