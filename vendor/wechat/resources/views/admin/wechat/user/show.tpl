@@ -5,6 +5,10 @@
 
 <{block "name"}>wechat/user<{/block}>
 
+<{block "head-plus"}>
+<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
+<{/block}>
+
 <{block "block-container"}>
 <div class="row">
 	<div class="col-md-6">

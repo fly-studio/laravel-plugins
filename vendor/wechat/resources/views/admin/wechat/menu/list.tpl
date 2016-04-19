@@ -6,7 +6,7 @@
 
 <{block "head-scripts-plus"}>
 <{include file="admin/wechat/menu/depot-selector.tpl"}>
-
+<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
 <script>
 (function($){
 	$().ready(function(){

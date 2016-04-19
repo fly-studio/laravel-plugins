@@ -7,6 +7,8 @@ class WechatAccount extends Model{
 	public $auto_cache = true;
 	protected $guarded = ['id'];
 
+	protected $hidden = ['appsecret', 'token', 'encodingaeskey', 'mchkey'];
+
 	public function users()
 	{
 		return $this->hasMany(get_namespace($this).'\\WechatUser', 'waid', 'id');

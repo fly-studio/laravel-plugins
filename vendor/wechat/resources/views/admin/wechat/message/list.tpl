@@ -23,11 +23,14 @@
 <{/block}>
 
 <{block "head-scripts-plus"}>
+<script src="<{'static/js/DatePicker/WdatePicker.js'|url}>"></script>
+<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
 <{include file="common/uploader.inc.tpl"}>
 <script>
 (function($){
 $().ready(function(){
 	$('a[method]').query();
+	$('[name="wechat/message/list"]').addClass('active').parents('li').addClass('active');
 });
 })(jQuery);
 </script>
