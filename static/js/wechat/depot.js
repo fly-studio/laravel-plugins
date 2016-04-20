@@ -51,8 +51,7 @@ $app.config(function(inputModifiedConfigProvider) {
 			return attrs.templateUrl || 'wechat/depot/selector';
 		},
 		link : function(scope, iElement, iAttrs, ngModelCtrl) {
-			if (!ngModelCtrl) return;
-			ngModelCtrl.$render = function(){
+			if (ngModelCtrl) ngModelCtrl.$render = function(){
 				var defaultValue = !(ngModelCtrl.$modelValue instanceof Array) ? ngModelCtrl.$modelValue.toString().split(',') : ngModelCtrl.$modelValue;
 				if (defaultValue && defaultValue != 0) {
 					$query.post(jQuery.baseuri + 'admin/wechat/depot/data/json',{'filters': {'id':{'in': defaultValue}}}, function(json){
@@ -70,15 +69,13 @@ $app.config(function(inputModifiedConfigProvider) {
 					}, false);
 				}
 			}
-
 			scope.$watch('depotConfirmed', function(newValue, oldValue) {
 				if (newValue === oldValue) { return; }
-
 				var keys = array_keys(scope.depotConfirmed);
-				if (scope.host) jQuery(scope.host).val(keys ? keys : '');
-                ngModelCtrl.$setViewValue(keys);
-
-            }, true);
+				if (scope.host) jQuery(scope.host).val(keys);
+				if (ngModelCtrl) ngModelCtrl.$setViewValue(keys);
+			}, true);
+			
 		}
 	}
 })
