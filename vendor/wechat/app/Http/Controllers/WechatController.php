@@ -211,7 +211,7 @@ abstract class WechatController extends Controller {
 	protected function text(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageText $text)
 	{
 		$depots = (new WechatReply)->autoReply($message);
-		return $this->sendToUser($api, $messagewechatUser, $depots);
+		return $this->sendToUser($api, $wechatUser, $depots);
 	}
 
 	/**
