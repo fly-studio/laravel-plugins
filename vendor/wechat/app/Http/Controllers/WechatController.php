@@ -380,6 +380,7 @@ abstract class WechatController extends Controller {
 			$menu = WechatMenu::find($matches[1]);
 			if (!empty($menu))
 			{
+				$menu->depot; //read it first
 				$depots = !empty($menu->depot) ? new Collection($menu->depot) : false;
 				$this->sendToUser($wechatUser, $depots);
 			}
