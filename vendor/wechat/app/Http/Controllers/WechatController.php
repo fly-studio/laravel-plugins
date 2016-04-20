@@ -85,31 +85,31 @@ abstract class WechatController extends Controller {
 		switch($type) {
 			case API::MSGTYPE_TEXT: //文字消息
 				$text = WechatMessageText::create(['id' => $message->getKey(), 'content' => $rev->getRevContent()]);
-				return $this->text($api, $message, $text);
+				return $this->text($api, $wechatUser, $message, $text);
 			case API::MSGTYPE_IMAGE: //图片消息
 				$data = $rev->getRevPic();
 				$image = WechatMessageMedia::create(['id' => $message->getKey(), 'media_id' => $data['mediaid'], 'format' => 'jpg']); //auto download
-				return $this->image($api, $message, $image);
+				return $this->image($api, $wechatUser, $message, $image);
 			case API::MSGTYPE_VOICE: //音频消息
 				$data = $rev->getRevVoice();
 				$voice = WechatMessageMedia::create(['id' => $message->getKey(), 'media_id' => $data['mediaid'], 'format' => $data['format']]); //auto download
-				return $this->voice($api, $message, $voice);
+				return $this->voice($api, $wechatUser, $message, $voice);
 			case API::MSGTYPE_VIDEO: //视频消息
 				$data = $rev->getRevVideo();
 				$video = WechatMessageMedia::create(['id' => $message->getKey(), 'media_id' => $data['mediaid'], 'thumb_media_id' => $data['thumbmediaid'], 'format' => 'mp4']); //auto download
-				return $this->video($api, $message, $video);
+				return $this->video($api, $wechatUser, $message, $video);
 			case API::MSGTYPE_SHORTVIDEO: //小视频消息
 				$data = $rev->getRevVideo();
 				$shortvideo = WechatMessageMedia::create(['id' => $message->getKey(), 'media_id' => $data['mediaid'], 'thumb_media_id' => $data['thumbmediaid'], 'format' => 'mp4']); //auto download
-				return $this->shortvideo($api, $message, $shortvideo);
+				return $this->shortvideo($api, $wechatUser, $message, $shortvideo);
 			case API::MSGTYPE_LOCATION: //地址消息
 				$data = $rev->getRevGeo();
 				$location = WechatMessageLocation::create(['id' => $message->getKey(), 'x' => $data['x'], 'y' => $data['y'], 'scale' => $data['scale'], 'label' => $data['label']]);
-				return $this->location($api, $message, $location);
+				return $this->location($api, $wechatUser, $message, $location);
 			case API::MSGTYPE_LINK: //链接消息
 				$data = $rev->getRevLink();
 				$link = WechatMessageLink::create(['id' => $message->getKey(), 'title' => $data['title'], 'description' => $data['description'], 'url' => $data['url']]);
-				return $this->link($api, $message, $link);
+				return $this->link($api, $wechatUser, $message, $link);
 			case API::MSGTYPE_EVENT: //事件
 				$event = $rev->getRevEvent();
 				switch ($event['event']) { 
@@ -208,10 +208,10 @@ abstract class WechatController extends Controller {
 	 * @param  Plugins\Wechat\App\WechatMessageText $text 文本  
 	 * @return string|response
 	 */
-	protected function text(API $api, WechatMessage $message, WechatMessageText $text)
+	protected function text(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageText $text)
 	{
 		$depots = (new WechatReply)->autoReply($message);
-		return $this->sendToUser($api, $wechatUser, $depots);
+		return $this->sendToUser($api, $messagewechatUser, $depots);
 	}
 
 	/**
@@ -222,7 +222,7 @@ abstract class WechatController extends Controller {
 	 * @param  Plugins\Wechat\App\WechatMessageMedia $images  图片
 	 * @return string|response
 	 */
-	protected function image(API $api, WechatMessage $message, WechatMessageMedia $image)
+	protected function image(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageMedia $image)
 	{
 		return null;
 	}
@@ -235,7 +235,7 @@ abstract class WechatController extends Controller {
 	 * @param  Plugins\Wechat\App\WechatMessageMedia $voice 音频  
 	 * @return string|response
 	 */
-	protected function voice(API $api, WechatMessage $message, WechatMessageMedia $voice)
+	protected function voice(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageMedia $voice)
 	{
 		return null;
 	}
@@ -248,7 +248,7 @@ abstract class WechatController extends Controller {
 	 * @param  Plugins\Wechat\App\WechatMessageMedia $video 视频  
 	 * @return string|response
 	 */
-	protected function video(API $api, WechatMessage $message, WechatMessageMedia $video)
+	protected function video(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageMedia $video)
 	{
 		return null;
 	}
@@ -261,7 +261,7 @@ abstract class WechatController extends Controller {
 	 * @param  Plugins\Wechat\App\WechatMessageMedia $video 视频  
 	 * @return string|response
 	 */
-	protected function shortvideo(API $api, WechatMessage $message, WechatMessageMedia $shortvideo)
+	protected function shortvideo(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageMedia $shortvideo)
 	{
 		return null;
 	}
@@ -274,7 +274,7 @@ abstract class WechatController extends Controller {
 	 * @param  Plugins\Wechat\App\WechatMessageLocation $location  地址
 	 * @return string|response
 	 */
-	protected function location(API $api, WechatMessage $message, WechatMessageLocation $location)
+	protected function location(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageLocation $location)
 	{
 		return null;
 	}
@@ -287,7 +287,7 @@ abstract class WechatController extends Controller {
 	 * @param  Plugins\Wechat\App\WechatMessageLink $link  链接
 	 * @return string|response
 	 */
-	protected function link(API $api, WechatMessage $message, WechatMessageLink $link)
+	protected function link(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageLink $link)
 	{
 		return null;
 	}
