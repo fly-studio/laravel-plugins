@@ -42,7 +42,7 @@ class WechatReply extends Model{
 				else
 					$result[ $v['waid'] ] [ $v['match_type'] ] [ $v['keywords'] ] = $v;
 			
-			$result;
+			return $result;
 		});
 	}
 
@@ -56,14 +56,14 @@ class WechatReply extends Model{
 	{
 		$replies = $this->getReplies();
 		$result = null;
-		if (isset($replies[$message->waid][static::MATCH_TYPE_WHOLE]) && array_key_exists($message->content, $replies[$message->waid][static::MATCH_TYPE_WHOLE])) {
-			$result = $replies[$message->waid][static::MATCH_TYPE_WHOLE][$message->content];
-		} elseif (isset($result[$message->waid][static::MATCH_TYPE_PART])) {
-			$replace = array_map(function($v) {return '#$@{'.$v->getKey().'}@$#'; }, $result[$message->waid][static::MATCH_TYPE_PART]);
-			$content = strtr($message->content, $replace);
-			if (strcmp($content, $message->content) != 0) { //有匹配对象
-				preg_match('/#\$@\{(\d*)\}@\$#/g', $content, $matches);
-				is_numeric($matches[1]) && $result = static::find($matches[1]);
+		if (isset($replies[$message->waid][static::MATCH_TYPE_WHOLE]) && array_key_exists($message->text->content, $replies[$message->waid][static::MATCH_TYPE_WHOLE])) {
+			$result = $replies[$message->waid][static::MATCH_TYPE_WHOLE][$message->text->content];
+		} elseif (isset($replies[$message->waid][static::MATCH_TYPE_PART])) {
+			$replace = array_map(function($v) {return '#$@{'.$v->getKey().'}@$#'; }, $replies[$message->waid][static::MATCH_TYPE_PART]);
+			$content = strtr($message->text->content, $replace);
+			if (strcmp($content, $message->text->content) != 0) { //有匹配对象
+				if (preg_match('/#\$@\{(\d*)\}@\$#/i', $content, $matches))
+					is_numeric($matches[1]) && $result = static::find($matches[1]);
 			}
 		}
 		unset($replies);

@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="<{'plugins/css/wechat/depot.css'|url}>">
 <link rel="stylesheet" href="<{'plugins/css/wechat/menu.css'|url}>">
 <{include file="common/uploader.inc.tpl"}>
+<{include file="common/editor.inc.tpl"}>
 <script src="<{'static/js/angular/angular-1.4.8.min.js'|url}>"></script>
 <script src="<{'static/js/angular/ui-bootstrap-tpls-0.14.3.min.js'|url}>"></script>
 <script src="<{'static/js/angular/angular-input-modified.min.js'|url}>"></script>

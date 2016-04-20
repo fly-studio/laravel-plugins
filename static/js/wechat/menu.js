@@ -1,6 +1,6 @@
 //depot controllers
 var $app = angular.module('app');
-$app.requires = ['jquery','ui.bootstrap', 'untils', 'ngInputModified'];
+$app.requires = ['jquery', 'ui.bootstrap', 'untils', 'ngInputModified', 'ng.ueditor'];
 $app.config(function(inputModifiedConfigProvider) {
 	inputModifiedConfigProvider.disableGlobally(); //默认关闭ngInputModified
 }).directive('menuController',function() {
