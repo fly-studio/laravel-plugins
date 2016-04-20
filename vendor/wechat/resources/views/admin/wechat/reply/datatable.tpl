@@ -4,22 +4,19 @@
 由于extends中无法使用if/include，所以需要将公共Block均写入list.tpl、datatable.tpl
 -->
 
-<{block "title"}>微信账号<{/block}>
+<{block "title"}>微信自定义回复<{/block}>
 
-<{block "name"}>wechat/account<{/block}>
+<{block "name"}>wechat/reply<{/block}>
 
 <{block "filter"}>
-<{include file="[wechat]admin/wechat/account/filters.inc.tpl"}>
+<{include file="[wechat]admin/wechat/reply/filters.inc.tpl"}>
 <{/block}>
 
 <{block "table-th-plus"}>
-<th class="text-center"><i class="glyphicon glyphicon-qrcode"></i></th>
-<th>名称</th>
-<th>账号</th>
-<th>APP ID</th>
-<th>用户数</th>
-<th>消息数</th>
-<th>素材数</th>
+<th>关键词</th>
+<th>匹配类型</th>
+<th>关联素材</th>
+<th>随机回复</th>
 <{/block}>
 
 <!-- DataTable的Block -->
@@ -28,15 +25,19 @@
 
 <{block "datatable-columns-plus"}>
 var columns_plus = [
-	{'data': "qr_aid", orderable: false, 'render': function(data, type, full){
-		return '<img src="<{'attachment/resize'|url}>?id='+data+'&width=80&height=80" alt="avatar" class="img-responsive">';
+	{'data': 'keywords'},
+	{'data': "match_type", orderable: false, 'render': function(data, type, full){
+		switch(data) {
+			case 'part':
+				return '<span class="label label-info">模糊匹配</span>';
+			case 'whole':
+				return '<span class="label label-warning">全字匹配</span>';
+			case 'subscribe':
+				return '<span class="label label-danger">关注时</span>';
+		}
 	}},
-	{'data': 'name'},
-	{'data': 'account'},
-	{'data': 'appid'},
-	{'data': 'users-count', orderable: false},
-	{'data': 'messages-count', orderable: false},
-	{'data': 'depots-count', orderable: false}
+	{'data': 'depots-count', orderable: false},
+	{'data': 'reply_count', orderable: false}
 ];
 <{/block}>
-<{block "datatable-columns-options-delete-confirm"}>var columns_options_delete_confirm = '您确定删除这个微信：'+full['name']+'吗？';<{/block}>
+<{block "datatable-columns-options-delete-confirm"}>var columns_options_delete_confirm = '您确定删除这个关键词：'+full['keywords']+'吗？';<{/block}>

@@ -40,7 +40,9 @@ class ReplyController extends Controller
 		$reply = new WechatReply;
 		$builder = $reply->newQuery()->where('waid', $account->getAccountID());
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
-		$data = $this->_getData($request, $builder);
+		$data = $this->_getData($request, $builder, function(&$v, $k){
+			$v['depots-count'] = $v->depots()->count();
+		});
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
 		return $this->success('', FALSE, $data);
@@ -73,19 +75,21 @@ class ReplyController extends Controller
 
 	public function create()
 	{
-		$keys = 'name,description,appid,appsecret,token,encodingaeskey,qr_aid';
+		$keys = 'keywords,match_type,wdid,reply_count';
 		$this->_data = [];
-		$this->_validates = $this->getScriptValidate('wechat-replay.store', $keys);
+		$this->_validates = $this->getScriptValidate('wechat-reply.store', $keys);
 		return $this->view('wechat::admin.wechat.reply.create');
 	}
 
 	public function store(Request $request, Account $account)
 	{
-		$keys = 'name,description,appid,appsecret,token,encodingaeskey,qr_aid';
-		$data = $this->autoValidate($request, 'wechat-replay.store', $keys);
+		$keys = 'keywords,match_type,wdid,reply_count';
+		$data = $this->autoValidate($request, 'wechat-reply.store', $keys);
 
-		WechatReply::create($data + ['waid' => $account->getAccountID()]);
-		return $this->success('', url('admin/wechat/replay'));
+		$wdid = $data['wdid'];unset($data['wdid']);
+		$reply = WechatReply::create($data + ['waid' => $account->getAccountID()]);
+		$reply->depots()->sync($wdid);
+		return $this->success('', url('admin/wechat/reply'));
 	}
 
 	public function edit($id)
@@ -94,8 +98,8 @@ class ReplyController extends Controller
 		if (empty($reply))
 			return $this->failure_noexists();
 
-		$keys = 'name,description,appid,appsecret,token,encodingaeskey,qr_aid';
-		$this->_validates = $this->getScriptValidate('wechat-replay.store', $keys);
+		$keys = 'keywords,match_type,wdid,reply_count';
+		$this->_validates = $this->getScriptValidate('wechat-reply.store', $keys);
 		$this->_data = $reply;
 		return $this->view('wechat::admin.wechat.reply.edit');
 	}
@@ -106,9 +110,11 @@ class ReplyController extends Controller
 		if (empty($reply))
 			return $this->failure_noexists();
 
-		$keys = 'name,description,appid,appsecret,token,encodingaeskey,qr_aid';
-		$data = $this->autoValidate($request, 'wechat-replay.store', $keys);
+		$keys = 'keywords,match_type,wdid,reply_count';
+		$data = $this->autoValidate($request, 'wechat-reply.store', $keys);
+		$wdid = $data['wdid'];unset($data['wdid']);
 		$reply->update($data);
+		$reply->depots()->sync($wdid);
 		return $this->success();
 	}
 

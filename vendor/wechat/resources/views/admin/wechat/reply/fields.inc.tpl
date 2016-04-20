@@ -1,63 +1,49 @@
 <div class="form-group">
-	<label class="col-md-3 control-label" for="name">名称</label>
+	<label class="col-md-3 control-label" for="keywords">关键字</label>
 	<div class="col-md-9">
-		<input type="text" id="name" name="name" class="form-control" placeholder="请输入名称" value="<{$_data.name}>">
-	</div>
-</div>
-<div class="form-group">
-	<label class="col-md-3 control-label" for="description">简介</label>
-	<div class="col-md-9">
-		<textarea id="description" name="description" rows="9" class="form-control" placeholder="简介.."></textarea>
+		<input type="text" id="keywords" name="keywords" class="form-control" placeholder="请输入关键字" value="<{$_data.keywords}>">
 	</div>
 </div>
 <div class="form-group">
 	<label class="col-md-3 control-label">类型</label>
 	<div class="col-md-9">
-		<{foreach $_fields.wechat_type as $v}>
 		<label class="radio-inline">
-			<input type="radio" name="wechat_type" value="<{$v.id}>" <{if $_data.wechat_type == $v.id}>checked="checked"<{/if}> > <{$v.title}>
+			<input type="radio" name="match_type" value="subscribe" <{if $_data.match_type == 'subscribe'}>checked="checked"<{/if}> > 关注时回复
 		</label>
-		<{/foreach}>
+		<label class="radio-inline">
+			<input type="radio" name="match_type" value="part" <{if $_data.match_type == 'part'}>checked="checked"<{/if}> > 模糊匹配
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="match_type" value="whole" <{if $_data.match_type == 'whole'}>checked="checked"<{/if}> > 全字匹配
+		</label>
 		<div class="clearfix"></div>
+		<span class="help-block">
+			<ul>
+				<li><b>关注时回复：</b>用户在关注时，推送一条消息；</li>
+				<li><b>模糊匹配：</b>比如关键词为「天安门」，用户输入：「我爱北京天安门」，则匹配成功；</li>
+				<li><b>全字匹配：</b>关键词和用户输入的完全相同时，则匹配成功；</li>
+				<li>全字匹配 优先于 模糊匹配。</li>
+			</ul>
+		</span>
 	</div>
 </div>
 <div class="form-group">
-	<label class="col-md-3 control-label" for="account">原始ID</label>
+	<label class="col-md-3 control-label" for="wdid">素材库</label>
 	<div class="col-md-9">
-		<input type="text" id="account" name="account" class="form-control" placeholder="请输入" value="<{$_data.account}>">
-		<span class="help-block">此账号由微信自动生成（公众号设置 - 原始ID），类似：gh_xxxxxxxxxxxxx</span>
+		<select name="wdid[]" id="wdid" class="form-control hidden" multiple="multiple">
+			<{foreach $_data.depots as $depot}><option value="<{$depot->getKey()}>" selected="selected"><{$depot->getKey()}></option><{/foreach}>
+		</select>
+		<div class="" id="depot" depot-selector="#wdid" selected-limit="10">
 	</div>
 </div>
 <div class="form-group">
-	<label class="col-md-3 control-label" for="appid">APP ID</label>
-	<div class="col-md-9">
-		<input type="text" id="appid" name="appid" class="form-control" placeholder="请输入APP ID" value="<{$_data.appid}>">
-	</div>
+	<label class="col-md-3 control-label"></label>
 </div>
 <div class="form-group">
-	<label class="col-md-3 control-label" for="appsecret">APP Secrect</label>
+	<label class="col-md-3 control-label" for="reply_count">一次回复数量</label>
 	<div class="col-md-9">
-		<input type="text" id="appsecret" name="appsecret" class="form-control" placeholder="请输入APP Secrect" value="<{$_data.appsecret}>">
-	</div>
-</div>
-<div class="form-group">
-	<label class="col-md-3 control-label" for="token">Token</label>
-	<div class="col-md-9">
-		<input type="text" id="token" name="token" class="form-control" placeholder="请输入Token" value="<{$_data.token}>">
-		<span class="help-block">(*) 为开发者模式设定的token</span>
-	</div>
-</div>
-<div class="form-group">
-	<label class="col-md-3 control-label" for="encodingaeskey">Encodingaes KEY</label>
-	<div class="col-md-9">
-		<input type="text" id="encodingaeskey" name="encodingaeskey" class="form-control" placeholder="请输入Encodingaes KEY" value="<{$_data.encodingaeskey}>">
-		<span class="help-block">(*) 如果不加密消息，可不用填写</span>
-	</div>
-</div>
-<div class="form-group">
-	<label class="col-md-3 control-label" for="qr_aid">二维码</label>
-	<div class="col-md-9">
-		<input type="hidden" id="qr_aid" name="qr_aid" class="form-control" value="<{$_data.qr_aid}>">
+		<input type="text" id="reply_count" name="reply_count" class="form-control" placeholder="请输入数量" value="<{$_data.reply_count|default:0}>">
+		<span class="help-block">比如选择了3个素材，可以设置为只随机回复1条。0 表示全部回复</span>
 	</div>
 </div>
 

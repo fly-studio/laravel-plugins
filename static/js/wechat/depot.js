@@ -51,8 +51,7 @@ $app.config(function(inputModifiedConfigProvider) {
 			return attrs.templateUrl || 'wechat/depot/selector';
 		},
 		link : function(scope, iElement, iAttrs, ngModelCtrl) {
-			if (ngModelCtrl) ngModelCtrl.$render = function(){
-				var defaultValue = !(ngModelCtrl.$modelValue instanceof Array) ? ngModelCtrl.$modelValue.toString().split(',') : ngModelCtrl.$modelValue;
+			var init = function(defaultValue){
 				if (defaultValue && defaultValue != 0) {
 					$query.post(jQuery.baseuri + 'admin/wechat/depot/data/json',{'filters': {'id':{'in': defaultValue}}}, function(json){
 						if (json.result == 'success')
@@ -69,10 +68,31 @@ $app.config(function(inputModifiedConfigProvider) {
 					}, false);
 				}
 			}
+			if (ngModelCtrl)
+				ngModelCtrl.$render = function(){
+					var val = ngModelCtrl.$modelValue;
+					var defaultValue = val ? (!(val instanceof Array) ? val.toString().split(',') : val) : [];
+					init(defaultValue);
+				};
+			else {
+				var $host = jQuery(scope.host);
+				var val = $host.val();
+				var defaultValue = val ? (!(val instanceof Array) ? val.toString().split(',') : val) : [];
+				init(defaultValue);
+			}
 			scope.$watch('depotConfirmed', function(newValue, oldValue) {
 				if (newValue === oldValue) { return; }
 				var keys = array_keys(scope.depotConfirmed);
-				if (scope.host) jQuery(scope.host).val(keys);
+				if (scope.host) {
+					var $host = jQuery(scope.host);
+					if ($host.is('select')) {
+						$host.val([]).empty();
+						angular.forEach(keys, function(v){
+							jQuery('<option value="'+v.toString()+'">'+v.toString()+'</option>').appendTo($host);
+						});
+					}
+					$host.val(keys);
+				}
 				if (ngModelCtrl) ngModelCtrl.$setViewValue(keys);
 			}, true);
 			

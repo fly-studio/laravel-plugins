@@ -2,20 +2,10 @@
 <form action="<{'admin'|url}>/<{block "name"}><{/block}>/" method="GET" class="form-bordered form-horizontal">
 	<input type="hidden" name="base" value="<{$_base}>">
 	<div class="form-group col-sm-4">
-		<label class="col-md-3 control-label" for="name">名称</label>
+		<label class="col-md-3 control-label" for="keywords">关键词</label>
 		<div class="col-md-9">
 			<div class="input-group">
-				<input type="text" id="name" name="name[like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.name.like}>">
-				<span class="input-group-addon"><i class="gi gi-user"></i></span>
-			</div>
-		</div>
-	</div>
-
-	<div class="form-group col-sm-4">
-		<label class="col-md-3 control-label" for="appid">APP ID</label>
-		<div class="col-md-9">
-			<div class="input-group">
-				<input type="text" id="appid" name="appid[like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.appid.like}>">
+				<input type="text" id="keywords" name="keywords[like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.keywords.like}>">
 				<span class="input-group-addon"><i class="gi gi-user"></i></span>
 			</div>
 		</div>

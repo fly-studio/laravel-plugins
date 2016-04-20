@@ -1,17 +1,17 @@
 <{extends file="admin/extends/create.block.tpl"}>
 
 <{block "head-plus"}>
-<{include file="common/uploader.inc.tpl"}>
+<{include file="admin/wechat/depot/selector.tpl"}>
 <{/block}>
 
 <{block "inline-script-plus"}>
-$('#qr_aid').uploader();
+
 <{/block}>
 
-<{block "title"}>微信账号<{/block}>
+<{block "title"}>微信自定义回复<{/block}>
 
-<{block "name"}>wechat/account<{/block}>
+<{block "name"}>wechat/reply<{/block}>
 
 <{block "fields"}>
-<{include file="[wechat]admin/wechat/account/fields.inc.tpl"}>
+<{include file="[wechat]admin/wechat/reply/fields.inc.tpl"}>
 <{/block}>

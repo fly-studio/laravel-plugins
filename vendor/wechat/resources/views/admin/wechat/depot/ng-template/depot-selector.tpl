@@ -1,15 +1,17 @@
 <script type="text/ng-template" id="wechat/depot/selector">
 <div class="depot-list row">
-	<div class="col-md-12 col-xs-12"  style="cursor:pointer;">
-		<a href="javascript:;" ng-click="toSelect()" class="btn btn-default"> <i class="fa fa-search"></i> 选择素材</a>
+	<div class="col-md-12 col-xs-12"  style="cursor:pointer;padding: 10px;">
+		<a href="javascript:;" ng-click="toSelect()" class="btn btn-default"> <i class="fa fa-search"></i> 选择素材 (<={{selectedLimit}}条)</a>
 	</div>
+	<div class="clearfix"></div>
 	<div class="col-md-6 col-xs-6" ng-include="'wechat/depot/'+depot.type" ng-repeat="depot in depotConfirmed"></div>
+	<div class="clearfix"></div>
 </div>
 </script>
 
 <script type="text/ng-template" id="wechat/depot/selector-modal">
 <div class="modal-header">
-	<h3 class="modal-title">选择素材</h3>
+	<h3 class="modal-title">选择素材 (<={{selectedLimit}}条)</h3>
 </div>
 <div class="modal-body~">
 	<div depot-controller="news" mode="selector" selected-limit="{{selectedLimit}}"></div>
