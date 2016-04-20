@@ -1268,7 +1268,7 @@ class API
 		//Find out if the given array is a numerical array
 		$keys = array_keys ( $arr );
 		$max_length = count ( $arr ) - 1;
-		if (($keys [0] === 0) && ($keys [$max_length] === $max_length )) { //See if the first key is 0 and last key is length - 1
+		if (isset($keys [0]) && ($keys [0] === 0) && ($keys [$max_length] === $max_length )) { //See if the first key is 0 and last key is length - 1
 			$is_list = true;
 			for($i = 0; $i < count ( $keys ); $i ++) { //See if each key correspondes to its position
 				if ($i != $keys [$i]) { //A key fails at position check.

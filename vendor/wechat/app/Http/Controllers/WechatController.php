@@ -168,7 +168,8 @@ abstract class WechatController extends Controller {
 	public function modifingAccount(Request $request, WechatAccountTool $account)
 	{
 		$data = WechatAccount::find($account->getAccountID());
-		return (new \Addons\Core\Controllers\Controller(FALSE))->success('', FALSE, $data->toArray());
+		$data = array_diff_key($data->toArray(), array_flip(['appsecret', 'token', 'encodingaeskey', 'mchkey']));
+		return (new \Addons\Core\Controllers\Controller(FALSE))->success('', FALSE, $data);
 	}
 
 	public function news(Request $request, $id)

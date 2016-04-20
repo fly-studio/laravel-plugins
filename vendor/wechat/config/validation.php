@@ -236,7 +236,10 @@ return [
 				'rules' => 'required_if:type,click|numeric',
 				'message' => ['required_if' => '请选择素材。']
 			],
-			
+			'content' => [
+				'name' => 'JSON内容',
+				'rules' => 'required|string|min:20',
+			],
 		 ],
 	],
 ];

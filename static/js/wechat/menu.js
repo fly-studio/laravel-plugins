@@ -50,11 +50,8 @@ $app.config(function(inputModifiedConfigProvider) {
 	}
 	$scope.saveMenus = function()
 	{
-		if (!$scope.forms.menu) 
-			return false;
-//console.log($scope.forms.menu);
 		var querys = [];
-		angular.forEach($scope.forms.menu, function(form, index){
+		if ($scope.forms.menu) angular.forEach($scope.forms.menu, function(form, index){
 			if (!form) return;
 			var $form = jQuery('[name="'+form.$name+'"]');
 			var item = index > 10 ? $scope.dataList[ parseInt(index / 10) - 1 ].children[ index % 10 - 1 ] : $scope.dataList[ index - 1 ]; 
@@ -74,8 +71,7 @@ $app.config(function(inputModifiedConfigProvider) {
 				
 			}));
 		});
-
-		return jQuery.when.apply(this,querys);
+		return jQuery.when.apply(this, querys);
 	}
 	$scope.save = function()
 	{
