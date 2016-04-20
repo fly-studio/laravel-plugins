@@ -16,6 +16,7 @@ use Plugins\Wechat\App\WechatDepotNews;
 use Plugins\Wechat\App\WechatAccount;
 use Plugins\Wechat\App\WechatUser;
 use Plugins\Wechat\App\WechatReply;
+use Plugins\Wechat\App\WechatMenu;
 use Plugins\Wechat\App\WechatMessage;
 use Plugins\Wechat\App\WechatMessageText;
 use Plugins\Wechat\App\WechatMessageMedia;
@@ -375,7 +376,7 @@ abstract class WechatController extends Controller {
 	 */
 	protected function click(API $api, WechatUser $wechatUser, WechatAccount $account, $key)
 	{
-		if (preg_match('/key-(\d*)/g', $key, $matches)){
+		if (preg_match('/key-(\d*)/i', $key, $matches)){
 			$menu = WechatMenu::find($matches[1]);
 			if (!empty($menu))
 			{
