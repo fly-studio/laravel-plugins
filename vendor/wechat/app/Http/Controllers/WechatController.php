@@ -487,9 +487,9 @@ abstract class WechatController extends Controller {
 	 * @param  boolean     $random     隨機發送幾條，默認全發
 	 * @return 
 	 */
-	protected function sendToUser(API $api, WechatUser $wechatUser, $depots, $random = NULL)
+	protected function sendToUser(API $api, WechatUser $wechatUser, Collection $depots, $random = NULL)
 	{
-		if (empty($depots)) return NULL;
+		if (empty($depots) || $depots->isEmpty()) return NULL;
 
 		$send = new Send($wechatUser, $api);
 		foreach($depots as $depot)
