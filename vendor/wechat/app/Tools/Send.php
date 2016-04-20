@@ -29,6 +29,11 @@ class Send {
 		return $this;
 	}
 
+	public function getMessages()
+	{
+		return $this->messages;
+	}
+
 	public function send($random = NULL)
 	{
 		$messages = !empty($random) ? array_pick($this->messages, $random) : $this->messages;
