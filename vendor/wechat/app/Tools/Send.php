@@ -9,13 +9,14 @@ use Plugins\Wechat\App\WechatUser;
 use Plugins\Wechat\App\Jobs\WechatSend;
 class Send {
 
-	private $user;
+	private $user,$api;
 
 	private $messages;
 
-	public function __construct(WechatUser $user)
+	public function __construct(WechatUser $user, API $api = NULL)
 	{
 		$this->user = $user;
+		$this->api = $api;
 		$this->messages = [];
 	}
 	/**
@@ -34,16 +35,23 @@ class Send {
 		return $this->messages;
 	}
 
-	public function send($random = NULL)
+	public function send($random = NULL, $realtime = FALSE)
 	{
 		$messages = !empty($random) ? array_pick($this->messages, $random) : $this->messages;
+		$result = NULL;
+		if ($realtime)
+		{
+			$message = array_shift($messages);
+			$result = (new WechatSend($this->user, $message))->reply($this->api);
+		}
 		foreach ($messages as $value)
 		{
 			//Queue
 			$job = (new WechatSend($this->user, $value))->onQueue('wechat')/*->delay(1)*/;
 			app('Illuminate\Contracts\Bus\Dispatcher')->dispatch($job);
 		}
-		return true;
+
+		return $result;
 	}
 
 }

@@ -25,9 +25,7 @@ use Plugins\Wechat\App\WechatMessageLocation;
 use Plugins\Wechat\App\WechatQrcode;
 use Plugins\Wechat\App\WechatLog;
 use Plugins\Wechat\App\WechatBill;
-use Plugins\Wechat\App\Attachment;
 use Plugins\Wechat\App\Tools\Send;
-
 abstract class WechatController extends Controller {
 	//use DispatchesJobs;
 
@@ -213,8 +211,7 @@ abstract class WechatController extends Controller {
 	protected function text(API $api, WechatMessage $message, WechatMessageText $text)
 	{
 		$depots = (new WechatReply)->autoReply($message);
-		$this->sendToUser($wechatUser, $depots);
-		return null;
+		return $this->sendToUser($api, $wechatUser, $depots);
 	}
 
 	/**
@@ -305,8 +302,7 @@ abstract class WechatController extends Controller {
 	protected function subscribe(API $api, WechatUser $wechatUser, WechatAccount $account)
 	{
 		$depots = (new WechatReply)->subscribeReply();
-		$this->sendToUser($wechatUser, $depots);
-		return null;
+		return $this->sendToUser($api, $wechatUser, $depots);
 	}
 
 	/**
@@ -333,8 +329,7 @@ abstract class WechatController extends Controller {
 	protected function scan_subscribe(API $api, WechatUser $wechatUser, WechatAccount $account, $scene_id, $ticket)
 	{
 		$depots = (new WechatQrcode)->subscribeReply($scene_id, $ticket) ?: (new WechatReply)->subscribeReply();
-		$this->sendToUser($wechatUser, $depots);
-		return null;
+		return $this->sendToUser($api, $wechatUser, $depots);
 	}
 
 	/**
@@ -349,8 +344,7 @@ abstract class WechatController extends Controller {
 	protected function scan(API $api, WechatUser $wechatUser, WechatAccount $account, $scene_id, $ticket)
 	{
 		$depots = (new WechatQrcode)->reply($scene_id, $ticket);
-		$this->sendToUser($wechatUser, $depots);
-		return null;
+		return $this->sendToUser($api, $wechatUser, $depots);
 	}
 
 	/**
@@ -382,7 +376,7 @@ abstract class WechatController extends Controller {
 			{
 				$menu->depot; //read it first
 				$depots = !empty($menu->depot) ? new Collection([$menu->depot]) : false;
-				$this->sendToUser($wechatUser, $depots);
+				return $this->sendToUser($api, $wechatUser, $depots);
 			}
 		}
 		return null;
@@ -493,13 +487,14 @@ abstract class WechatController extends Controller {
 	 * @param  boolean     $random     隨機發送幾條，默認全發
 	 * @return 
 	 */
-	protected function sendToUser(WechatUser $wechatUser, $depots, $random = NULL)
+	protected function sendToUser(API $api, WechatUser $wechatUser, $depots, $random = NULL)
 	{
-		if (empty($depots)) return false;
-		$send = new Send($wechatUser);
+		if (empty($depots)) return NULL;
+
+		$send = new Send($wechatUser, $api);
 		foreach($depots as $depot)
 			$send->add($depot);
-		$send->send($random);
+		return $send->send($random, TRUE); //可以实时反馈
 	}
 
 }
