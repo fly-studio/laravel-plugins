@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 //use Addons\Core\Controllers\Controller;
 use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 use Plugins\Wechat\App\Tools\API;
 use Plugins\Wechat\App\Tools\Account as WechatAccountTool;
@@ -381,7 +381,7 @@ abstract class WechatController extends Controller {
 			if (!empty($menu))
 			{
 				$menu->depot; //read it first
-				$depots = !empty($menu->depot) ? new Collection($menu->depot) : false;
+				$depots = !empty($menu->depot) ? new Collection([$menu->depot]) : false;
 				$this->sendToUser($wechatUser, $depots);
 			}
 		}
