@@ -8,13 +8,13 @@
 	<label class="col-md-3 control-label">类型</label>
 	<div class="col-md-9">
 		<label class="radio-inline">
-			<input type="radio" name="match_type" value="subscribe" <{if $_data.match_type == 'subscribe'}>checked="checked"<{/if}> > 关注时回复
+			<input type="radio" name="match_type" onclick="jQuery('#keywords').prop('disabled',true);" value="subscribe" <{if $_data.match_type == 'subscribe'}>checked="checked"<{/if}> > 关注时回复
 		</label>
 		<label class="radio-inline">
-			<input type="radio" name="match_type" value="part" <{if $_data.match_type == 'part'}>checked="checked"<{/if}> > 模糊匹配
+			<input type="radio" name="match_type" onclick="jQuery('#keywords').prop('disabled',false);"value="part" <{if $_data.match_type == 'part'}>checked="checked"<{/if}> > 模糊匹配
 		</label>
 		<label class="radio-inline">
-			<input type="radio" name="match_type" value="whole" <{if $_data.match_type == 'whole'}>checked="checked"<{/if}> > 全字匹配
+			<input type="radio" name="match_type" onclick="jQuery('#keywords').prop('disabled',false);"value="whole" <{if $_data.match_type == 'whole'}>checked="checked"<{/if}> > 全字匹配
 		</label>
 		<div class="clearfix"></div>
 		<span class="help-block">

@@ -301,7 +301,7 @@ abstract class WechatController extends Controller {
 	 */
 	protected function subscribe(API $api, WechatUser $wechatUser, WechatAccount $account)
 	{
-		$depots = (new WechatReply)->subscribeReply();
+		$depots = (new WechatReply)->subscribeReply($account);
 		return $this->sendToUser($api, $wechatUser, $depots);
 	}
 
@@ -328,7 +328,7 @@ abstract class WechatController extends Controller {
 	 */
 	protected function scan_subscribe(API $api, WechatUser $wechatUser, WechatAccount $account, $scene_id, $ticket)
 	{
-		$depots = (new WechatQrcode)->subscribeReply($scene_id, $ticket) ?: (new WechatReply)->subscribeReply();
+		$depots = (new WechatQrcode)->subscribeReply($account, $scene_id, $ticket) ?: (new WechatReply)->subscribeReply($account);
 		return $this->sendToUser($api, $wechatUser, $depots);
 	}
 

@@ -3,6 +3,7 @@ namespace Plugins\Wechat\App;
 
 use Addons\Core\Models\Model;
 use Plugins\Wechat\App\WechatMessage;
+use Plugins\Wechat\App\WechatAccount;
 
 class WechatReply extends Model{
 	public $auto_cache = true;
@@ -73,13 +74,13 @@ class WechatReply extends Model{
 	/**
 	 * 关注自动回复
 	 * 
-	 * @param  Plugins\Wechat\App\WechatMessage $message
+	 * @param  Plugins\Wechat\App\WechatAccount $account
 	 * 
 	 * @return Illuminate\Support\Collection [Plugins\Wechat\App\WechatDepots, ...]
 	 */
-	public function subscribeReply(WechatMessage $message)
+	public function subscribeReply(WechatAccount $account)
 	{
 		$replies = $this->getReplies();
-		return isset($replies[$message->waid][static::MATCH_TYPE_SUBSCRIBE]) ? $replies[$message->waid][static::MATCH_TYPE_SUBSCRIBE]->getDepots() : false;//$this->newCollection();
+		return isset($replies[$account->getKey()][static::MATCH_TYPE_SUBSCRIBE]) ? $replies[$account->getKey()][static::MATCH_TYPE_SUBSCRIBE]->getDepots() : $this->newCollection();
 	}
 }
