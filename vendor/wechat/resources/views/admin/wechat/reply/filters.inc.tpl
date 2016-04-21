@@ -12,6 +12,25 @@
 	</div>
 
 	<div class="form-group col-sm-4">
+		<label class="col-md-3 control-label" for="created_at-min">类型</label>
+		<div class="col-md-9">
+			<label class="radio-inline">
+				<input type="radio" name="filters[match_type]" value="" <{if empty($_filters.match_type.equal)}>checked="checked"<{/if}>> 不限
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="filters[match_type]" value="subscribe" <{if $_filters.match_type.equal == 'subscribe'}>checked="checked"<{/if}>> 关注
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="filters[match_type]" value="part" <{if $_filters.match_type.equal == 'part'}>checked="checked"<{/if}>> 模糊
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="filters[match_type]" value="whole" <{if $_filters.match_type.equal == 'whole'}>checked="checked"<{/if}>> 全字
+			</label>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<div class="form-group col-sm-4">
 		<label class="col-md-3 control-label" for="created_at-min">加入时间</label>
 		<div class="col-md-9">
 			<div class="input-group input-daterange">
