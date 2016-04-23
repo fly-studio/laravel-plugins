@@ -2,22 +2,31 @@
 <form action="<{'admin'|url}>/<{block "name"}><{/block}>/" method="GET" class="form-bordered form-horizontal">
 	<input type="hidden" name="base" value="<{$_base}>">
 	<div class="form-group col-sm-4">
-		<label class="col-md-3 control-label" for="name">名称</label>
+		<label class="col-md-3 control-label" for="keywords">关键词</label>
 		<div class="col-md-9">
 			<div class="input-group">
-				<input type="text" id="name" name="name[like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.name.like}>">
+				<input type="text" id="keywords" name="keywords[like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.keywords.like}>">
 				<span class="input-group-addon"><i class="gi gi-user"></i></span>
 			</div>
 		</div>
 	</div>
 
 	<div class="form-group col-sm-4">
-		<label class="col-md-3 control-label" for="appid">APP ID</label>
+		<label class="col-md-3 control-label" for="created_at-min">类型</label>
 		<div class="col-md-9">
-			<div class="input-group">
-				<input type="text" id="appid" name="appid[like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.appid.like}>">
-				<span class="input-group-addon"><i class="gi gi-user"></i></span>
-			</div>
+			<label class="radio-inline">
+				<input type="radio" name="filters[match_type]" value="" <{if empty($_filters.match_type.equal)}>checked="checked"<{/if}>> 不限
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="filters[match_type]" value="subscribe" <{if $_filters.match_type.equal == 'subscribe'}>checked="checked"<{/if}>> 关注
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="filters[match_type]" value="part" <{if $_filters.match_type.equal == 'part'}>checked="checked"<{/if}>> 模糊
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="filters[match_type]" value="whole" <{if $_filters.match_type.equal == 'whole'}>checked="checked"<{/if}>> 全字
+			</label>
+			<div class="clearfix"></div>
 		</div>
 	</div>
 

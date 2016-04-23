@@ -72,10 +72,9 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="title" class="col-sm-3 control-label">类型</label>
+		<label for="type" class="col-sm-3 control-label">类型</label>
 		<div class="col-sm-9">
-			<select name="type" class="form-control" ng-model="item.type">
-				<option value="">请选择</option>
+			<select id="type" name="type" class="form-control" ng-model="item.type">
 				<option value="view">页面跳转</option>
 				<option value="click">点击事件</option>
 				<option value="event">其他事件</option>
@@ -84,10 +83,10 @@
 			</select>
 		</div>
 	</div>
-	<div class="form-group" ng-show="item.type == 'event'">
-		<label for="title" class="col-sm-3 control-label">事件</label>
+	<div class="form-group" ng-if="item.type == 'event'">
+		<label for="event" class="col-sm-3 control-label">事件</label>
 		<div class="col-sm-9">
-			<select name="event" class="form-control" ng-model="item.event">
+			<select id="event" name="event" class="form-control" ng-model="item.event">
 				<option value="">请选择</option>
 				<option value="pic_sysphoto">系统拍照发图</option>
 				<option value="pic_photo_or_album">拍照或者相册发图</option>
@@ -98,14 +97,19 @@
 			</select>
 		</div>
 	</div>
-
 	<div class="form-group" ng-if="item.type == 'view'">
 		<label for="url" class="col-sm-3 control-label">跳转网址</label>
 		<div class="col-sm-9">
 			<input type="text" id="url" name="url" class="form-control" ng-model="item.url" placeholder="http://">
 		</div>
 	</div>
-
+	<div class="form-group" ng-if="item.type == 'click'">
+		<label for="title" class="col-sm-3 control-label">素材库</label>
+		<div class="col-sm-9">
+			<input type="text" name="wdid" class="hidden" ng-model="item.wdid" >
+			<div id="depot" depot-selector="" ng-model="item.wdid" selected-limit="1">
+		</div>
+	</div>
 </form>
 </script>
 

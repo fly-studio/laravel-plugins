@@ -80,11 +80,12 @@ class WechatSend implements SelfHandling, ShouldQueue
 
 			$depot = $this->media;
 			$type = $depot->type;
+			$depot->$type; //init
 			$data += ['msgtype' => $type, $type => []];
 
-			$url = new UrlTool($api);
 			if ($type == 'news')
 			{
+				$url = new UrlTool($api);
 				$data[$type] = [
 					'articles' => array_map(function($v) use ($url){
 						return [
@@ -138,5 +139,43 @@ class WechatSend implements SelfHandling, ShouldQueue
 	private function uploadToWechat(API $api, Attachment $attachment, $type)
 	{
 		return $api->uploadMedia($attachment->create_symlink(NULL, NULL), $type, Mimes::getInstance()->mime_by_ext($attachment->ext));
+	}
+
+	public function reply(API $api)
+	{
+		if ($this->media instanceof WechatDepot) //素材
+		{
+			$depot = $this->media;
+			$type = $depot->type;
+			$depot->$type; //init read
+
+			$message = WechatMessage::create(['waid' => $api->waid, 'wuid' => $this->user->getKey(), 'type' => $type, 'transport_type' => 'send', 'message_id' => '', 'wdid' => $depot->getKey()]);
+			
+			if ($type == 'news')
+			{
+				$url = new UrlTool($api);
+				$data = array_map(function($v) use ($url){
+					return [
+						'Title' => $v['title'],
+						'Description' => $v['description'],
+						'Url' => $url->getURL('wechat/news?id='.$v['id'], $this->user),
+						'PicUrl' => url('attachment?id='.$v['cover_aid']),
+					];
+				}, $depot->news->toArray());
+				return $api->news($data)->reply([], true);
+			} else if ($type == 'text') {
+				return $api->text($depot->text->content)->reply([], true);
+			} else if ($type == 'callback') {
+				//
+				return NULL;
+			} else if ($type == 'music') {
+				$url = Attachment::findOrFail($depot->music->thumb_aid)->url(NULL, true);
+				!empty($depot->music->thumb_aid) && $media = $this->uploadToWechat($api, Attachment::find($depot->music->thumb_aid), 'image');
+				return $api->music($depot->music->title, $depot->music->description, $url, $url, !empty($media) ? $media['thumb_media_id'] : '')->reply([], true);
+			} else {
+				$media = $this->uploadToWechat($api, Attachment::find($depot->$type->aid), $type);
+				return $api->$type($media['media_id'], $depot->$type->title, $depot->$type->description)->reply([], true);
+			}
+		}
 	}
 }

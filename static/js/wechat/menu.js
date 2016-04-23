@@ -1,23 +1,9 @@
-document.getElementsByTagName('html')[0].setAttribute('ng-app', 'app');
 //depot controllers
-var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputModified'])
-.config(function(inputModifiedConfigProvider) {
+var $app = angular.module('app');
+$app.requires = ['jquery', 'ui.bootstrap', 'untils', 'ngInputModified', 'ng.ueditor'];
+$app.config(function(inputModifiedConfigProvider) {
 	inputModifiedConfigProvider.disableGlobally(); //默认关闭ngInputModified
-})
-.config(function($provide) {
-	$provide.decorator('$controller', function($delegate) {
-		return function(constructor, locals, later, indent) {
-			if (typeof constructor === 'string' && !locals.$scope.controllerName) {
-				locals.$scope.controllerName =  constructor;
-			}
-			return $delegate(constructor, locals, later, indent);
-		};
-	});
-})
-.run(function($rootScope) {
-
-})
-.directive('menuController',function() {
+}).directive('menuController',function() {
 	return {
 		restrict: 'A',
 		controller: 'menuController',
@@ -64,11 +50,9 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 	}
 	$scope.saveMenus = function()
 	{
-		if (!$scope.forms.menu) 
-			return false;
-
 		var querys = [];
-		angular.forEach($scope.forms.menu, function(form, index){
+		if ($scope.forms.menu) angular.forEach($scope.forms.menu, function(form, index){
+			if (!form) return;
 			var $form = jQuery('[name="'+form.$name+'"]');
 			var item = index > 10 ? $scope.dataList[ parseInt(index / 10) - 1 ].children[ index % 10 - 1 ] : $scope.dataList[ index - 1 ]; 
 
@@ -87,8 +71,7 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 				
 			}));
 		});
-
-		return jQuery.when.apply(this,querys);
+		return jQuery.when.apply(this, querys);
 	}
 	$scope.save = function()
 	{
@@ -110,13 +93,16 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 	}
 	$scope.destroy = function(item, parentItem)
 	{
-		jQuery.confirm('您确定删除此项吗？').done(function(){
+		jQuery.confirm('您确定删除此项吗？', function(){
 			for (var i = 0; i < parentItem.length; i++)
-				if (parentItem[i].index > item.index) parentItem[i].index--;
+				if (parentItem[i].index > item.index)
+					parentItem[i].index--;
+
 			if (item.id > 0 ) $scope.deletedList.push(item.id);
 			parentItem.splice(item.index % 10 - 1, 1);
 			$scope.$apply();
-			delete $scope.forms.menu[item.index];
+
+			//delete $scope.forms.menu[item.index];
 		});
 	}
 });

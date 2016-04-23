@@ -104,6 +104,17 @@ class MenuController extends Controller
 		
 		return $this->publishToWechat($account);
 	}
+
+	public function readJson(Account $account)
+	{
+		$account = WechatAccount::findOrFail($account->getAccountID());
+		$api = new API($account->toArray(), $account->getKey());
+		$data = $api->getMenu();
+		if (empty($data))
+			return $this->failure('wechat::wechat.menu_get_failure', FALSE, ['error_no' => $api->errCode, 'error_message' => $api->errMsg]);
+		else
+			return $this->success('', false, $data);
+	}
 	
 	public function publishToWechat(Account $account)
 	{
@@ -127,10 +138,40 @@ class MenuController extends Controller
 
 		$account = WechatAccount::findOrFail($account->getAccountID());
 		$api = new API($account->toArray(), $account->getKey());
-		if($api->createMenu($menu_data))
-			return $this->success('wechat::wechat.menu_created_success', TRUE);
+		
+		if($menulist->count() <= 0 ? $api->deleteMenu() : $api->createMenu($menu_data))
+			return $this->success('wechat::wechat.menu_created_success', TRUE, $menu_data);
 		else
 			return $this->failure('wechat::wechat.menu_created_failure', FALSE, ['error_no' => $api->errCode, 'error_message' => $api->errMsg]);
+	}
+
+	public function publishJson(Request $request, Account $account)
+	{
+		$keys = 'content';
+		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
+
+		$json = json_decode($data['content'], true);
+		if (empty($json) || empty($json['button']))
+			return $this->failure('wechat::wechat.menu_json_failure');
+		else {
+			$account = WechatAccount::findOrFail($account->getAccountID());
+			$api = new API($account->toArray(), $account->getKey());
+		
+			if($api->createMenu($json))
+				return $this->success('wechat::wechat.menu_created_success', TRUE, $json);
+			else
+				return $this->failure('wechat::wechat.menu_created_failure', FALSE, ['error_no' => $api->errCode, 'error_message' => $api->errMsg]);
+		}
+	}
+
+	public function deleteAll(Account $account)
+	{
+		$account = WechatAccount::findOrFail($account->getAccountID());
+		$api = new API($account->toArray(), $account->getKey());
+		if ($api->deleteMenu())
+			return $this->success('wechat::wechat.menu_deleted_success');
+		else
+			return $this->failure('wechat::wechat.menu_deleted_failure', FALSE, ['error_no' => $api->errCode, 'error_message' => $api->errMsg]);
 	}
 
 	private function getMenuData(WechatMenu $menu)

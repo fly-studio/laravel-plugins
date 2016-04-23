@@ -16,6 +16,7 @@
 <script src="<{'static/js/ueditor/angular-ueditor.js'|url}>"></script>
 <script src="<{'static/js/angular/common.js'|url}>"></script>
 <script src="<{'plugins/js/wechat/depot.js'|url}>"></script>
+<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
 <script>
 (function($){
 	$().ready(function(){

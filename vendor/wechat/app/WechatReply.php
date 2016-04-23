@@ -3,6 +3,7 @@ namespace Plugins\Wechat\App;
 
 use Addons\Core\Models\Model;
 use Plugins\Wechat\App\WechatMessage;
+use Plugins\Wechat\App\WechatAccount;
 
 class WechatReply extends Model{
 	public $auto_cache = true;
@@ -42,7 +43,7 @@ class WechatReply extends Model{
 				else
 					$result[ $v['waid'] ] [ $v['match_type'] ] [ $v['keywords'] ] = $v;
 			
-			$result;
+			return $result;
 		});
 	}
 
@@ -56,14 +57,14 @@ class WechatReply extends Model{
 	{
 		$replies = $this->getReplies();
 		$result = null;
-		if (isset($replies[$message->waid][static::MATCH_TYPE_WHOLE]) && array_key_exists($message->content, $replies[$message->waid][static::MATCH_TYPE_WHOLE])) {
-			$result = $replies[$message->waid][static::MATCH_TYPE_WHOLE][$message->content];
-		} elseif (isset($result[$message->waid][static::MATCH_TYPE_PART])) {
-			$replace = array_map(function($v) {return '#$@{'.$v->getKey().'}@$#'; }, $result[$message->waid][static::MATCH_TYPE_PART]);
-			$content = strtr($message->content, $replace);
-			if (strcmp($content, $message->content) != 0) { //有匹配对象
-				preg_match('/#\$@\{(\d*)\}@\$#/g', $content, $matches);
-				is_numeric($matches[1]) && $result = static::find($matches[1]);
+		if (isset($replies[$message->waid][static::MATCH_TYPE_WHOLE]) && array_key_exists($message->text->content, $replies[$message->waid][static::MATCH_TYPE_WHOLE])) {
+			$result = $replies[$message->waid][static::MATCH_TYPE_WHOLE][$message->text->content];
+		} elseif (isset($replies[$message->waid][static::MATCH_TYPE_PART])) {
+			$replace = array_map(function($v) {return '#$@{'.$v->getKey().'}@$#'; }, $replies[$message->waid][static::MATCH_TYPE_PART]);
+			$content = strtr($message->text->content, $replace);
+			if (strcmp($content, $message->text->content) != 0) { //有匹配对象
+				if (preg_match('/#\$@\{(\d*)\}@\$#/i', $content, $matches))
+					is_numeric($matches[1]) && $result = static::find($matches[1]);
 			}
 		}
 		unset($replies);
@@ -73,13 +74,13 @@ class WechatReply extends Model{
 	/**
 	 * 关注自动回复
 	 * 
-	 * @param  Plugins\Wechat\App\WechatMessage $message
+	 * @param  Plugins\Wechat\App\WechatAccount $account
 	 * 
 	 * @return Illuminate\Support\Collection [Plugins\Wechat\App\WechatDepots, ...]
 	 */
-	public function subscribeReply(WechatMessage $message)
+	public function subscribeReply(WechatAccount $account)
 	{
 		$replies = $this->getReplies();
-		return isset($replies[$message->waid][static::MATCH_TYPE_SUBSCRIBE]) ? $replies[$message->waid][static::MATCH_TYPE_SUBSCRIBE]->getDepots() : false;//$this->newCollection();
+		return isset($replies[$account->getKey()][static::MATCH_TYPE_SUBSCRIBE]) ? $replies[$account->getKey()][static::MATCH_TYPE_SUBSCRIBE]->getDepots() : $this->newCollection();
 	}
 }

@@ -10,6 +10,7 @@
 
 <{block "head-scripts-after"}>
 <script src="<{'static/js/emojione.js'|url}>"></script>
+<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
 <{/block}>
 
 <{block "filter"}>

@@ -2,6 +2,7 @@
 namespace Plugins\Wechat\App;
 
 use Addons\Core\Models\Model;
+use Plugins\Wechat\App\WechatAccount;
 
 class WechatQrcode extends Model{
 	public $auto_cache = true;
@@ -27,9 +28,9 @@ class WechatQrcode extends Model{
 	 * 
 	 * @return Illuminate\Support\Collection [Plugins\Wechat\App\WechatDepots, ...]
 	 */
-	public function subscribeReply($scene_id, $ticket)
+	public function subscribeReply(WechatAccount $account, $scene_id, $ticket)
 	{
-		$qr = $this->where('ticket', '=', $ticket)->orderBy('updated_at','DESC')->first();
+		$qr = $this->where('ticket', '=', $ticket)->where('waid', $account->getKey())->orderBy('updated_at','DESC')->first();
 		return empty($qr) ? false : $qr->subscribe_depot()->get(); //返回数据集
 	}
 

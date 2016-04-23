@@ -17,7 +17,7 @@ class ToolsController extends Controller {
 		//Cache
 		Cache::flush();
 		//smarty
-		$smarty = (new \Addons\Smarty\View\Engine(app('config')))->getSmarty();
+		$smarty = (new \Addons\Smarty\View\Engine(config('smarty')))->getSmarty();
 		$smarty->clearAllCache();
 		$smarty->clearCompiledTemplate();
 		//other files

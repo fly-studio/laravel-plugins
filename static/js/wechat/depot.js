@@ -1,22 +1,8 @@
-document.getElementsByTagName('html')[0].setAttribute('ng-app', 'app');
 //depot controllers
-var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputModified', 'ng.ueditor'])
-.config(function(inputModifiedConfigProvider) {
+var $app = angular.module('app');
+$app.requires = ['jquery', 'ui.bootstrap', 'untils', 'ngInputModified', 'ng.ueditor'];
+$app.config(function(inputModifiedConfigProvider) {
 	inputModifiedConfigProvider.disableGlobally(); //默认关闭ngInputModified
-})
-.config(function($provide) {
-	$provide.decorator('$controller', function($delegate) {
-		return function(constructor, locals, later, indent) {
-			if (typeof constructor === 'string' && !locals.$scope.controllerName) {
-				locals.$scope.controllerName =  constructor;
-			}
-			return $delegate(constructor, locals, later, indent);
-		};
-	});
-})
-.run(function($rootScope) {
-	/*$rootScope.load = function(page, filters, orders) {};
-	$rootScope.reload = function() {};*/
 })
 .controller('depotSelector',  function($rootScope, $scope, $query, $uibModal, $log, $element) {
 	$scope.mode = 'preview';
@@ -45,20 +31,13 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 	}
 	$scope.unpreview = function(depotId){
 		if (typeof depotId == 'undefined') for(var i in $scope.depotConfirmed) delete $scope.depotConfirmed[i]; else delete $scope.depotConfirmed[depotId];
-		
 	}
-
-	$scope.$watch('depotConfirmed', function(newValue, oldValue){
-		if (newValue === oldValue) { return; }
-		var keys = array_keys($scope.depotConfirmed);
-		jQuery($scope.host).val(keys ? keys : '');
-	}, true);
 
 })
 .controller('depotSelectorModal',  function($scope, $query, $uibModalInstance) {
 	
 })
-.directive('depotSelector',function() {
+.directive('depotSelector',function($query) {
 	return {
 		restrict: 'A',
 		controller: 'depotSelector',
@@ -67,8 +46,56 @@ var $app = angular.module('app', ['jquery', 'ui.bootstrap', 'untils', 'ngInputMo
 			host: '@depotSelector',
 			selectedLimit: '@selectedLimit',
 		},
+		require: '?ngModel',
 		templateUrl: function(element, attrs) {
 			return attrs.templateUrl || 'wechat/depot/selector';
+		},
+		link : function(scope, iElement, iAttrs, ngModelCtrl) {
+			var init = function(defaultValue){
+				if (defaultValue && defaultValue != 0) {
+					$query.post(jQuery.baseuri + 'admin/wechat/depot/data/json',{'filters': {'id':{'in': defaultValue}}}, function(json){
+						if (json.result == 'success')
+						{
+							var data = {};
+							for (var i = 0; i < json.data.data.length; i++) {
+								var v = json.data.data[i];
+								data[v.id] = v; 
+							}
+							scope.depotSelected = angular.copy(data);	
+							scope.depotConfirmed = angular.copy(scope.depotSelected);
+							scope.$apply();	
+						}
+					}, false);
+				}
+			}
+			if (ngModelCtrl)
+				ngModelCtrl.$render = function(){
+					var val = ngModelCtrl.$modelValue;
+					var defaultValue = val ? (!(val instanceof Array) ? val.toString().split(',') : val) : [];
+					init(defaultValue);
+				};
+			else {
+				var $host = jQuery(scope.host);
+				var val = $host.val();
+				var defaultValue = val ? (!(val instanceof Array) ? val.toString().split(',') : val) : [];
+				init(defaultValue);
+			}
+			scope.$watch('depotConfirmed', function(newValue, oldValue) {
+				if (newValue === oldValue) { return; }
+				var keys = array_keys(scope.depotConfirmed);
+				if (scope.host) {
+					var $host = jQuery(scope.host);
+					if ($host.is('select')) {
+						$host.val([]).empty();
+						angular.forEach(keys, function(v){
+							jQuery('<option value="'+v.toString()+'">'+v.toString()+'</option>').appendTo($host);
+						});
+					}
+					$host.val(keys);
+				}
+				if (ngModelCtrl) ngModelCtrl.$setViewValue(keys);
+			}, true);
+			
 		}
 	}
 })
