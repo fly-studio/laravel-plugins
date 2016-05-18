@@ -3,6 +3,7 @@ namespace Plugins\Wechat\App\Tools\Pay;
 
 use Plugins\Wechat\App\WechatLog;
 use Plugins\Wechat\App\Tools\API;
+use Exception;
 /**
  *
  * 接口调用结果类
@@ -71,14 +72,14 @@ class Results extends Base
 	 * @param string $xml
 	 * @throws Exception
 	 */
-	public static function Init($xml, API $api)
+	public static function Init($xml, API $api,$noCheckSign = true)
 	{
 		WechatLog::create(['log' => $xml, 'waid' => $api->waid, 'url' => app('url')->full()]);
 		$obj = new self();
 		$obj->fromXml($xml);
 		//fix bug 2015-06-29
 		if ($obj->values['return_code'] == 'SUCCESS')
-			$obj->CheckSign($api->mchkey);
+			$noCheckSign&&$obj->CheckSign($api->mchkey);
 		return $obj->getValues();
 	}
 }
