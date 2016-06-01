@@ -73,20 +73,19 @@ body>div.game_start {
 .start_bt img {
 	width:100%;
 }
-.reward_bt {
+.use_hb {
 	position:absolute;
 	top:53.28%;
 	left:58.59%;
 	width:32.03%;
 	border-radius:20.57%;
 	box-shadow:0 5px 5px #333333;
-	cursor:pointer;
+	
 }
-.reward_bt img {
-	width:100%;
-}
+.reward_bt img,
+.use_hb img {width:100%}
 
-.use_hb {
+.reward_bt {
 	position:absolute;
 	top:60.44%;
 	left:50%;
@@ -96,9 +95,7 @@ body>div.game_start {
 	cursor:pointer;
 	display:block;
 }
-.use_hb img {
-	width:100%;
-}
+
 .lucky_chart {
 	position:absolute;
 	top:75.15%;
@@ -344,7 +341,7 @@ body>div.tip {
 	height:100%;
 	position:absolute;
 	z-index:1102;
-	background-image:url(../../img/m/monkey/tip.png);
+	
 	background-repeat:no-repeat;
 	background-position:left top;
 	background-size:100% 100%;
@@ -355,6 +352,11 @@ body>div.tip {
 }
 body>div.tip.active{
 	display:block;
+	background-image:url(../../img/m/monkey/tip.png);
+}
+body>div.tip.active1{
+	display:block;
+	background-image:url(../../img/m/monkey/share.png);
 }
 body>div.main {
 	width:100%;
@@ -390,7 +392,7 @@ body>div.main .chumo {
 	top:40px;
 	left:25px;
 	font-family:"微软雅黑";
-	font-size:24px;
+	font-size:18px;
 	font-weight:600;
 	color:#486537;
 	width:298px;
@@ -408,7 +410,7 @@ body>div.main .chumo {
 	height:45px;
 	line-height:45px;
 	font-family:"微软雅黑";
-	font-size:24px;
+	font-size:18px;
 	color:#eb4900;
 	background-color:transparent;
 	border-width:0;
@@ -420,7 +422,7 @@ body>div.main .chumo {
 	left:25px;
 	font-family:"微软雅黑";
 	font-weight:600;
-	font-size:24px;
+	font-size:18px;
 	color:#486537;
 	width:226px;
 	height:45px;

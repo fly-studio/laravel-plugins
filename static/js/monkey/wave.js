@@ -33,7 +33,7 @@ SiriWave.prototype = {
 		this.ctx.moveTo(0,0);
 		this.ctx.beginPath();
 		this.ctx.strokeStyle = color;
-		this.ctx.lineWidth = width || 20;
+		this.ctx.lineWidth = width || 35;
 		var x, y;
 		for (var i=-this.K; i<=this.K; i+=0.01) {
 			x = this.width*((i+this.K)/(this.K*2));

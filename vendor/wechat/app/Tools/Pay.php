@@ -15,6 +15,8 @@ use Plugins\Wechat\App\Tools\Pay\Results;
 use Plugins\Wechat\App\Tools\Pay\Reverse;
 use Plugins\Wechat\App\Tools\Pay\ShortUrl;
 use Plugins\Wechat\App\Tools\Pay\UnifiedOrder;
+use Plugins\Wechat\App\Tools\Pay\SendRedPack;
+use Plugins\Wechat\App\Tools\Pay\Gethbinfo;
 
 use Exception;
 use Closure;
@@ -453,6 +455,93 @@ class Pay
 		return $result;
 	}
 
+	/**
+	 *
+	 * 发送红包
+	 * 该接口主要用于发送红包
+	 * appid、mchid、nonce_str,client_ip不需要填入
+	 * mch_billno,send_name,re_openid,total_num,total_amount,wishing,act_name,remark
+	 * @param SendRedPack $input
+	 * @param int $time_out
+	 * @throws Exception
+	 * @return 成功时返回，其他抛异常
+	 */
+	public function sendredpack(SendRedPack $input, $time_out = 6)
+	{
+	    $url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack';
+	    //检测必填参数
+		if (! $input->isMchBillNoSet()) {
+			throw new Exception('商户订单号，缺少必填参数mch_billno！');
+		}
+		if (! $input->isSendNameSet()) {
+			throw new Exception('商户名称，缺少必填参数send_name！');
+		}
+		if (! $input->isOpenIDSet()) {
+			throw new Exception('用户openid，缺少必填参数re_openid！');
+		}
+		if (! $input->isTotalAmountSet()) {
+			throw new Exception('付款金额，缺少必填参数total_amount！');
+		}
+		if (! $input->isTotalNumSet()) {
+			throw new Exception('红包发放总人数，缺少必填参数total_num！');
+		}
+		if (! $input->isWishingSet()) {
+		    throw new Exception('红包祝福语，缺少必填参数wishing！');
+		}
+		if (! $input->isActNameSet()) {
+		    throw new Exception('活动名称，缺少必填参数act_name！');
+		}
+		if (! $input->isRemarkSet()) {
+		    throw new Exception('活动备注，缺少必填参数remark！');
+		}
+	    $input->setAppid($this->api->appid); //公众账号ID
+	    $input->setMchId($this->api->mchid); //商户号
+	    $input->setNonceStr($this->api->generateNonceStr()); //随机字符串
+	    $input->setClientIp($_SERVER['REMOTE_ADDR']);//客户端ip
+	    $input->setSign($this->api->mchkey); //签名
+	    $xml = $input->toXml();
+	
+	    $start_time_stamp = $this->getMillisecond(); //请求开始时间
+	    $response = $this->postXmlCurl($xml, $url, true, $time_out);
+	    $result = Results::Init($response, $this->api,false);
+	    $this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+	
+	    return $result;
+	}
+	/**
+	 *
+	 * 查询红包
+	 * mch_billno必填
+	 * appid、mchid、nonce_str不需要填入
+	 * @param Gethbinfo $input
+	 * @param int $time_out
+	 * @throws Exception
+	 * @return 成功时返回，其他抛异常
+	 */
+	public function gethbinfo(Gethbinfo $input, $time_out = 6)
+	{
+		$url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo';
+		//检测必填参数
+		if (! $input->isMchBillNoSet()) {
+			throw new Exception('红包查询接口中，mch_billno参数必填！');
+		}
+		$input->setAppid($this->api->appid); //公众账号ID
+		$input->setMchId($this->api->mchid); //商户号
+		$input->setBillType('MCHT'); //MCHT:通过商户订单号获取红包信息
+		$input->setNonceStr($this->api->generateNonceStr()); //随机字符串
+
+
+		$input->setSign($this->api->mchkey); //签名
+		$xml = $input->toXml();
+
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, true, $time_out);
+		$result = Results::Init($response, $this->api,false);
+		$this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+
+
+		return $result;
+	}
 	/**
 	 *
 	 * 支付结果通用通知
