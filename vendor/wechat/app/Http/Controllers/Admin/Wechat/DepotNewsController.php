@@ -107,6 +107,8 @@ class DepotNewsController extends Controller
 
 		$keys = 'title,author,description,content,cover_aid,cover_in_content,redirect,url';
 		$data = $this->autoValidate($request, 'wechat-news.store', $keys);
+		$data['cover_in_content'] = isset($data['cover_in_content']) ? boolval($data['cover_in_content']): false;
+
 		$news->update($data);
 		return $this->success('', FALSE, $news->toArray());
 	}
