@@ -39,6 +39,7 @@
 				<div class="tab-pane <{if $item@index == 0}>active<{/if}>" id="role-<{$item->getKey()}>">
 					<input type="hidden" name="name" value="<{$item->name}>">
 					<input type="hidden" name="display_name" value="<{$item->display_name}>">
+					<input type="hidden" name="url" value="<{$item->url}>">
 					<textarea class="hidden" name="description"><{$item->description}></textarea>
 					<h3 class="page-header">
 						<{$item->display_name}> <small> (<{$item->name}>) </small>&nbsp;&nbsp;&nbsp;
