@@ -197,7 +197,7 @@ class AttachmentController extends Controller {
 
 	public function uploaderQuery()
 	{
-		$attachment = $this->model->upload($this->user['id'], 'Filedata');
+		$attachment = $this->model->upload($this->user->getKey(), 'Filedata');
 		if (!($attachment instanceof Attachment))
 			return $this->failure_attachment($attachment);
 		return $this->success('', FALSE, $attachment->toArray());
@@ -212,7 +212,7 @@ class AttachmentController extends Controller {
 
 		if (empty($hash) || empty($size) || empty($filename))
 			return $this->error_param()->setStatusCode(404);
-		$attachment = $this->model->hash($this->user['id'], $hash, $size, $filename);
+		$attachment = $this->model->hash($this->user->getKey(), $hash, $size, $filename);
 		if (!($attachment instanceof Attachment))
 			return $this->failure_attachment($attachment);
 		return $this->success('', FALSE, $attachment->toArray());
@@ -221,7 +221,7 @@ class AttachmentController extends Controller {
 	public function editormdUploadQuery()
 	{
 		$data = array('success' => 1, 'message' => '');
-		$attachment = $this->model->upload($this->user['id'], 'editormd-image-file');
+		$attachment = $this->model->upload($this->user->getKey(), 'editormd-image-file');
 		if (!($attachment instanceof Attachment))
 		{
 			$data = array('success' => 0, 'message' => $this->read_message($attachment));
@@ -235,7 +235,7 @@ class AttachmentController extends Controller {
 	{
 		$data = array('error' => 0, 'url' => '');
 		
-		$attachment = $this->model->upload($this->user['id'], 'Filedata');
+		$attachment = $this->model->upload($this->user->getKey(), 'Filedata');
 		if (!($attachment instanceof Attachment))
 		{
 			$data = array('error' => 1, 'message' => $this->read_message($attachment));
@@ -303,7 +303,7 @@ class AttachmentController extends Controller {
 			case 'uploadvideo':
 			/* 上传文件 */
 			case 'uploadfile':
-				$attachment = $this->model->upload($this->user['id'], 'Filedata');
+				$attachment = $this->model->upload($this->user->getKey(), 'Filedata');
 				$data = !($attachment instanceof Attachment) ? array('state' => $this->read_message($attachment)) : array(
 					'state' => 'SUCCESS',
 					'url' => $attachment->url(),
@@ -319,7 +319,7 @@ class AttachmentController extends Controller {
 				$fp = fopen($file_path,'wb+');
 				fwrite($fp, base64_decode($_POST['Filedata']));
 				fclose($fp);
-				$attachment = $this->model->savefile($this->user['id'], $file_path, 'scrawl_'.$this->user['id'].'_'.date('Ymdhis').'.png');
+				$attachment = $this->model->savefile($this->user->getKey(), $file_path, 'scrawl_'.$this->user->getKey().'_'.date('Ymdhis').'.png');
 				$data = !($attachment instanceof Attachment) ? array('state' => $this->read_message($attachment)) : array(
 					'state' => 'SUCCESS',
 					'url' => $attachment->url(),
@@ -334,7 +334,7 @@ class AttachmentController extends Controller {
 				$url = isset($_POST['Filedata']) ? $_POST['Filedata'] : $_GET['Filedata'];
 				$url = to_array($url);$list = array();
 				foreach ($url as $value) {
-					$attachment = $this->model->download($this->user['id'], $value);
+					$attachment = $this->model->download($this->user->getKey(), $value);
 					$list[] = !($attachment instanceof Attachment) ? array('state' => $this->read_message($attachment), 'source' => $value) : array (
 						'state' => 'SUCCESS',
 						'url' => $attachment->url(),
@@ -383,8 +383,34 @@ class AttachmentController extends Controller {
 		fwrite($fp, $data[0]);
 		fclose($fp);
 
-		$attachment = $this->model->savefile($this->user['id'], $file_path, 'avatar_'.$this->user['id'].'_'.date('Ymdhis').'.jpg');
+		$attachment = $this->model->savefile($this->user->getKey(), $file_path, 'avatar_'.$this->user->getKey().'_'.date('Ymdhis').'.jpg');
 		return $this->success('', $url, array('id' => $attachment->getKey(), 'url' => $attachment->url()));
+	}
+
+	public function fullavatarQuery(Request $request)
+	{
+		$_config = config('attachment');
+		$result = ['success' => true];
+		if (isset($_FILES['__source']))
+		{
+			$attachment = $this->model->upload($this->user->getKey(), '__source');
+			if (!($attachment instanceof Attachment))
+				$result = ['success' => false, 'message' => $this->read_message($attachment)];
+			else
+				$result['original_aid'] = $attachment['id'];
+		}
+		if ($result['success'])
+		foreach (['__avatar1', '__avatar2', '__avatar3'] as $v) {
+			if (isset($_FILES[$v]) && is_uploaded_file($_FILES[$v]["tmp_name"]) && !$_FILES[$v]["error"]){
+				$attachment = $this->model->savefile($this->user->getKey(), $_FILES[$v]["tmp_name"], $v.$this->user->getKey().'_'.date('Ymdhis').'.jpg');
+				if (!($attachment instanceof Attachment))
+					$result = ['success' => false, 'message' => $this->read_message($attachment)];
+				else
+					$result['avatar_aids'][] = $attachment['id'];
+			}
+		}
+
+		return response()->json($result);
 	}
 
 	public function dataurlUploadQuery(Request $request)
@@ -400,7 +426,7 @@ class AttachmentController extends Controller {
 		fclose($fp);
 		unset($dataurl, $data, $part);
 
-		$attachment = $this->model->savefile($this->user['id'], $file_path, 'datauri_'.$this->user['id'].'_'.date('Ymdhis').'.'.$ext);
+		$attachment = $this->model->savefile($this->user->getKey(), $file_path, 'datauri_'.$this->user->getKey().'_'.date('Ymdhis').'.'.$ext);
 		return $this->success('', $url, array('id' => $attachment->getKey(), 'url' => $attachment->url()));
 	}
 
@@ -409,6 +435,12 @@ class AttachmentController extends Controller {
 	{
 		$_config = config('attachment');
 		$_data =  ['maxsize' => $_config['maxsize'], 'ext' => implode(',', $_config['ext'])];
-		return Lang::has($message = 'attachment.'.$message_field.'.content') ? trans($message, $_data) : trans('attachment::'.$message.'.content', $_data);
+		return Lang::has($message = 'attachment.'.$message_field.'.content') ? trans($message, $_data) : trans('attachment::'.$message, $_data);
+	}
+
+	private function failure_attachment($error_no, $url = FALSE)
+	{
+		$_config = config('attachment');
+		return $this->failure(Lang::has($message = 'attachment.'.$message_field.'.content') ? $message :  'attachment::'.$message, $url, ['maxsize' => format_bytes($_config['maxsize']), 'ext' => implode(',', $_config['ext'])]);
 	}
 }
