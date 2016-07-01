@@ -441,6 +441,6 @@ class AttachmentController extends Controller {
 	private function failure_attachment($error_no, $url = FALSE)
 	{
 		$_config = config('attachment');
-		return $this->failure(Lang::has($message = 'attachment.'.$message_field.'.content') ? $message :  'attachment::'.$message, $url, ['maxsize' => format_bytes($_config['maxsize']), 'ext' => implode(',', $_config['ext'])]);
+		return $this->failure(Lang::has($message = 'attachment.'.$error_no.'.content') ? $message :  'attachment::'.$message, $url, ['maxsize' => format_bytes($_config['maxsize']), 'ext' => implode(',', $_config['ext'])]);
 	}
 }
