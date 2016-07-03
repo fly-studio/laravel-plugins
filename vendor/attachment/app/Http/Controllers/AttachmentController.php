@@ -136,7 +136,7 @@ class AttachmentController extends Controller {
 		$mime_type = Mimes::getInstance()->mime_by_ext($attachment->ext);
 		$content_length = NULL;//$attachment->size;
 		$last_modified = true;
-		$etag = true;
+		$etag = $attachment->hash; //只要网址一样，输出同一个etag
 		$cache = TRUE;
 		return response()->preview($new_path, [], compact('mime_type', 'etag', 'last_modified', 'content_length', 'cache'));
 	}
