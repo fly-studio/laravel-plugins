@@ -9,7 +9,7 @@ use Addons\Core\File\Mimes;
 use Lang,Crypt,Agent,Image,Session;
 class AttachmentController extends Controller {
 
-	public $permissions = ['uploaderQuery,avatarUploadQuery,avatarUploadQuery,kindeditorUploadQuery,ueditorUploadQuery,dataurlUploadQuery,editormdUploadQuery,hashQuery' => 'attachment.create'];
+	public $permissions = ['uploaderQuery,avatarUploadQuery,fullavatarQuery,kindeditorUploadQuery,ueditorUploadQuery,dataurlUploadQuery,editormdUploadQuery,hashQuery' => 'attachment.create'];
 
 	private $model;
 	public function __construct()
@@ -119,19 +119,20 @@ class AttachmentController extends Controller {
 		$attachment->sync();
 
 		$full_path = $attachment->full_path();
-		$img = Image::make($full_path);
-		if ((!empty($width) && $img->width() > $width) || (!empty($height) && $img->height() > $height))
+		$size = getimagesize($full_path);
+		if ((!empty($width) && $size[0] > $width) || (!empty($height) && $size[1] > $height))
 		{
-			$wh = aspect_ratio($img->width(), $img->height(), $width, $height);extract($wh);
+			$wh = aspect_ratio($size[0], $size[1], $width, $height);extract($wh);
 			$new_path = storage_path(str_replace('.','[dot]',$attachment->relative_path()).';'.$width.'x'.$height.'.'.$attachment->ext);
 			if (!file_exists($new_path))
 			{
+				$img = Image::make($full_path);
 				!is_dir($path = dirname($new_path)) && mkdir($path, 0777, TRUE);
 				$img->resize($width, $height, function ($constraint) {$constraint->aspectRatio();})->save($new_path);
+				unset($img);
 			}
 		} else
 			$new_path = $full_path;
-		unset($img);		
 		$mime_type = Mimes::getInstance()->mime_by_ext($attachment->ext);
 		$content_length = NULL;//$attachment->size;
 		$last_modified = true;
