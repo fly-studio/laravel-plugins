@@ -13,9 +13,13 @@ return [
 		'title' => '下载成功',
 		'content' => '您的文件已经下载成功！',
 	],
-	'failure_resize' => [
-		'title' => '无法裁减',
-		'content' => '您的文件非图片类型，无法裁减！',
+	'failure_image' => [
+		'title' => '无法预览',
+		'content' => '您的文件非图片类型，无法预览！',
+	],
+	'failure_watermark' => [
+		'title' => '无法预览',
+		'content' => '水印文件有误。',
 	],
 	UPLOAD_ERR_OK => [
 		'title' => '上传成功',

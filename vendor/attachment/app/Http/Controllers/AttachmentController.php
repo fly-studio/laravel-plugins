@@ -69,7 +69,7 @@ class AttachmentController extends Controller {
 		return $this->success('', TRUE, $attachment->toArray());
 	}
 
-	public function index($id, $width = NULL, $height = NULL)
+	public function index($id, $width = NULL, $height = NULL, $m = NULL)
 	{
 		$id = intval($id);
 		if (empty($id))
@@ -83,7 +83,9 @@ class AttachmentController extends Controller {
 
 		if ($attachment->file_type() == 'image')
 		{
-			if (!empty($width) || !empty($height))
+			if (!empty($m))
+				return $this->watermark($id, $m, $width, $height);
+			else if (!empty($width) || !empty($height))
 				return $this->resize($id, $width, $height);
 			else
 			{
@@ -112,7 +114,7 @@ class AttachmentController extends Controller {
 		
 
 		if ($attachment->file_type() != 'image')
-			return $this->failure('attachment::attachment.failure_resize');
+			return $this->failure('attachment::attachment.failure_image');
 
 
 		//获取远程文件
@@ -180,6 +182,50 @@ class AttachmentController extends Controller {
 		$etag = $attachment->hash;
 		$cache = TRUE;
 		return response()->preview($full_path, [], compact('mime_type', 'etag', 'last_modified', 'content_length', 'cache'));
+	}
+
+	public function watermark($id, $m, $width = NULL, $height = NULL)
+	{
+		$id = intval($id);
+		if (empty($id) || empty($m))
+			return $this->error_param()->setStatusCode(404);
+
+		$watermark_path = is_numeric($m) ? (($a = $this->model->get($m)) ? $a->full_path() : '') : APPPATH.$m;
+		if (empty($watermark_path) || !file_exists($watermark_path))
+			return $this->failure('attachment::attachment.failure_watermark');
+
+		$attachment = $this->model->get($id);
+
+		if (empty($attachment))
+			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
+
+		if ($attachment->file_type() != 'image')
+			return $this->failure('attachment::attachment.failure_image');
+
+		//获取远程文件
+		$attachment->sync();
+
+		$full_path = $attachment->full_path();
+		$size = getimagesize($full_path);
+		if (!empty($width) || !empty($height)) {$wh = aspect_ratio($size[0], $size[1], $width, $height);extract($wh);} else list($width, $height) = $size;
+		$new_path = storage_path(str_replace('.','[dot]',$attachment->relative_path()).';'.$width.'x'.$height.';'.md5($watermark_path).'.'.$attachment->ext);
+
+		if (!file_exists($new_path))
+		{
+			$img = Image::make($full_path);
+			!is_dir($path = dirname($new_path)) && mkdir($path, 0777, TRUE);
+			($size[0] != $width || $size[1] != $height) && $img->resize($width, $height, function ($constraint) {$constraint->aspectRatio();});
+			$wm = Image::make($watermark_path)->resize($width * 0.2, $height * 0.2);
+			$img->insert($wm, 'bottom-right', 7, 7)->save($new_path);
+			unset($img);
+		}
+
+		$mime_type = Mimes::getInstance()->mime_by_ext($attachment->ext);
+		$content_length = NULL;//$attachment->size;
+		$last_modified = true;
+		$etag = $attachment->hash; //只要网址一样，输出同一个etag
+		$cache = TRUE;
+		return response()->preview($new_path, [], compact('mime_type', 'etag', 'last_modified', 'content_length', 'cache'));
 	}
 
 	public function redirect($id)
