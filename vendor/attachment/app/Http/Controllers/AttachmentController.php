@@ -101,8 +101,10 @@ class AttachmentController extends Controller {
 		}
 	}
 
-	public function resize($id, $width = NULL, $height = NULL)
+	public function resize($id, $width = NULL, $height = NULL, $m = NULL)
 	{
+		if (!empty($m)) return $this->watermark($id, $m, $width, $height);
+		
 		$id = intval($id);
 		if (empty($id))
 			return $this->error_param()->setStatusCode(404);
