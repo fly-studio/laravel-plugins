@@ -217,7 +217,9 @@ class AttachmentController extends Controller {
 			$img = Image::make($full_path);
 			!is_dir($path = dirname($new_path)) && mkdir($path, 0777, TRUE);
 			($size[0] != $width || $size[1] != $height) && $img->resize($width, $height, function ($constraint) {$constraint->aspectRatio();});
-			$wm = Image::make($watermark_path)->resize($width * 0.2, $height * 0.2);
+			$size = getimagesize($watermark_path);
+			$wh = aspect_ratio($size[0], $size[1], $width * 0.2, $height * 0.2);
+			$wm = Image::make($watermark_path)->resize($wh['width'], $wh['height']);
 			$img->insert($wm, 'bottom-right', 7, 7)->save($new_path);
 			unset($img);
 		}
