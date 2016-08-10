@@ -9,7 +9,7 @@ use Addons\Core\File\Mimes;
 use Lang,Crypt,Agent,Image,Session;
 class AttachmentController extends Controller {
 
-	public $permissions = ['uploaderQuery,avatarUploadQuery,kindeditorUploadQuery,ueditorUploadQuery,dataurlUploadQuery,editormdUploadQuery,hashQuery' => 'attachment.create']; // fullavatarQuery canot post sessionid
+	public $permissions = ['uploaderQuery,avatarUploadQuery,fullavatarQuery,kindeditorUploadQuery,ueditorUploadQuery,dataurlUploadQuery,editormdUploadQuery,hashQuery' => 'attachment.create'];
 
 	private $model;
 	public function __construct()
