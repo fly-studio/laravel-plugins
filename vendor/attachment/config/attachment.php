@@ -32,7 +32,7 @@ return [
 		'folder_grp' => NULL, //文件夹所属组，比如：nobody
 		'folder_mod' => 0777, //文件夹的权限，一般情况下必须要777
 	],
-	'ext' => ['mov','ogg','tp','ts','mkv','webm','webp','rmvb','rm','asf','mpeg','mpg','avi','midi','mid','wmv','wma','wav','mp4','mp3','amr','f4v','flv','swf','bz2','gz','pptx','ppt','xslx','xsl','docx','doc','pdf','7z','rar','zip','gif','png','bmp','jpeg','jpg'],
+	'ext' => ['mov','ogg','tp','ts','mkv','webm','webp','rmvb','rm','asf','mpeg','mpg','avi','midi','mid','wmv','wma','wav','mp4','mp3','amr','f4v','flv','swf','bz2','gz','pptx','ppt','xslx','xsl','csv','docx','doc','pdf','7z','rar','zip','gif','png','bmp','jpeg','jpg','svg'],
 	'maxsize' => 1024 * 1024 * 100,  //100M
 	'normal_ext' => 'gf',
 	'file_type' => [
@@ -56,6 +56,7 @@ return [
 			'gif',
 			'png',
 			'webp',
+			'svg',
 		],
 		'video' => [
 			'mov',
@@ -84,7 +85,7 @@ return [
 		],
 		'document' => [
 			'pptx','ppt',
-			'xslx','xsl',
+			'xslx','xsl','csv',
 			'docx','doc',
 			'pdf',
 		],
