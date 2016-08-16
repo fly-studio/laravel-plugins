@@ -41,7 +41,8 @@ class AttachmentController extends Controller {
 
 		if (empty($attachment))
 			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
-	
+		else if(empty($attachment->afid))
+			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 		//获取远程文件
 		$attachment->sync();
 
@@ -65,6 +66,8 @@ class AttachmentController extends Controller {
 		$attachment = $this->model->get($id);
 		if (empty($attachment))
 			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
+		else if(empty($attachment->afid))
+			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 
 		return $this->success('', TRUE, $attachment->toArray());
 	}
@@ -79,7 +82,8 @@ class AttachmentController extends Controller {
 
 		if (empty($attachment))
 			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
-		
+		else if(empty($attachment->afid))
+			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 
 		if ($attachment->file_type() == 'image')
 		{
@@ -113,7 +117,8 @@ class AttachmentController extends Controller {
 
 		if (empty($attachment))
 			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
-		
+		else if(empty($attachment->afid))
+			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 
 		if ($attachment->file_type() != 'image')
 			return $this->failure('attachment::attachment.failure_image');
@@ -155,7 +160,8 @@ class AttachmentController extends Controller {
 
 		if (empty($attachment))
 			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
-		
+		else if(empty($attachment->afid))
+			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 
 		if ($attachment->file_type() == 'image')
  			return $this->resize($id, 640, 960);
@@ -173,7 +179,8 @@ class AttachmentController extends Controller {
 
 		if (empty($attachment))
 			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
-
+		else if(empty($attachment->afid))
+			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 		//获取远程文件
 		$attachment->sync();
 
@@ -200,6 +207,8 @@ class AttachmentController extends Controller {
 
 		if (empty($attachment))
 			return $this->failure('attachment::attachment.failure_noexists')->setStatusCode(404);
+		else if(empty($attachment->afid))
+			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 
 		if ($attachment->file_type() != 'image')
 			return $this->failure('attachment::attachment.failure_image');
@@ -246,9 +255,16 @@ class AttachmentController extends Controller {
 		return redirect($link_path);
 	}
 
-	public function uploaderQuery()
+	public function uploaderQuery(Request $request)
 	{
-		$attachment = $this->model->upload($this->user->getKey(), 'Filedata');
+		$uuid = $request->input('uuid') ?: '';
+		$count = $request->input('chunks') ?: 1;
+		$index = $request->input('chunk') ?: 0;
+		$size = $request->input('size') ?: 0;
+		$start = $request->input('start') ?: 0;
+		$end = $request->input('end') ?: 0;
+
+		$attachment = $this->model->upload($this->user->getKey(), 'Filedata', compact('uuid', 'count', 'index', 'start', 'end'));
 		if (!($attachment instanceof Attachment))
 			return $this->failure_attachment($attachment);
 		return $this->success('', FALSE, $attachment->toArray());

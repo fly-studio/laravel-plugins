@@ -5,11 +5,13 @@ use Addons\Core\Models\Model;
 
 use \Curl\Curl;
 use Addons\Core\SSH;
+use Plugins\Attachment\App\AttachmentFile;
+use Plugins\Attachment\App\AttachmentChunk;
+use DB, Cache;
 class Attachment extends Model{
 	
 	protected $guarded = ['id'];
 	protected $hidden = ['path', 'afid', 'basename'];
-
 
 	const UPLOAD_ERR_MAXSIZE = 100;
 	const UPLOAD_ERR_EMPTY = 101;
@@ -44,6 +46,11 @@ class Attachment extends Model{
 		return $this->hasOne(get_namespace($this).'\\AttachmentFile', 'id', 'afid');
 	}
 
+	public function chunks()
+	{
+		return $this->hasMany(get_namespace($this).'\\AttachmentChunk', 'aid', 'id')->orderBy('index', 'ASC');
+	}
+
 	public function full_path()
 	{
 		return $this->get_real_path();
@@ -59,7 +66,7 @@ class Attachment extends Model{
 		return $this->get_relative_path();
 	}
 
-		/**
+	/**
 	 * 构造一个符合router标准的URL
 	 * 
 	 * @param  integer $id      AID
@@ -87,7 +94,7 @@ class Attachment extends Model{
 		return url(str_replace(APPPATH, '', $path));
 	}
 
-	public function upload($uid, $field_name, $description = '')
+	public function upload($uid, $field_name, $chunks = [], $extra = [])
 	{
 		if (!isset($_FILES[$field_name]) || !is_uploaded_file($_FILES[$field_name]["tmp_name"]) || $_FILES[$field_name]["error"] != 0) {
 			return $_FILES[$field_name]['error'];
@@ -97,8 +104,10 @@ class Attachment extends Model{
 		set_time_limit(0);
 
 		//$ext = strtolower(pathinfo($_FILES[$field_name]['name'],PATHINFO_EXTENSION));
-
-		return $this->savefile($uid, $_FILES[$field_name]["tmp_name"], $_FILES[$field_name]['name'], NULL, NULL, $description);
+		if (empty($chunks)  || $chunks['count'] == 1) //只有一个分块
+			return $this->savefile($uid, $_FILES[$field_name]["tmp_name"], $_FILES[$field_name]['name'], NULL, NULL, $extra);
+		else
+			return $this->savechunk($uid, $_FILES[$field_name]["tmp_name"], $_FILES[$field_name]['name'], $chunks, NULL, NULL, $extra);
 	}
 
 	public function download($uid, $url, $filename = NULL, $ext = NULL)
@@ -130,11 +139,10 @@ class Attachment extends Model{
 			!empty($tmp) && $basename = mb_basename(trim($tmp[1],'\'"'));//pathinfo($download_filename,PATHINFO_BASENAME);
 		}
 
-		return $this->savefile($uid, $file_path, $basename, $filename, $ext, 'Download from:' . $url);
-
+		return $this->savefile($uid, $file_path, $basename, $filename, $ext, ['description' => 'Download from:' . $url]);
 	}
 
-	public function hash($uid, $hash, $size, $original_basename, $file_name = NULL, $file_ext = NULL, $description = NULL)
+	public function hash($uid, $hash, $size, $original_basename, $file_name = NULL, $file_ext = NULL, $extra = NULL)
 	{
 		if (empty($hash) || empty($size))
 			return FALSE;
@@ -150,13 +158,13 @@ class Attachment extends Model{
 			'filename' => $file_name,
 			'ext' => $file_ext,
 			'original_basename' => $original_basename,
-			'description' => $description,
+			'description' => !empty($extra['description']) ? $extra['description'] : '',
 			'uid' => $uid,
 		]);
 		return $this->get($attachment->getKey());
 	}
 
-	public function savefile($uid, $original_file_path, $original_basename, $file_name = NULL, $file_ext = NULL, $description = NULL)
+	private function _saveCheck($original_file_path, $original_basename, &$size = 0, &$file_name = NULL, &$file_ext = NULL)
 	{
 		if (!file_exists($original_file_path))
 			return FALSE;
@@ -172,6 +180,122 @@ class Attachment extends Model{
 			return static::UPLOAD_ERR_MAXSIZE;
 		if (empty($size))
 			return static::UPLOAD_ERR_EMPTY;
+
+		return TRUE;
+	}
+
+
+	public function savechunk($uid, $original_file_path, $original_basename, $chunks, $file_name = NULL, $file_ext = NULL, $extra = [])
+	{
+		if (empty($chunks['uuid']) || empty($chunks['count'])) return FALSE;
+
+		$size = 0;
+		$r = $this->_saveCheck($original_file_path, $original_basename, $size, $file_name, $file_ext);
+		if ($r !== TRUE) return $r;
+
+		//传文件都耗费了那么多时间,还怕md5?
+		$hash = md5_file($original_file_path);
+
+		DB::beginTransaction();
+
+		$attachment = static::where('uuid', $chunks['uuid'])->lockForUpdate()->first();
+		empty($attachment) && $attachment = static::create([
+			'uuid' => $chunks['uuid'],
+			'chunk_count' => $chunks['count'],
+			'afid' => 0,
+			'filename' => $file_name,
+			'ext' => $file_ext,
+			'original_basename' => $original_basename,
+			'description' => !empty($extra['description']) ? $extra['description'] : '',
+			'uid' => $uid,
+		]);
+
+		$new_basename = $this->_get_hash_basename();
+		$new_hash_path = $this->get_hash_path($new_basename);
+		if (!$this->_save_file($original_file_path, $new_basename))
+		{
+			DB::rollback();
+			return static::UPLOAD_ERR_SAVE;
+		}
+
+		AttachmentChunk::create([
+			'aid' => $attachment->getKey(),
+			'basename' => $new_basename,
+			'path' => $new_hash_path,
+			'hash' => $hash,
+			'size' => $size,
+			'index' => $chunks['index'],
+			'start' => $chunks['start'],
+			'end' => $chunks['end'],
+		]);
+		DB::commit();
+		$this->_mergeChunk($attachment->getKey());
+
+		return $this->get($attachment->getKey());
+	}
+
+	private function _mergeChunk($aid)
+	{
+		DB::beginTransaction();
+		$attachment = static::where($this->getKeyName(), $aid)->lockForUpdate()->first();
+
+		if ($attachment->chunks()->count() != $attachment->chunk_count || !empty($attachment->afid))
+		{
+			DB::rollback();
+			return FALSE; //未完整的得到文件
+		}
+
+		//合并文件
+		$merged_file_path = tempnam(sys_get_temp_dir(), 'attachment-'.$attachment->getKey());
+		$fw = fopen($merged_file_path, 'w');
+		foreach ($attachment->chunks as $chunk)
+		{
+			$path = $this->get_real_path($chunk->path);
+			if (!file_exists($path)) {DB::rollback();return FALSE;}
+			$fr = fopen($path, 'rb');
+			while(!feof($fr))
+			{
+				$stream = fread($fr, 1024 * 32); //32K
+				fwrite($fw, $stream);
+			}
+			fclose($fr);
+		}
+		fclose($fw);
+
+		$size = filesize($merged_file_path);
+		//传文件都耗费了那么多时间,还怕md5?
+		$hash = md5_file($merged_file_path);
+
+		$file = $this->fileModel->get_byhash($hash, $size);
+		if (empty($file))
+		{
+			$new_basename = $this->_get_hash_basename();
+			$new_hash_path = $this->get_hash_path($new_basename);
+			if (!$this->_save_file($merged_file_path, $new_basename)) {
+				DB::rollback();
+				return static::UPLOAD_ERR_SAVE;
+			}
+
+			$file = AttachmentFile::create([
+				'basename' => $new_basename,
+				'path' => $new_hash_path,
+				'hash' => $hash,
+				'size' => $size,
+			]);
+		} else
+			@unlink($merged_file_path);
+
+		$attachment->update(['afid' => $file->getKey()]);
+		DB::commit();
+
+		return TRUE;
+	}
+
+	public function savefile($uid, $original_file_path, $original_basename, $file_name = NULL, $file_ext = NULL, $extra = [])
+	{
+		$size = 0;
+		$r = $this->_saveCheck($original_file_path, $original_basename, $size, $file_name, $file_ext);
+		if ($r !== TRUE) return $r;
 
 		//传文件都耗费了那么多时间,还怕md5?
 		$hash = md5_file($original_file_path);
@@ -200,7 +324,7 @@ class Attachment extends Model{
 			'filename' => $file_name,
 			'ext' => $file_ext,
 			'original_basename' => $original_basename,
-			'description' => $description,
+			'description' => !empty($extra['description']) ? $extra['description'] : '',
 			'uid' => $uid,
 		]);
 		//当前Model更新
@@ -213,7 +337,7 @@ class Attachment extends Model{
 	public function get($id)
 	{
 		$attachment = static::find($id);
-		if (!empty($attachment))
+		if (!empty($attachment) && !empty($attachment->afid))
 		{
 			$result = $attachment->getAttributes() + $attachment->file->getAttributes();
 			$result['displayname'] = $result['filename'].(!empty($result['ext']) ?  '.'.$result['ext'] : '' );

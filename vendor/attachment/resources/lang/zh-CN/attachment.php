@@ -5,6 +5,10 @@ return [
 		'title' => '附件不存在',
 		'content' => '该附件不存在，或者已被删除！',
 	],
+	'failure_file_noexists' => [
+		'title' => '文件不存在',
+		'content' => '该文件不存在，可能上传不完整、或者已被删除！',
+	],
 	'success_upload' => [
 		'title' => '上传成功',
 		'content' => '您的文件已经上传成功！',
