@@ -9,9 +9,9 @@ use Plugins\Wechat\App\Tools\OAuth2;
 use Plugins\Wechat\App\Tools\Js;
 class WechatOAuth2Controller extends Controller {
 
-	public $wechat_oauth2_account = NULL;
-	public $wechat_oauth2_type = 'snsapi_base'; // snsapi_base  snsapi_userinfo  hybrid
-	public $wechat_oauth2_bindUserRole = Role::WECHATER; // 将微信用户绑定到系统用户的用戶組，為空則不綁定
+	protected $wechat_oauth2_account = NULL;
+	protected $wechat_oauth2_type = 'snsapi_base'; // snsapi_base  snsapi_userinfo  hybrid
+	protected $wechat_oauth2_bindUserRole = Role::WECHATER; // 将微信用户绑定到系统用户的用戶組，為空則不綁定
 
 	protected $wechatUser = NULL;
 

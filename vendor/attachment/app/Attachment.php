@@ -255,10 +255,11 @@ class Attachment extends Model{
 			$fr = fopen($path, 'rb');
 			while(!feof($fr))
 			{
-				$stream = fread($fr, 1024 * 32); //32K
-				fwrite($fw, $stream);
+				$stream = fread($fr, $this->_config['write_cache']);
+				fwrite($fw, $stream);unset($stream);
 			}
 			fclose($fr);
+			@unlink($path); //读取完毕就删除，没有保留的必要
 		}
 		fclose($fw);
 
