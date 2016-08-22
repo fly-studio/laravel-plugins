@@ -1,7 +1,7 @@
 <div class="form-group">
 	<label class="col-md-3 control-label" for="name">配置网址</label>
 	<div class="col-md-9">
-		<p class="form-control-static"><code><{'wechat/push'|url}>?id=<i><{$_data.id|default:'ID'}></i></code>，（对应公众号的ID）</p>
+		<p class="form-control-static"><code><{'wechat/push'|url}>?id=<i><{$_data.id|default:'ID'}></i></code>，（ID在新建之后会变为正确的值）</p>
 	</div>
 </div>
 <div class="form-group">
@@ -31,7 +31,7 @@
 	<label class="col-md-3 control-label" for="account">原始ID</label>
 	<div class="col-md-9">
 		<input type="text" id="account" name="account" class="form-control" placeholder="请输入" value="<{$_data.account}>">
-		<span class="help-block">此账号由微信自动生成（公众号设置 - 原始ID），类似：gh_xxxxxxxxxxxxx</span>
+		<span class="help-block">此账号由微信自动生成（请到：「公众号设置」 - 「原始ID」处查看），类似：gh_xxxxxxxxxxxxx</span>
 	</div>
 </div>
 <div class="form-group">
@@ -74,7 +74,7 @@
 		<label class="col-md-3 control-label" for="mchid">商戶ID</label>
 		<div class="col-md-9">
 			<input type="text" id="mchid" name="mchid" class="form-control" placeholder="请输入商戶ID" value="<{$_data.mchid}>">
-			<span class="help-block">(*) 如果不加密消息，可不用填写</span>
+			<span class="help-block">(*) 如需支付，必须填写</span>
 		</div>
 	</div>
 	<div class="form-group">
