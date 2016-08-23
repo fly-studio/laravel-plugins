@@ -260,11 +260,12 @@ class AttachmentController extends Controller {
 		$uuid = $request->input('uuid') ?: '';
 		$count = $request->input('chunks') ?: 1;
 		$index = $request->input('chunk') ?: 0;
-		$size = $request->input('size') ?: 0;
+		$total = $request->input('total') ?: 0;
 		$start = $request->input('start') ?: 0;
 		$end = $request->input('end') ?: 0;
+		$hash = $request->input('hash') ?: '';
 
-		$attachment = $this->model->upload($this->user->getKey(), 'Filedata', compact('uuid', 'count', 'index', 'start', 'end'));
+		$attachment = $this->model->upload($this->user->getKey(), 'Filedata', compact('uuid', 'count', 'index', 'start', 'end', 'total', 'hash'));
 		if (!($attachment instanceof Attachment))
 			return $this->failure_attachment($attachment);
 		return $this->success('', FALSE, $attachment->toArray());
