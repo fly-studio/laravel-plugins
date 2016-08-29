@@ -4,13 +4,12 @@ namespace Plugins\Wechat\App\Jobs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 use Plugins\Wechat\App\WechatQrcode as WechatQrcodeModel;
 use Plugins\Wechat\App\Tools\API;
 use Plugins\Wechat\App\Tools\Attachment;
-class WechatQrcode implements SelfHandling, ShouldQueue
+class WechatQrcode implements ShouldQueue
 {
 	use Queueable;
 	use InteractsWithQueue, SerializesModels;
