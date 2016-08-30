@@ -24,8 +24,6 @@ class AttachmentController extends Controller {
 				Session::setId($session_id);
 			}
 		}
-		
-		parent::__construct();
 
 		$this->model = new Attachment();
 	}
