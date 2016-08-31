@@ -2,6 +2,7 @@
 return [
 	'register' => [
 		'view' => true,
+		'migrate' => false, 
 		'translator' => true,
 		'router' => true,
 		'validation' => true,
