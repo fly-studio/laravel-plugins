@@ -136,12 +136,13 @@ $('h1[id]', '#editormd-view').each(function(i){
 	var $this = $(this);
 	$this.attr('id', this.id + i);
 	var $obj = $('<li><a href="#'+$this.attr('id')+'">'+$this.text()+'</a><ul class="nav"></ul></li>').appendTo("#navbar");
-	$obj = $('ul', $obj);
+	$obj = $('ul.nav', $obj);
 	$this.nextUntil("h1",'h2').each(function(m){
 		var $_this = $(this);
 		$_this.attr('id', this.id + '-' + i + '-' + m);
 		$obj.append('<li><a href="#'+$_this.attr('id')+'">'+$_this.text()+'</a></li>');
 	});
+	if (!$obj.children().length) $obj.remove();
 });
 //滚动监听
 $('body').scrollspy({ target: '#navbar' });
