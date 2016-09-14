@@ -33,6 +33,7 @@ class ManualController extends Controller
 		$this->_parents = $this->_data->getParents(['id','pid','title']);
 		$this->_root = $this->_data->getRoot(['id','pid','title']);
 		$this->_tree = $this->_root->getTree(['id','pid','title'], false);
+		$this->subtitle($data->title);
 		return $this->view('tools::manual.show');
 	}
 
