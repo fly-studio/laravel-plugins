@@ -67,7 +67,7 @@ class AttachmentController extends Controller {
 		else if(empty($attachment->afid))
 			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 
-		return $this->success('', TRUE, $attachment->toArray());
+		return $this->api($attachment->toArray());
 	}
 
 	public function index($id, $width = NULL, $height = NULL, $m = NULL)

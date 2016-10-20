@@ -334,21 +334,18 @@ class Attachment extends Model{
 		return $this->get($attachment->getKey());
 	}
 
-
-
 	public function get($id)
 	{
-		$attachment = static::find($id);
+		$attachment = static::findByCache($id);
 		if (!empty($attachment) && !empty($attachment->afid))
 		{
-			$result = $attachment->getAttributes() + $attachment->file->getAttributes();
+			$result = $attachment->getAttributes() + AttachmentFile::findByCache($attachment->afid)->getAttributes();
 			$result['displayname'] = $result['filename'].(!empty($result['ext']) ?  '.'.$result['ext'] : '' );
 			//Model更新
 			$attachment->setRawAttributes($result, true);
 		}
 		return $attachment;
 	}
-
 
 	/**
 	 * 根据数据库中的路径得到绝对路径
@@ -547,5 +544,17 @@ class Attachment extends Model{
 			//!empty($life_time) && delay_unlink($local, $life_time);
 		}
 		return TRUE;
+	}
+
+	public function __sleep()
+	{
+		return array_diff(array_keys(get_object_vars($this)), ['_config', 'fileModel']);;
+	}
+
+	public function __wakeup()
+	{
+		parent::__wakeup();
+		$this->fileModel = new AttachmentFile();
+		$this->_config = config('attachment');
 	}
 }
