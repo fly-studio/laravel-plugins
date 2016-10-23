@@ -31,7 +31,7 @@ class WechatOAuth2Controller extends Controller {
 
 				$this->wechatUser = $oauth2->authenticate(NULL, $this->wechat_oauth2_type, $this->wechat_oauth2_bindUserRole);
 			}
-			$userModel = config('auth.model');
+			$userModel = config('auth.providers.users.model');
 			$this->wechat_oauth2_bindUserRole && $this->user = (new $userModel)->find($this->wechatUser->uid);
 			//$this->user = (new $userModel)->find(15);
 		}

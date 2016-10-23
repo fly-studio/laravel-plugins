@@ -88,7 +88,6 @@ ins {
 					<{foreach $_data->getChildren() as $item}>
 					<li>
 						<h4><a href="<{'manual'|url}>/<{$item.id}>"><{$item.title}></a></h4>
-						<pre><code><{$item.content|truncate:250}></code></pre>
 					</li>
 					<{/foreach}>
 				</ul>
@@ -103,6 +102,18 @@ ins {
 				</div>
 
 			</div>
+			<{if config('changyan.app_id', NULL) !== NULL}>
+			<div>
+				<div id="SOHUCS" sid="manual-<{$_data->getKey()}>"></div>
+				<script charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/changyan.js" ></script>
+				<script type="text/javascript">
+				window.changyan.api.config({
+					appid: '<{config('changyan.app_id')}>',
+					conf: '<{config('changyan.conf')}>'
+				});
+				</script>
+			</div>
+			<{/if}>
 		</div>
 	</div>
 </div>
