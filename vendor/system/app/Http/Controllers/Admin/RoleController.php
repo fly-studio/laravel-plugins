@@ -41,7 +41,7 @@ class RoleController extends Controller
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function store(Request $request)
