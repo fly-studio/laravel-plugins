@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="<{'plugins/css/tools/console.css'|url nofilter}>">
-<script src="<{'plugins/js/tools/console.js'|url nofilter}>"></script>
+<link rel="stylesheet" href="<{'plugins/css/tools/console.min.css'|url nofilter}>">
+<script src="<{'plugins/js/tools/console.min.js'|url nofilter}>"></script>
 <div class="console-fixed-blank"></div>
 <div class="container console" id="console">
 	<div class="row toolbar">

@@ -8,5 +8,5 @@
 <{block "name"}>wechat/user<{/block}>
 
 <{block "head-plus"}>
-<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
+<script src="<{'plugins/js/wechat/choose.min.js'|url}>"></script>
 <{/block}>

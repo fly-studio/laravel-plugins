@@ -5,7 +5,7 @@
 <{block "name"}>wechat/depot<{/block}>
 
 <{block "head-styles-plus"}>
-<link rel="stylesheet" href="<{'plugins/css/wechat/depot.css'|url}>">
+<link rel="stylesheet" href="<{'plugins/css/wechat/depot.min.css'|url}>">
 <{/block}>
 <{block "head-scripts-plus"}>
 <{include file="common/uploader.inc.tpl"}>
@@ -15,8 +15,8 @@
 <script src="<{'static/js/angular/angular-input-modified.min.js'|url}>"></script>
 <script src="<{'static/js/ueditor/angular-ueditor.js'|url}>"></script>
 <script src="<{'static/js/angular/common.js'|url}>"></script>
-<script src="<{'plugins/js/wechat/depot.js'|url}>"></script>
-<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
+<script src="<{'plugins/js/wechat/depot.min.js'|url}>"></script>
+<script src="<{'plugins/js/wechat/choose.min.js'|url}>"></script>
 <script>
 (function($){
 	$().ready(function(){

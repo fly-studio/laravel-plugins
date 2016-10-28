@@ -3,7 +3,7 @@
 <{block "head-plus"}>
 <script src="<{'static/js/DatePicker/WdatePicker.js'|url}>"></script>
 <{include file="common/uploader.inc.tpl"}>
-<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
+<script src="<{'plugins/js/wechat/choose.min.js'|url}>"></script>
 <{/block}>
 
 <{block "inline-script-plus"}>

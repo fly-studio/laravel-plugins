@@ -24,7 +24,7 @@
 
 <{block "head-scripts-plus"}>
 <script src="<{'static/js/DatePicker/WdatePicker.js'|url}>"></script>
-<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
+<script src="<{'plugins/js/wechat/choose.min.js'|url}>"></script>
 <{include file="common/uploader.inc.tpl"}>
 <script>
 (function($){

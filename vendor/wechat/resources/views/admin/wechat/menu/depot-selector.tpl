@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="<{'plugins/css/wechat/depot.css'|url}>">
-<link rel="stylesheet" href="<{'plugins/css/wechat/menu.css'|url}>">
+<link rel="stylesheet" href="<{'plugins/css/wechat/depot.min.css'|url}>">
+<link rel="stylesheet" href="<{'plugins/css/wechat/menu.min.css'|url}>">
 <{include file="common/uploader.inc.tpl"}>
 <{include file="common/editor.inc.tpl"}>
 <script src="<{'static/js/angular/angular-1.4.8.min.js'|url}>"></script>
@@ -10,7 +10,7 @@
 <script>
 	var menuList = <{$_table_data->toArray()|json_encode nofilter}>
 </script>
-<script src="<{'plugins/js/wechat/menu.js'|url}>"></script>
+<script src="<{'plugins/js/wechat/menu.min.js'|url}>"></script>
 <script src="<{'plugins/js/wechat/depot.js'|url}>"></script>
 
 <{include file="[wechat]admin/wechat/depot/ng-template/depot-selector.tpl"}>
