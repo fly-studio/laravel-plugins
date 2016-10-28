@@ -263,6 +263,9 @@ class AttachmentController extends Controller {
 		$end = $request->input('end') ?: 0;
 		$hash = $request->input('hash') ?: '';
 
+		if (!isset($_FILES['Filedata']))
+			return $this->error_param();
+
 		$attachment = $this->model->upload($this->user->getKey(), 'Filedata', compact('uuid', 'count', 'index', 'start', 'end', 'total', 'hash'));
 		if (!($attachment instanceof Attachment))
 			return $this->failure_attachment($attachment);
@@ -506,7 +509,7 @@ class AttachmentController extends Controller {
 
 	private function failure_attachment($error_no, $url = FALSE)
 	{
-		$_config = config('attachment');
-		return $this->failure(Lang::has($message = 'attachment.'.$error_no.'.content') ? $message :  'attachment::'.$message, $url, ['maxsize' => format_bytes($_config['maxsize']), 'ext' => implode(',', $_config['ext'])]);
+		$_config = config('attachment');dd($error_no);
+		return $this->failure(Lang::has($message = 'attachment.'.$error_no.'.content') ? $message : 'attachment::'.$message, $url, ['maxsize' => format_bytes($_config['maxsize']), 'ext' => implode(',', $_config['ext'])]);
 	}
 }
