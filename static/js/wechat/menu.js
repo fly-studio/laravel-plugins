@@ -1,9 +1,9 @@
 //depot controllers
 var $app = angular.module('app');
 $app.requires = ['jquery', 'ui.bootstrap', 'untils', 'ngInputModified', 'ng.ueditor'];
-$app.config(function(inputModifiedConfigProvider) {
+$app.config(['inputModifiedConfigProvider', function(inputModifiedConfigProvider) {
 	inputModifiedConfigProvider.disableGlobally(); //默认关闭ngInputModified
-}).directive('menuController',function() {
+}]).directive('menuController', function() {
 	return {
 		restrict: 'A',
 		controller: 'menuController',
@@ -14,7 +14,7 @@ $app.config(function(inputModifiedConfigProvider) {
 		}
 	}
 })
-.controller('menuController', function($scope, $query){
+.controller('menuController', ['$scope', '$query', function($scope, $query){
 	$scope.forms = {}; //form 变量
 	$scope.submiting = false;
 	$scope.dataList = menuList ? menuList.data : [];
@@ -105,4 +105,4 @@ $app.config(function(inputModifiedConfigProvider) {
 			//delete $scope.forms.menu[item.index];
 		});
 	}
-});
+}]);

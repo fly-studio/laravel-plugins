@@ -1,10 +1,10 @@
 //depot controllers
 var $app = angular.module('app');
 $app.requires = ['jquery', 'ui.bootstrap', 'utils', 'ngInputModified', 'ng.ueditor'];
-$app.config(function(inputModifiedConfigProvider) {
+$app.config(['inputModifiedConfigProvider', function(inputModifiedConfigProvider) {
 	inputModifiedConfigProvider.disableGlobally(); //默认关闭ngInputModified
-})
-.controller('depotSelector',  function($rootScope, $scope, $query, $uibModal, $log, $element) {
+}])
+.controller('depotSelector',  ['$rootScope', '$scope', '$query', '$uibModal', '$log', '$element', function($rootScope, $scope, $query, $uibModal, $log, $element) {
 	$scope.mode = 'preview';
 	$scope.depotConfirmed = {};
 	$scope.depotSelected = {};
@@ -33,11 +33,11 @@ $app.config(function(inputModifiedConfigProvider) {
 		if (typeof depotId == 'undefined') for(var i in $scope.depotConfirmed) delete $scope.depotConfirmed[i]; else delete $scope.depotConfirmed[depotId];
 	}
 
-})
-.controller('depotSelectorModal',  function($scope, $query, $uibModalInstance) {
+}])
+.controller('depotSelectorModal',  ['$scope', '$query', '$uibModalInstance', function($scope, $query, $uibModalInstance) {
 	
-})
-.directive('depotSelector',function($query) {
+}])
+.directive('depotSelector', ['$query', function($query) {
 	return {
 		restrict: 'A',
 		controller: 'depotSelector',
@@ -98,8 +98,8 @@ $app.config(function(inputModifiedConfigProvider) {
 			
 		}
 	}
-})
-.controller('depotController',  function($rootScope, $scope, $query, $uibModal, $log, $element) {
+}])
+.controller('depotController', ['$rootScope', '$scope', '$query', '$uibModal', '$log', '$element', function($rootScope, $scope, $query, $uibModal, $log, $element) {
 	$scope.dataList = {};
 	$scope.types = {'news': {title:'图文'},'text': {title:'文本'},'image': {title:'图片'},'callback': {title:'编程'},'video': {title:'视频'},'voice': {title:'录音'},'music': {title:'音乐'}};
 	$scope.types[$scope.type].active = true; //根据attr参数
@@ -175,7 +175,7 @@ $app.config(function(inputModifiedConfigProvider) {
 		});
 	});
 
-}).directive('depotController',function() {
+}]).directive('depotController',function() {
 	return {
 		restrict: 'A',
 		scope: {
@@ -193,9 +193,9 @@ $app.config(function(inputModifiedConfigProvider) {
 		}
 	}
 })
-.controller('depotListController',  function($scope){
+.controller('depotListController', ['$scope', function($scope){
 
-}).directive('depotList',function() {
+}]).directive('depotList', function() {
 	return {
 		restrict: 'A',
 		scope: false,
@@ -211,7 +211,7 @@ $app.config(function(inputModifiedConfigProvider) {
 		}
 	};
 })
-.directive('depotItem',function($compile, $templateRequest, $sce) {
+.directive('depotItem',['$compile', '$templateRequest', '$sce', function($compile, $templateRequest, $sce) {
 	return {
 		restrict: 'A',
 		scope: false,
@@ -228,10 +228,10 @@ $app.config(function(inputModifiedConfigProvider) {
 			});*/
 		}
 	}
-})
-.controller('depotListOptionsController',  function($scope){
+}])
+.controller('depotListOptionsController', ['$scope', function($scope){
 
-}).directive('depotListOptions',function() {
+}]).directive('depotListOptions', function() {
 	return {
 		restrict: 'A',
 		scope: false,
@@ -247,7 +247,7 @@ $app.config(function(inputModifiedConfigProvider) {
 		}
 	};
 })
-.controller('depotEditController', function($scope, $uibModalInstance, $query){
+.controller('depotEditController', ['$scope', '$uibModalInstance', '$query', function($scope, $uibModalInstance, $query){
 	// $uibModalInstance.close();
 	// $uibModalInstance.dismiss('cancel');
 	$scope.forms = {}; //form 变量
@@ -424,4 +424,4 @@ $app.config(function(inputModifiedConfigProvider) {
 			$scope.createNews();
 	}
 
-});
+}]);
