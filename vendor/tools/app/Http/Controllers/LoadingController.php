@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Addons\Core\Validation\ValidatesRequests;
 class LoadingController extends Controller {
+	protected $addons = false;
 
 	public function index($folders = [], $style = '', $url = '', $tips = '')
 	{

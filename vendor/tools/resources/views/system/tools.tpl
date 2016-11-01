@@ -1,4 +1,4 @@
-<{extends file="extends/main.block.tpl"}>
+<{extends file="[tools]system/main.block.tpl"}>
 
 <{block "head-title"}><title>System Tools</title><{/block}>
 <{block "head-styles-plus"}>

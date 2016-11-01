@@ -6,7 +6,13 @@ use Illuminate\Http\Request;
 use Cache;
 class ToolsController extends Controller {
 
-	public $withInit = FALSE;
+	protected $addons = false;
+
+	public function __construct()
+	{
+		config(['app.url' => get_current_url(HTTP_URL_SCHEME | HTTP_URL_PATH | HTTP_URL_PATH)]);
+	}
+	
 	public function index()
 	{
 		return $this->view('tools::system.tools');
@@ -52,7 +58,7 @@ class ToolsController extends Controller {
 		$link_path = normalize_path(APPPATH . 'static/plugins');
 		@$this->_symlink($target_path, $link_path);
 
-		return $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功'), TRUE);
+		return file_exists($link_path) ? $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功')) : $this->failure(array('title' => '指向失败', 'content' => '您没有写入权限，static目录指向失败'));
 	}
 
 	private function _symlink($target_path, $link_path)
