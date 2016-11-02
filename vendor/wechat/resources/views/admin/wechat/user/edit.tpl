@@ -1,9 +1,9 @@
 <{extends file="admin/extends/edit.block.tpl"}>
 
 <{block "head-plus"}>
-<script src="<{'static/js/DatePicker/WdatePicker.js'|url}>"></script>
+<script src="<{'js/DatePicker/WdatePicker.js'|static}>"></script>
 <{include file="common/uploader.inc.tpl"}>
-<script src="<{'plugins/js/wechat/choose.min.js'|url}>"></script>
+<script src="<{'js/wechat/choose.min.js'|plugins}>"></script>
 <{/block}>
 
 <{block "inline-script-plus"}>

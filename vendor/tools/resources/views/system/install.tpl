@@ -4,6 +4,28 @@
 <{block "head-styles-plus"}>
 <{/block}>
 
+<{block "head-scripts-plus"}>
+<script>
+(function($){
+$().ready(function(){
+	$('li.nav-install','#navigation').addClass('active');
+
+	$('input').on('input propertychange', function(){
+		var name = $(this).attr('name');
+		$('.' + name).text($(this).val());
+	});
+	$('a[method]').query();
+	$('#form').query(function(json){
+		if (json.result == 'success')
+		{
+			$('#form').remove();
+		}
+	}, false);
+});
+})(jQuery);
+</script>
+<{/block}>
+
 <{block "body-container"}>
 <{include file="system/nav.inc.tpl"}>
 <div class="container" role="main" style="margin-top:70px;margin-bottom:70px;">
@@ -100,25 +122,8 @@
 	</form>
 	<h1 class="page-header">第三步：迁移数据库</h1>
 	<div>
-			<a href="<{'artisans/console-query'|url}>?command=php%20artisan%20migrate" method="get" class="" target="_blank">点击迁移数据库</a>
+		<a href="<{'artisans/console-query'|url}>?command=php%20artisan%20migrate" target="_blank">点击迁移数据库</a>
 	</div>
-<script>
-(function($){
-$().ready(function(){
-	$('input').on('input propertychange', function(){
-		var name = $(this).attr('name');
-		$('.' + name).text($(this).val());
-	});
-	$('a[method]').query();
-	$('#form').query(function(json){
-		if (json.result == 'success')
-		{
-			$('#form').remove();
-		}
-	}, false);
-});
-})(jQuery);
-</script>
 </div>
 
 

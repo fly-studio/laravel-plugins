@@ -6,7 +6,7 @@
 <{block "name"}>wechat/user<{/block}>
 
 <{block "head-plus"}>
-<script src="<{'plugins/js/wechat/choose.min.js'|url}>"></script>
+<script src="<{'js/wechat/choose.min.js'|plugins}>"></script>
 <{/block}>
 
 <{block "block-container"}>

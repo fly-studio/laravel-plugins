@@ -4,11 +4,11 @@
 	<meta charset="UTF-8">
 	<title>Loading...</title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-	<script type="text/javascript" src="<{'static/js/jquery-2.1.0.min.js'|url}>"></script>
-	<script src="<{'static/js/bootstrap3/bootstrap.min.js'|url}>"></script>
-	<script src="<{'static/js/common.js'|url}>"></script>
-	<link rel="stylesheet" href="<{'static/css/bootstrap3/bootstrap.min.css'|url}>" />
-	<link rel="stylesheet" href="<{'static/css/loaders.min.css'|url}>" />
+	<script type="text/javascript" src="<{'js/jquery-2.1.0.min.js'|static}>"></script>
+	<script src="<{'js/bootstrap3/bootstrap.min.js'|static}>"></script>
+	<script src="<{'js/common.js'|static}>"></script>
+	<link rel="stylesheet" href="<{'css/bootstrap3/bootstrap.min.css'|static}>" />
+	<link rel="stylesheet" href="<{'css/loaders.min.css'|static}>" />
 	<style>
 	html,body {background: #ed5565;color:#fff;}
 	</style>

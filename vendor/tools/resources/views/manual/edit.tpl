@@ -2,11 +2,11 @@
 
 <{block "head-scripts-plus"}>
 <script>var $ = jQuery;</script>
-<script src="<{'static/js/editor.md/editormd.min.js'|url}>"></script>
+<script src="<{'js/editor.md/editormd.min.js'|static}>"></script>
 <{/block}>
 
 <{block "head-styles-plus"}>
-<link rel="stylesheet" href="<{'static/js/editor.md/css/editormd.min.css'|url}>" />
+<link rel="stylesheet" href="<{'js/editor.md/css/editormd.min.css'|static}>" />
 <{/block}>
 
 <{block "body-container"}>
