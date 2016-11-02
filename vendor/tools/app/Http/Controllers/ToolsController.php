@@ -7,11 +7,6 @@ use Cache;
 class ToolsController extends Controller {
 
 	protected $addons = false;
-
-	public function __construct()
-	{
-		config(['app.url' => get_current_url(HTTP_URL_SCHEME | HTTP_URL_PATH | HTTP_URL_PATH)]);
-	}
 	
 	public function index()
 	{

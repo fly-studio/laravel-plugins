@@ -52,7 +52,7 @@ return [
 			],
 			'DB_PASSWORD' => [
 				'name' => '数据库密码',
-				'rules' => 'required',
+				'rules' => [],
 			],
 		],
 	],

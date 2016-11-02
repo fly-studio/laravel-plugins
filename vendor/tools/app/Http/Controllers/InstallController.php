@@ -10,11 +10,6 @@ class InstallController extends Controller {
 
 	protected $addons = false;
 
-	public function __construct()
-	{
-		config(['app.url' => get_current_url(HTTP_URL_SCHEME | HTTP_URL_PATH | HTTP_URL_PATH)]);
-	}
-
 	public function index()
 	{
 		$this->_path = preg_replace('#[/\\\\]+#', '/', dirname($_SERVER['SCRIPT_NAME']));
@@ -26,7 +21,7 @@ class InstallController extends Controller {
 	public function saveQuery(Request $request)
 	{
 		$keys = 'SESSION_PATH,APP_URL,DB_HOST,DB_PORT,DB_DATABASE,DB_USERNAME,DB_PASSWORD';
-		$data = $this->autoValidate($request, 'install.store', $keys);
+		$data = $this->tipsValidate($request, 'install.store', $keys);
 
 		$data['APP_KEY'] = 'base64:'.base64_encode(random_bytes(config('app.cipher') == 'AES-128-CBC' ? 16 : 32));
 
