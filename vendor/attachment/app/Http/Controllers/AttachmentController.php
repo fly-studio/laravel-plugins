@@ -197,7 +197,7 @@ class AttachmentController extends Controller {
 		if (empty($id) || empty($m))
 			return $this->error_param()->setStatusCode(404);
 
-		$watermark_path = is_numeric($m) ? (($a = $this->model->get($m)) ? $a->full_path() : '') : APPPATH.$m;
+		$watermark_path = is_numeric($m) ? (($a = $this->model->get($m)) ? $a->full_path() : '') : base_path($m);
 		if (empty($watermark_path) || !file_exists($watermark_path))
 			return $this->failure('attachment::attachment.failure_watermark');
 

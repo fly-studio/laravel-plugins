@@ -91,7 +91,7 @@ class Attachment extends Model{
 		if (empty($path))
 			return FALSE;
 
-		return url(str_replace(APPPATH, '', $path));
+		return url(str_replace(base_path(), '', $path));
 	}
 
 	public function upload($uid, $field_name, $chunks = [], $extra = [])
@@ -355,7 +355,7 @@ class Attachment extends Model{
 	 */
 	private function get_real_path($hash_path = NULL)
 	{
-		return APPPATH.$this->get_relative_path($hash_path);
+		return base_path($this->get_relative_path($hash_path));
 	}
 
 	/**

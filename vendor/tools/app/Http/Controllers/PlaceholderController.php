@@ -38,7 +38,7 @@ class PlaceholderController extends Controller {
 
 			// Text positioning
 			empty($fontsize) && $fontsize = ($width > $height) ? ($height / 10) : ($width / 10) ;
-			$font = APPPATH.'static/common/fonts/msyh.ttf';
+			$font = static_path('common/fonts/msyh.ttf');
 			$fontbox = calculate_textbox($fontsize, 0, $font, $text);
 			// Generate text
 			function_exists('imageantialias') && imageantialias($image, true);

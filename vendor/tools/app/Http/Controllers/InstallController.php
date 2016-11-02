@@ -38,7 +38,7 @@ class InstallController extends Controller {
 		file_put_contents($path, $content);
 
 		//.htaccess
-		$path = APPPATH.'/.htaccess';
+		$path = base_path('.htaccess');
 		$content = file_get_contents($path);
 		$content = preg_replace('/RewriteBase(.*?)([\r\n]{1,2})/i', 'RewriteBase '.str_replace(array('\\', '$'), array('\\\\', '\\$'), $data['SESSION_PATH']).'$2', $content);
 		file_put_contents($path, $content);

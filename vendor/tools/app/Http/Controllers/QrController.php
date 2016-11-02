@@ -22,7 +22,7 @@ class QrController extends Controller {
 
 	public function png($text, $size = 25, $watermark = '')
 	{
-		if (empty($watermark) || !file_exists(APPPATH.$watermark))
+		if (empty($watermark) || !file_exists(base_path($watermark)))
 		{
 			return response()->stream(function() use ($text, $size, $watermark){
 				echo QRcode::png($text, FALSE, Constants::QR_ECLEVEL_M, $size, 0 );
@@ -30,7 +30,7 @@ class QrController extends Controller {
 		}
 		else
 		{
-			$watermark = APPPATH.$watermark;
+			$watermark = base_path($watermark);
 			$tmp = tempnam(sys_get_temp_dir(), '.png');
 			QRcode::png($text, $tmp, Constants::QR_ECLEVEL_M, $size, 0 );
 			$img = Image::make($tmp);
