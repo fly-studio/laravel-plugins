@@ -12,5 +12,6 @@ $router->group(['middleware' => 'local'], function($router){
 	$router->addAnyActionRoutes([
 		'artisans',
 		'install',
+		'database',
 	]);
 });
