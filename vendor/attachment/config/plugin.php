@@ -1,5 +1,6 @@
 <?php
 return [
+	'enable' => true,
 	'register' => [
 		'view' => false,
 		'migrate' => true, 
