@@ -1,10 +1,5 @@
 <?php
 return [
-	'field' => [
-		'store' => [
-
-		],
-	],
 	'role' => [
 		'store' => [
 			'name' => [

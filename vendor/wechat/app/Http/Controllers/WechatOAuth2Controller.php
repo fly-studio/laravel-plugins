@@ -11,7 +11,7 @@ class WechatOAuth2Controller extends Controller {
 
 	protected $wechat_oauth2_account = NULL;
 	protected $wechat_oauth2_type = 'snsapi_base'; // snsapi_base  snsapi_userinfo  hybrid
-	protected $wechat_oauth2_bindUserRole = Role::WECHATER; // 将微信用户绑定到系统用户的用戶組，為空則不綁定
+	protected $wechat_oauth2_bindUserRole = NULL; // 将微信用户绑定到系统用户的用戶組，比如：user，為空則不綁定
 
 	protected $wechatUser = NULL;
 
