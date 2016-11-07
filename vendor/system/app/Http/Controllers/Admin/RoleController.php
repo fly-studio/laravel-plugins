@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Role;
 use App\Permission;
 use Addons\Core\Controllers\AdminTrait;
-
+use Illuminate\Support\Collection;
 class RoleController extends Controller
 {
 	use AdminTrait;
@@ -38,7 +38,14 @@ class RoleController extends Controller
 		$role = new Role;
 		$builder = $role->newQuery()->with('perms');
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
-		$data = $this->_getData($request, $builder);
+		$data = $this->_getData($request, $builder, function($page) use($request, $role) {
+			if ($request->input('tree') == 'true')
+			{
+				$items = $page->getCollection()->keyBy($role->getKeyName())->toArray();
+				$page->setCollection(new Collection($role->_data_to_tree($items, 0, false)));
+			}
+		});
+
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
 		return $this->api($data);
