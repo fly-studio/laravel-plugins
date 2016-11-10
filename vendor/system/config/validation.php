@@ -22,6 +22,10 @@ return [
 				'name' => '权限',
 				'rules' => 'array',
 			],
+			'pid' => [
+				'name' => '父用户组',
+				'rules' => 'required|numeric|not_zero',
+			],
 		],
 		'destroy' => [
 			'original_role_id' => [

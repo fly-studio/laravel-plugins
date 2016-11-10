@@ -22,13 +22,11 @@ class RoleController extends Controller
 	public function index(Request $request)
 	{
 		$role = new Role;
-		$builder = $role->newQuery()->with('perms');
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$role->getTable(), $this->site['pagesize']['common']);
+		$roles = $role->newQuery()->with('perms')->where($role->getKeyName(), '!=', 0)->orderBy($role->getKeyName())->get();
+
 
 		//view's variant
-		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $this->_getPaginate($request, $builder, ['*']);
+		$this->_table_data = $roles;
 		$this->_perms_data = Permission::all();
 		return $this->view('system::admin.role.list');
 	}
@@ -53,7 +51,7 @@ class RoleController extends Controller
 
 	public function store(Request $request)
 	{
-		$keys = 'name,display_name,description,url';
+		$keys = 'name,display_name,description,url,pid';
 		$data = $this->autoValidate($request, 'role.store', $keys);
 
 		Role::create($data);
@@ -70,7 +68,7 @@ class RoleController extends Controller
 			foreach(Role::all() as $role)
 				$role->perms()->sync(isset($data['perms'][$role->getKey()]) ? $data['perms'][$role->getKey()] : [] );
 		}
-		else
+		else //修改某用户组的资料
 		{
 			$role = Role::find($id);
 			if (empty($role))
