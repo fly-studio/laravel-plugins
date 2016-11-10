@@ -21,16 +21,12 @@ class AccountController extends Controller
 	public function index(Request $request)
 	{
 		$account = new WechatAccount;
-		$builder = $account->newQuery();
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$account->getTable(), $this->site['pagesize']['common']);
-		$base = boolval($request->input('base')) ?: false;
 
 		//view's variant
-		$this->_base = $base;
 		$this->_pagesize = $pagesize;
 		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $base ? $this->_getPaginate($request, $builder, ['*'], ['base' => $base]) : [];
-		return $this->view('wechat::admin.wechat.account.'. ($base ? 'list' : 'datatable'));
+		return $this->view('wechat::admin.wechat.account.datatable'));
 	}
 
 	public function data(Request $request)
@@ -38,10 +34,13 @@ class AccountController extends Controller
 		$account = new WechatAccount;
 		$builder = $account->newQuery();
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
-		$data = $this->_getData($request, $builder, function(&$v, $k){
-			$v['users-count'] = $v->users()->count();
-			$v['depots-count'] = $v->depots()->count();
-			$v['messages-count'] = $v->messages()->count();
+		$data = $this->_getData($request, $builder, function($page){
+			foreach ($page as $v)
+			{
+				$v['users-count'] = $v->users()->count();
+				$v['depots-count'] = $v->depots()->count();
+				$v['messages-count'] = $v->messages()->count();
+			}
 		});
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
