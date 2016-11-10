@@ -26,7 +26,7 @@ class AccountController extends Controller
 		//view's variant
 		$this->_pagesize = $pagesize;
 		$this->_filters = $this->_getFilters($request, $builder);
-		return $this->view('wechat::admin.wechat.account.datatable'));
+		return $this->view('wechat::admin.wechat.account.datatable');
 	}
 
 	public function data(Request $request)

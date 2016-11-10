@@ -22,16 +22,12 @@ class DepotNewsController extends Controller
 	public function index(Request $request, Account $account)
 	{
 		$news = new WechatDepotNews;
-		$builder = $news->newQuery()->where('waid', $account->getAccountID());
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$news->getTable(), $this->site['pagesize']['common']);
-		$base = boolval($request->input('base')) ?: false;
 
 		//view's variant
-		$this->_base = $base;
 		$this->_pagesize = $pagesize;
 		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $base ? $this->_getPaginate($request, $builder, ['*'], ['base' => $base]) : [];
-		return $this->view('wechat::admin.wechat.news.'. ($base ? 'list' : 'datatable'));
+		return $this->view('wechat::admin.wechat.news.datatable'));
 	}
 
 	public function data(Request $request, Account $account)
