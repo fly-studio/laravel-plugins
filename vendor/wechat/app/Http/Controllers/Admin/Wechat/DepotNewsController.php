@@ -26,8 +26,8 @@ class DepotNewsController extends Controller
 
 		//view's variant
 		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		return $this->view('wechat::admin.wechat.news.datatable'));
+		$this->_filters = $this->_getFilters($request);
+		return $this->view('wechat::admin.wechat.news.datatable');
 	}
 
 	public function data(Request $request, Account $account)

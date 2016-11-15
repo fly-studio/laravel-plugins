@@ -10,6 +10,6 @@
 	<ul>
 		<li><a href="<{'admin/profile'|url}>" name="profile/list">修改资料</a></li>
 		<li><a href="<{'admin/password'|url}>" name="password/list">修改密码</a></li>
-		<li><a href="<{'admin/field'|url}>">通用字段</a></li>
+		<li><a href="<{'admin/catalog'|url}>">网站分类</a></li>
 	</ul>
 </li>

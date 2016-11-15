@@ -23,7 +23,7 @@ class StatementController extends Controller
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$bill->getTable(), $this->site['pagesize']['common']);
 
 		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
+		$this->_filters = $this->_getFilters($request);
 		return $this->view('wechat::admin.wechat.statement.datatable');
 	}
 

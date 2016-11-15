@@ -27,7 +27,7 @@ class ReplyController extends Controller
 
 		//view's variant
 		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
+		$this->_filters = $this->_getFilters($request);
 		return $this->view('wechat::admin.wechat.reply.datatable');
 	}
 

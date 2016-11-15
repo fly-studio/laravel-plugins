@@ -13,5 +13,6 @@ return [
 	],
 	'injectViews' => [
 		'admin/sidebar.inc.tpl',
+		'admin/menubar.inc.tpl',
 	],
 ];
