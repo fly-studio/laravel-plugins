@@ -1,5 +1,5 @@
 <li class="dropdown">
-	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">系统(S) <i class="fa fa-angle-down"></i></a>
+	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">系统 <i class="fa fa-angle-down"></i></a>
 	<ul class="dropdown-menu">
 		<li><a href="<{'admin/role'|url}>" name="role/list"><i class="fa fa-group fa-fw pull-right"></i> 用户组</a></li>
 		<li><a href="<{'admin/permission'|url}>" name="permission/list"><i class="fa fa-lock fa-fw pull-right"></i> 权限</a></li>
@@ -9,7 +9,6 @@
 		<li class="divider"></li>
 		<li><a href="<{'admin/catalog'|url}>" name="catalog/list"><i class="fa fa-tree fa-fw pull-right"></i> 分类</a></li>
 		<li class="divider"></li>
-		<li><a href="<{'auth/logout'|url}>" ><span class="text-danger"><i class="gi gi-exit pull-right"></i> 退出系统</span></a></li>
-
+		<li><a href="<{'auth/logout'|url}>"><span class="text-danger"><i class="gi gi-exit pull-right"></i> 退出系统</span></a></li>
 	</ul>
 </li>

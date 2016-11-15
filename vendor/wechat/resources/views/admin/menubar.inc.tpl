@@ -1,5 +1,5 @@
 <li class="dropdown">
-	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">微信(W) <i class="fa fa-angle-down"></i></a>
+	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">微信 <i class="fa fa-angle-down"></i></a>
 	<ul class="dropdown-menu">
 		<li><a href="<{'admin/wechat/account'|url}>" name="wechat/account/list"><i class="fa fa-user-o fa-fw pull-right"></i> 多账号管理</a></li>
 		<li><a href="<{'admin/wechat/depot'|url}>" name="wechat/depot/list"><i class="fa fa-newspaper-o fa-fw pull-right"></i> 素材管理</a></li>
