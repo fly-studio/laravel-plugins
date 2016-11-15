@@ -1,7 +1,9 @@
 <?php
 return [
+	'enable' => true,
 	'register' => [
 		'view' => true,
+		'migrate' => true, 
 		'translator' => true,
 		'router' => true,
 		'validation' => true,
@@ -11,5 +13,6 @@ return [
 	],
 	'injectViews' => [
 		'admin/sidebar.inc.tpl',
+		'admin/menubar.inc.tpl',
 	],
 ];

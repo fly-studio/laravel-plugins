@@ -24,7 +24,7 @@ return [
 	'local' => [
 		'enabled' => TRUE,
 		'life_time' => 0, //enabled为TRUE时无效，0表示永不过期，
-		'path' => 'attachments'.DIRECTORY_SEPARATOR, //本地存放路径
+		'path' => env('ATTACHMENT_PATH', 'attachments/'), //本地存放路径
 		'file_own' => NULL, //文件所属用户，比如：nobody
 		'file_grp' => NULL, //文件所属组，比如：nobody
 		'file_mod' => 0644,

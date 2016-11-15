@@ -1,9 +1,9 @@
 <{extends file="extends/main.block.tpl"}>
 
 <{block "head-styles-plus"}>
-<link rel="stylesheet" href="<{'plugins/css/tools/bootstrap-sidebar/sb-admin-2.css'|url}>" />
-<link rel="stylesheet" href="<{'static/js/editor.md/css/editormd.preview.css'|url}>" />
-<link rel="stylesheet" href="<{'static/css/font-awesome.min.css'|url}>" />
+<link rel="stylesheet" href="<{'css/tools/bootstrap-sidebar/sb-admin-2.min.css'|plugins}>" />
+<link rel="stylesheet" href="<{'js/editor.md/css/editormd.preview.css'|static}>" />
+<link rel="stylesheet" href="<{'css/font-awesome.min.css'|static}>" />
 <style>
 body {font-family: "Helvetica Neue", Helvetica, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;}
 .nav>li>a {position: relative;display: block;padding: 10px 15px;}
@@ -44,14 +44,14 @@ ins {
 
 <{block "head-scripts-plus"}>
 <script>var $ = jQuery;</script>
-<script src="<{'static/js/editor.md/lib/marked.min.js'|url}>"></script>
-<script src="<{'static/js/editor.md/lib/prettify.min.js'|url}>"></script>
-<script src="<{'static/js/editor.md/lib/raphael.min.js'|url}>"></script>
-<script src="<{'static/js/editor.md/lib/underscore.min.js'|url}>"></script>
-<script src="<{'static/js/editor.md/lib/sequence-diagram.min.js'|url}>"></script>
-<script src="<{'static/js/editor.md/lib/flowchart.min.js'|url}>"></script>
-<script src="<{'static/js/editor.md/lib/jquery.flowchart.min.js'|url}>"></script>
-<script src="<{'static/js/editor.md/editormd.min.js'|url}>"></script>
+<script src="<{'js/editor.md/lib/marked.min.js'|static}>"></script>
+<script src="<{'js/editor.md/lib/prettify.min.js'|static}>"></script>
+<script src="<{'js/editor.md/lib/raphael.min.js'|static}>"></script>
+<script src="<{'js/editor.md/lib/underscore.min.js'|static}>"></script>
+<script src="<{'js/editor.md/lib/sequence-diagram.min.js'|static}>"></script>
+<script src="<{'js/editor.md/lib/flowchart.min.js'|static}>"></script>
+<script src="<{'js/editor.md/lib/jquery.flowchart.min.js'|static}>"></script>
+<script src="<{'js/editor.md/editormd.min.js'|static}>"></script>
 <{/block}>
 
 <{block "body-container"}>
@@ -88,7 +88,6 @@ ins {
 					<{foreach $_data->getChildren() as $item}>
 					<li>
 						<h4><a href="<{'manual'|url}>/<{$item.id}>"><{$item.title}></a></h4>
-						<pre><code><{$item.content|truncate:250}></code></pre>
 					</li>
 					<{/foreach}>
 				</ul>
@@ -103,6 +102,18 @@ ins {
 				</div>
 
 			</div>
+			<{if config('changyan.app_id', NULL) !== NULL}>
+			<div>
+				<div id="SOHUCS" sid="manual-<{$_data->getKey()}>"></div>
+				<script charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/changyan.js" ></script>
+				<script type="text/javascript">
+				window.changyan.api.config({
+					appid: '<{config('changyan.app_id')}>',
+					conf: '<{config('changyan.conf')}>'
+				});
+				</script>
+			</div>
+			<{/if}>
 		</div>
 	</div>
 </div>

@@ -22,16 +22,12 @@ class UserController extends Controller
 	public function index(Request $request, Account $account)
 	{
 		$user = new WechatUser;
-		$builder = $user->newQuery()->with('_gender')->where('waid', $account->getAccountID());
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$user->getTable(), $this->site['pagesize']['common']);
-		$base = boolval($request->input('base')) ?: false;
 
 		//view's variant
-		$this->_base = $base;
 		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $base ? $this->_getPaginate($request, $builder, ['*'], ['base' => $base]) : [];
-		return $this->view('wechat::admin.wechat.user.'. ($base ? 'list' : 'datatable'));
+		$this->_filters = $this->_getFilters($request);
+		return $this->view('wechat::admin.wechat.user.datatable');
 	}
 
 	public function data(Request $request, Account $account)

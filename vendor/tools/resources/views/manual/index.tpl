@@ -1,7 +1,7 @@
 <{extends file="extends/main.block.tpl"}>
 
 <{block "head-styles-plus"}>
-<link rel="stylesheet" href="<{'static/css/font-awesome.min.css'|url}>" />
+<link rel="stylesheet" href="<{'css/font-awesome.min.css'|static}>" />
 <style>
 	.media-body-container{position: relative;}
 	.media-body-container pre {height:250px; overflow: hidden; }

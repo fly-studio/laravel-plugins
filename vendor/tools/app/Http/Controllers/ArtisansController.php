@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\StringInput;
 use DB;
 class ArtisansController extends Controller {
 	use ValidatesRequests;
-	public $withInit = FALSE;
+	protected $addons = false;
 
 	public function index()
 	{
@@ -47,7 +47,7 @@ class ArtisansController extends Controller {
 		try {
 			set_time_limit(120);
 			DB::transaction(function () use ($data){
-					DB::statement($data['content']);
+				DB::statement($data['content']);
 			});
 		} catch (Exception $e) {
 			$error = error_get_last();

@@ -10,7 +10,7 @@
 		<a class="navbar-brand" href="<{'manual'|url}>">手册合集</a>
 	</div>
 	<!-- /.navbar-header -->
-
+	<div class="pull-right"><{$_user->nickname}></div>
 
 	<div class="navbar-default sidebar" role="navigation">
 		<div class="sidebar-nav navbar-collapse">

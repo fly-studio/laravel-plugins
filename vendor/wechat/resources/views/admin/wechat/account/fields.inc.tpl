@@ -1,7 +1,7 @@
 <div class="form-group">
 	<label class="col-md-3 control-label" for="name">配置网址</label>
 	<div class="col-md-9">
-		<p class="form-control-static"><code><{'wechat/push'|url}>?id=<i><{$_data.id|default:'ID'}></i></code>，（ID在新建之后会变为正确的值）</p>
+		<p class="form-control-static"><code><{'wechat/push'|url}>?id=<i><{$_data.id|default:'ID'}></i></code>，（ID在新建之后会显示）</p>
 	</div>
 </div>
 <div class="form-group">
@@ -19,7 +19,7 @@
 <div class="form-group">
 	<label class="col-md-3 control-label">类型</label>
 	<div class="col-md-9">
-		<{foreach $_fields.wechat_type as $v}>
+		<{foreach 'fields.wechat.type.children'|catalogs as $v}>
 		<label class="radio-inline">
 			<input type="radio" name="wechat_type" value="<{$v.id}>" <{if $_data.wechat_type == $v.id}>checked="checked"<{/if}> > <{$v.title}>
 		</label>

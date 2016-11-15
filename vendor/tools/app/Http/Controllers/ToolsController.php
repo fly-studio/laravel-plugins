@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Cache;
 class ToolsController extends Controller {
 
-	public $withInit = FALSE;
+	protected $addons = false;
+	
 	public function index()
 	{
 		return $this->view('tools::system.tools');
@@ -44,23 +45,23 @@ class ToolsController extends Controller {
 
 	public function createStaticFolderQuery()
 	{
-		$target_path = normalize_path(APPPATH.'../static');
-		$link_path = normalize_path(APPPATH . 'static/common');
+		$target_path = normalize_path(base_path('../static'));
+		$link_path = static_path('common');
 		@$this->_symlink($target_path, $link_path);
 
 		$target_path = normalize_path(PLUGINSPATH.'static');
-		$link_path = normalize_path(APPPATH . 'static/plugins');
+		$link_path = plugins_path();
 		@$this->_symlink($target_path, $link_path);
 
-		return $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功'), TRUE);
+		return file_exists($link_path) ? $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功')) : $this->failure(array('title' => '指向失败', 'content' => '您没有写入权限，static目录指向失败'));
 	}
 
 	private function _symlink($target_path, $link_path)
 	{
 		@unlink($link_path);@rmdir($link_path);
 		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' && version_compare(php_uname('r'), '6.0', '<')) { //Windows Vista以下
-			exec('"'.APPPATH.'../static/bin/junction.exe" -d "'.$link_path.'"');
-			exec('"'.APPPATH.'../static/bin/junction.exe" '.$link_path.'" "'.$target_path.'"');
+			exec('"'.base_path('../static/bin/junction.exe').'" -d "'.$link_path.'"');
+			exec('"'.base_path('../static/bin/junction.exe').'" '.$link_path.'" "'.$target_path.'"');
 		} else {
 			symlink($target_path, $link_path);
 		}

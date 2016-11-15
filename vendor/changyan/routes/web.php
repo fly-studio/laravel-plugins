@@ -1,0 +1,5 @@
+<?php
+
+$router->addAnyActionRoutes([
+	'changyan',
+]);

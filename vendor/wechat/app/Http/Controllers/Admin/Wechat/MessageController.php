@@ -27,15 +27,11 @@ class MessageController extends Controller
 	public function index(Request $request, Account $account)
 	{
 		$message = new WechatMessage;
-//		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('transport_type','receive')->where('waid', $account->getAccountID());
-		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('waid', $account->getAccountID());
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$message->getTable(), $this->site['pagesize']['common']);
-		$base = boolval($request->input('base')) ?: false;
 
 		//view's variant
 		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $this->_getPaginate($request, $builder, ['*']);
+		$this->_filters = $this->_getFilters($request);
 		return $this->view('wechat::admin.wechat.message.list');
 	}
 

@@ -1,10 +1,5 @@
 <?php
 return [
-	'field' => [
-		'store' => [
-
-		],
-	],
 	'role' => [
 		'store' => [
 			'name' => [
@@ -26,6 +21,10 @@ return [
 			'perms' => [
 				'name' => '权限',
 				'rules' => 'array',
+			],
+			'pid' => [
+				'name' => '父用户组',
+				'rules' => 'required|numeric|not_zero',
 			],
 		],
 		'destroy' => [

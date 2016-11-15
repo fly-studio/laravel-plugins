@@ -1,0 +1,2 @@
+/*! menu.css 2016-10-28 17:19:39*/
+.menu-items .menu-item,.menu-items .menu-subitem{line-height:40px;display:block;border-bottom:1px #f6f6f6 solid}.menu-left{border-right:1px #ccc solid}.menu-items .menu-item:hover,.menu-items .menu-subitem:hover{background-color:#f6f6f6}.menu-items .menu-item.active,.menu-items .menu-subitem.active{background-color:#eee}.menu-items .menu-item{padding:0 10px}.menu-items .menu-subitem{padding:0 10px 0 30px}.menu-items .menu-plus{height:40px;margin-top:30px}.menu-publish{border-top:1px #ccc solid;padding:15px}.menu-forms .tips{padding:0 20px}

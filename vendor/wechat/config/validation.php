@@ -12,7 +12,7 @@ return [
 			],
 			'wechat_type' => [
 				'name' => '类型',
-				'rules' => 'required|not_zero|field',
+				'rules' => 'required|not_zero|catalog:fields.wechat.type',
 			],
 			'appid' => [
 				'name' => 'APP ID',
@@ -61,7 +61,7 @@ return [
 			],
 			'type' => [
 				'name' => '类型',
-				'rules' => 'required|not_zero|field_name:wechat_message_type',
+				'rules' => 'required|not_zero|catalog_name:fields.wechat.message_type',
 			],
 		],
 	],
@@ -100,7 +100,7 @@ return [
 			],
 			'gender' => [
 				'name' => '性别',
-				'rules' => 'field',
+				'rules' => 'catalog:fields.gender',
 			],
 			'avatar_aid' => [
 				'name' => '头像(AID)',

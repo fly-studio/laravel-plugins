@@ -14,7 +14,7 @@ use Addons\Core\Controllers\AdminTrait;
 class DepotController extends Controller
 {
 	use AdminTrait;
-	//public $RESTful_permission = 'wechat-depot';
+	public $RESTful_permission = 'wechat-depot';
 	/**
 	 * Display a listing of the resource.
 	 *

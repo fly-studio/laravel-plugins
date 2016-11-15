@@ -26,6 +26,14 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-md-3 control-label" for="pid">父用户组</label>
+						<div class="col-md-9">
+							<input type="hidden" name="pid" value="0" id="pid1">
+							<select class="form-control tree-model" style="width:100%" id="pid" data-model="admin/role" data-text="{display_name}({name})" ></select>
+							<span class="help-block">(*) 请选择一个父用户组</span>
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-md-3 control-label" for="description">介绍</label>
 						<div class="col-md-9">
 							<textarea name="description" id="description" class="form-control" rows="10" placeholder="请输入简介"></textarea>
@@ -35,7 +43,7 @@
 						<label class="col-md-3 control-label" for="url">后台路由名</label>
 						<div class="col-md-9">
 							<input type="text" id="url" name="url" class="form-control" value="">
-							<span class="help-block">(*) 也就是文件名，比如：admin。留空表示首页</span>
+							<span class="help-block">(*) 也就是此用户登录时候，跳转的路由（网址），比如：admin。留空表示跳转到首页</span>
 						</div>
 					</div>
 					<div class="form-group form-actions">
@@ -70,11 +78,11 @@
 						<div class="col-md-9">
 							<p class="form-control-static" id="role_name">Admin</p>
 						</div>
-					</div>	
+					</div>
 					<div class="form-group">
 						<label class="col-md-3 control-label" for="name">待转移的组名</label>
 						<div class="col-md-9">
-							<select class="form-control select-model" style="width:80%" name="role_id" id="role_id" data-model="admin/role" data-text="{display_name}({name})" ></select>
+							<select class="form-control tree-model" style="width:80%" name="role_id" id="role_id" data-model="admin/role" data-text="{display_name}({name})" ></select>
 							<span class="help-block">(*) 删除用户组，需要将组下的用户转移到其它组</span>
 						</div>
 					</div>		

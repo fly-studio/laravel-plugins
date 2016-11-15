@@ -20,15 +20,11 @@ class StatementController extends Controller
 	public function index(Request $request)
 	{
 		$bill = new WechatBill;
-		$builder = $bill->newQuery();
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$bill->getTable(), $this->site['pagesize']['common']);
-		$base = boolval($request->input('base')) ?: false;
 
-		$this->_base = $base;
 		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $base ? $this->_getPaginate($request, $builder, ['*'], ['base' => $base]) : [];
-		return $this->view('wechat::admin.wechat.statement.'. ($base ? 'list' : 'datatable'));
+		$this->_filters = $this->_getFilters($request);
+		return $this->view('wechat::admin.wechat.statement.datatable');
 	}
 
 	public function data(Request $request)

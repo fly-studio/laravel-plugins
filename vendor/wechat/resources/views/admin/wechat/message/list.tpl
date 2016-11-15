@@ -10,7 +10,7 @@
 
 <{block "filter"}>
 	<{include file="[wechat]admin/wechat/message/filters.inc.tpl"}>
-	<{/block}>
+<{/block}>
 
 <{block "head-styles-plus"}>
 	<style>
@@ -23,8 +23,8 @@
 	<{/block}>
 
 <{block "head-scripts-plus"}>
-<script src="<{'static/js/DatePicker/WdatePicker.js'|url}>"></script>
-<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
+<script src="<{'js/DatePicker/WdatePicker.js'|static}>"></script>
+<script src="<{'js/wechat/choose.min.js'|plugins}>"></script>
 <{include file="common/uploader.inc.tpl"}>
 <script>
 (function($){
@@ -92,4 +92,4 @@ $().ready(function(){
 		<div class="col-sm-7 col-xs-12 clearfix"><{$_table_data->render() nofilter}></div>
 	</div>
 	<{include file="[wechat]admin/wechat/message/reply.inc.tpl"}>
-	<{/block}>
+<{/block}>

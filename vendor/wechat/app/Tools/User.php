@@ -2,8 +2,8 @@
 namespace Plugins\Wechat\App\Tools;
 
 use Plugins\Wechat\App\Tools\API;
-use App\User as UserModel;
-use App\Role as RoleModel;
+/*use App\User as UserModel;
+use App\Role as RoleModel;*/
 use Plugins\Attachment\App\Attachment as AttachmentModel;
 use Plugins\Wechat\App\WechatUser;
 use Cache;
@@ -99,18 +99,18 @@ class User {
 				
 			}
 			$wechatUser = WechatUser::where('openid', $openid)->where('waid', $this->api->waid)->get()->first();
-			Cache::put($hashkey, $wechatUser, 12 * 60); //0.5 day
+			Cache::put($hashkey, $wechatUser, config('cache.ttl'));
 		}
 		return $wechatUser;
 	}
 
-	public function bindToUser(WechatUser $wechatUser, $role_name = RoleModel::WECHATER, $cache = TRUE)
-	{	
-		$userModel = config('auth.model');
-		$user = !empty($wechatUser->uid) ? (new $userModel)->find($wechatUser->uid) : (new $userModel)->get($wechatUser->unionid);
-		empty($user) && $user = (new $userModel)->add([
+	public function bindToUser(WechatUser $wechatUser, $role_name = NULL, $cache = TRUE)
+	{
+		$userModel = config('auth.providers.users.model');
+		$user = !empty($wechatUser->uid) ? $userModel::find($wechatUser->uid) : $userModel::findByName($wechatUser->unionid);
+		empty($user) && $user = $userModel::add([
 			'username' => $wechatUser->unionid,
-			'password' => (new $userModel)->auto_password($wechatUser->unionid),
+			'password' => '',
 		], $role_name);
 
 		$wechatUser->update(['uid' => $user->getKey()]);
@@ -123,7 +123,7 @@ class User {
 				'gender' => $wechatUser->gender,
 				'avatar_aid' => $wechatUser->avatar_aid,
 			]);
-			Cache::put($hashkey, time(), 1440); //0.5 day
+			Cache::put($hashkey, time(), config('cache.ttl'));
 		}
 		return $user;
 	}

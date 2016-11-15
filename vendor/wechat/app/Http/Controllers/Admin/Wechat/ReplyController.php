@@ -23,16 +23,12 @@ class ReplyController extends Controller
 	public function index(Request $request, Account $account)
 	{
 		$reply = new WechatReply;
-		$builder = $reply->newQuery()->where('waid', $account->getAccountID());
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$reply->getTable(), $this->site['pagesize']['common']);
-		$base = boolval($request->input('base')) ?: false;
 
 		//view's variant
-		$this->_base = $base;
 		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $base ? $this->_getPaginate($request, $builder, ['*'], ['base' => $base]) : [];
-		return $this->view('wechat::admin.wechat.reply.'. ($base ? 'list' : 'datatable'));
+		$this->_filters = $this->_getFilters($request);
+		return $this->view('wechat::admin.wechat.reply.datatable');
 	}
 
 	public function data(Request $request, Account $account)
@@ -40,8 +36,9 @@ class ReplyController extends Controller
 		$reply = new WechatReply;
 		$builder = $reply->newQuery()->where('waid', $account->getAccountID());
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
-		$data = $this->_getData($request, $builder, function(&$v, $k){
-			$v['depots-count'] = $v->depots()->count();
+		$data = $this->_getData($request, $builder, function($page){
+			foreach($page as $v)
+				$v['depots-count'] = $v->depots()->count();
 		});
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];

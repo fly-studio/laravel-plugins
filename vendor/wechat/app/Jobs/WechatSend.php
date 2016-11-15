@@ -4,7 +4,6 @@ namespace Plugins\Wechat\App\Jobs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 use Plugins\Attachment\App\Attachment;
@@ -21,7 +20,7 @@ use Plugins\Wechat\App\WechatMessageLink;
 use Plugins\Wechat\App\WechatMessageLocation;
 use Addons\Core\File\Mimes;
 
-class WechatSend implements SelfHandling, ShouldQueue
+class WechatSend implements ShouldQueue
 {
 	use Queueable;
 	use InteractsWithQueue, SerializesModels;

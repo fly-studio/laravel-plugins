@@ -24,8 +24,6 @@ class AttachmentController extends Controller {
 				Session::setId($session_id);
 			}
 		}
-		
-		parent::__construct();
 
 		$this->model = new Attachment();
 	}
@@ -69,7 +67,7 @@ class AttachmentController extends Controller {
 		else if(empty($attachment->afid))
 			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 
-		return $this->success('', TRUE, $attachment->toArray());
+		return $this->api($attachment->toArray());
 	}
 
 	public function index($id, $width = NULL, $height = NULL, $m = NULL)
@@ -199,7 +197,7 @@ class AttachmentController extends Controller {
 		if (empty($id) || empty($m))
 			return $this->error_param()->setStatusCode(404);
 
-		$watermark_path = is_numeric($m) ? (($a = $this->model->get($m)) ? $a->full_path() : '') : APPPATH.$m;
+		$watermark_path = is_numeric($m) ? (($a = $this->model->get($m)) ? $a->full_path() : '') : base_path($m);
 		if (empty($watermark_path) || !file_exists($watermark_path))
 			return $this->failure('attachment::attachment.failure_watermark');
 
@@ -264,6 +262,9 @@ class AttachmentController extends Controller {
 		$start = $request->input('start') ?: 0;
 		$end = $request->input('end') ?: 0;
 		$hash = $request->input('hash') ?: '';
+
+		if (!isset($_FILES['Filedata']))
+			return $this->error_param();
 
 		$attachment = $this->model->upload($this->user->getKey(), 'Filedata', compact('uuid', 'count', 'index', 'start', 'end', 'total', 'hash'));
 		if (!($attachment instanceof Attachment))
@@ -509,6 +510,6 @@ class AttachmentController extends Controller {
 	private function failure_attachment($error_no, $url = FALSE)
 	{
 		$_config = config('attachment');
-		return $this->failure(Lang::has($message = 'attachment.'.$error_no.'.content') ? $message :  'attachment::'.$message, $url, ['maxsize' => format_bytes($_config['maxsize']), 'ext' => implode(',', $_config['ext'])]);
+		return $this->failure(Lang::has($message = 'attachment.'.$error_no.'.content') ? $message : 'attachment::'.$message, $url, ['maxsize' => format_bytes($_config['maxsize']), 'ext' => implode(',', $_config['ext'])]);
 	}
 }

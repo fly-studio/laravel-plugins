@@ -16,12 +16,8 @@ use Plugins\Wechat\App\Tools\API;
 class MenuController extends Controller
 {
 	use AdminTrait;
-	//public $RESTful_permission = 'wechat-menu';
+	public $RESTful_permission = 'wechat-menu';
 	
-	public function __construct()
-	{
-		parent::__construct();
-	}
 	/**
 	 * Display a listing of the resource.
 	 *

@@ -9,8 +9,8 @@
 <{block "name"}>wechat/user<{/block}>
 
 <{block "head-scripts-after"}>
-<script src="<{'static/js/emojione.js'|url}>"></script>
-<script src="<{'plugins/js/wechat/choose.js'|url}>"></script>
+<script src="<{'js/emojione.js'|static}>"></script>
+<script src="<{'js/wechat/choose.min.js'|plugins}>"></script>
 <{/block}>
 
 <{block "filter"}>

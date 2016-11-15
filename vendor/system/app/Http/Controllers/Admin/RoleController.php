@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Role;
 use App\Permission;
 use Addons\Core\Controllers\AdminTrait;
-
+use Illuminate\Support\Collection;
 class RoleController extends Controller
 {
 	use AdminTrait;
@@ -22,13 +22,11 @@ class RoleController extends Controller
 	public function index(Request $request)
 	{
 		$role = new Role;
-		$builder = $role->newQuery()->with('perms');
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$role->getTable(), $this->site['pagesize']['common']);
+		$roles = $role->newQuery()->with('perms')->where($role->getKeyName(), '!=', 0)->orderBy($role->getKeyName())->get();
+
 
 		//view's variant
-		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $this->_getPaginate($request, $builder, ['*']);
+		$this->_table_data = $roles;
 		$this->_perms_data = Permission::all();
 		return $this->view('system::admin.role.list');
 	}
@@ -38,15 +36,22 @@ class RoleController extends Controller
 		$role = new Role;
 		$builder = $role->newQuery()->with('perms');
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
-		$data = $this->_getData($request, $builder);
+		$data = $this->_getData($request, $builder, function($page) use($request, $role) {
+			if ($request->input('tree') == 'true')
+			{
+				$items = $page->getCollection()->keyBy($role->getKeyName())->toArray();
+				$page->setCollection(new Collection($role->_data_to_tree($items, 0, false)));
+			}
+		});
+
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function store(Request $request)
 	{
-		$keys = 'name,display_name,description,url';
+		$keys = 'name,display_name,description,url,pid';
 		$data = $this->autoValidate($request, 'role.store', $keys);
 
 		Role::create($data);
@@ -63,7 +68,7 @@ class RoleController extends Controller
 			foreach(Role::all() as $role)
 				$role->perms()->sync(isset($data['perms'][$role->getKey()]) ? $data['perms'][$role->getKey()] : [] );
 		}
-		else
+		else //修改某用户组的资料
 		{
 			$role = Role::find($id);
 			if (empty($role))
