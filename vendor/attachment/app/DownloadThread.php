@@ -1,9 +1,8 @@
 <?php
-namespace Addons\Core\Models;
-
+namespace Plugins\Attachment\App;
 
 use \Curl\Curl;
-use Addons\Core\Models\DownloadManager;
+use Plugins\Attachment\App\DownloadManager;
 class DownloadThread {
 
 	private $curl;

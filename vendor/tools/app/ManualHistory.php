@@ -1,8 +1,8 @@
 <?php
 namespace Plugins\Tools\App;
 
+use App\Model;
 use Plugins\Tools\App\ManualHistory;
-use Addons\Core\Models\Model;
 class ManualHistory extends Model {
 
 	//不能批量赋值

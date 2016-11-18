@@ -1,10 +1,9 @@
 <?php
 namespace Plugins\Wechat\App;
 
-use Addons\Core\Models\Tree;
+use App\Tree;
 
 class WechatMenu extends Tree{
-	public $auto_cache = true;
 	protected $guarded = ['id'];
 
 	public function account()

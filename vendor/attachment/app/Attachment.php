@@ -1,7 +1,7 @@
 <?php
 namespace Plugins\Attachment\App;
 
-use Addons\Core\Models\Model;
+use App\Model;
 
 use \Curl\Curl;
 use Addons\Core\SSH;

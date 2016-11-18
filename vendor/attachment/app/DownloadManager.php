@@ -1,8 +1,8 @@
 <?php
-namespace Addons\Core\Models;
+namespace Plugins\Attachment\App;
 
-use Addons\Core\Models\DownloadThread;
-class DownloadManager{
+use Plugins\Attachment\App\DownloadThread;
+class DownloadManager {
 
 	private $x64 = false;
 	private $url;
