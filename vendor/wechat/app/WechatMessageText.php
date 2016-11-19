@@ -1,10 +1,9 @@
 <?php
 namespace Plugins\Wechat\App;
 
-use Addons\Core\Models\Model;
+use App\Model;
 
 class WechatMessageText extends Model{
-	public $auto_cache = true;
 	protected $guarded = [];
 	public $incrementing = false;
 

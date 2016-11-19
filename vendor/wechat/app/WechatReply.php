@@ -1,12 +1,11 @@
 <?php
 namespace Plugins\Wechat\App;
 
-use Addons\Core\Models\Model;
+use App\Model;
 use Plugins\Wechat\App\WechatMessage;
 use Plugins\Wechat\App\WechatAccount;
 
 class WechatReply extends Model{
-	public $auto_cache = true;
 	protected $guarded = ['id'];
 
 	public $fire_caches = ['wechat-replies'];

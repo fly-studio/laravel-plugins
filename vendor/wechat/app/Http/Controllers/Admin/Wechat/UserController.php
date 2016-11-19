@@ -33,7 +33,7 @@ class UserController extends Controller
 	public function data(Request $request, Account $account)
 	{
 		$user = new WechatUser;
-		$builder = $user->newQuery()->with('_gender')->where('waid', $account->getAccountID());
+		$builder = $user->newQuery()->where('waid', $account->getAccountID());
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
@@ -44,7 +44,7 @@ class UserController extends Controller
 	public function export(Request $request, Account $account)
 	{
 		$user = new WechatUser;
-		$builder = $user->newQuery()->with('_gender')->where('waid', $account->getAccountID());
+		$builder = $user->newQuery()->where('waid', $account->getAccountID());
 		$page = $request->input('page') ?: 0;
 		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
 		$total = $this->_getCount($request, $builder);
@@ -58,7 +58,7 @@ class UserController extends Controller
 		}
 
 		$data = $this->_getExport($request, $builder, function(&$v){
-			$v['_gender'] = !empty($v['_gender']) ? $v['_gender']['title'] : NULL;
+			$v['gender'] = !empty($v['gender']) ? $v['gender']['title'] : NULL;
 		});
 		return $this->success('', FALSE, $data);
 	}
