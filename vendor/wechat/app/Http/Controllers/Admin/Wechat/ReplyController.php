@@ -42,7 +42,7 @@ class ReplyController extends Controller
 		});
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function export(Request $request, Account $account)
@@ -62,7 +62,7 @@ class ReplyController extends Controller
 		}
 
 		$data = $this->_getExport($request, $builder)->where('waid', $account->getAccountID());
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function show($id)
