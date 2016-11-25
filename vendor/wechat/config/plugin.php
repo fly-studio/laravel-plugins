@@ -12,7 +12,7 @@ return [
 		'wechat.account' => \Plugins\Wechat\App\Http\Middleware\WechatAccount::class,
 	],
 	'injectViews' => [
-		'admin/sidebar.inc.tpl',
-		'admin/menubar.inc.tpl',
+		'admin/sidebar.inc.tpl' => 99,
+		'admin/menubar.inc.tpl' => 99,
 	],
 ];
