@@ -47,13 +47,13 @@ class ToolsController extends Controller {
 	{
 		$target_path = normalize_path(base_path('../static'));
 		$link_path = static_path('common');
-		@$this->_symlink($target_path, $link_path);
+		//@$this->_symlink($target_path, $link_path);
 
-		$target_path = normalize_path(PLUGINSPATH.'static');
+		$target_path = normalize_path(PLUGINSPATH.'static');dd(plugins_path(), $target_path);
 		$link_path = plugins_path();
-		@$this->_symlink($target_path, $link_path);
+		//@$this->_symlink($target_path, $link_path);
 
-		return file_exists($link_path) ? $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功')) : $this->failure(array('title' => '指向失败', 'content' => '您没有写入权限，static目录指向失败'));
+		return is_link($link_path) ? $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功')) : $this->failure(array('title' => '指向失败', 'content' => '您没有写入权限，static目录指向失败'));
 	}
 
 	private function _symlink($target_path, $link_path)
