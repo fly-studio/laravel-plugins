@@ -1,8 +1,4 @@
 <{extends file="admin/extends/list.block.tpl"}>
-<!-- 
-公共Block 
-由于extends中无法使用if/include，所以需要将公共Block均写入list.tpl
--->
 
 <{block "title"}>微信用户<{/block}>
 
