@@ -24,7 +24,7 @@ class StatementController extends Controller
 
 		$this->_pagesize = $pagesize;
 		$this->_filters = $this->_getFilters($request);
-		return $this->view('wechat::admin.wechat.statement.datatable');
+		return $this->view('wechat::admin.wechat.statement.list');
 	}
 
 	public function data(Request $request)

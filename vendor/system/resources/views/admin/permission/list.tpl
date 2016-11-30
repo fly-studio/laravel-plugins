@@ -1,4 +1,4 @@
-<{extends file="admin/extends/datatable.block.tpl"}>
+<{extends file="admin/extends/list.block.tpl"}>
 <!-- 
 公共Block 
 由于extends中无法使用if/include，所以需要将公共Block均写入list.tpl、datatable.tpl
@@ -20,13 +20,10 @@
 
 <!-- DataTable的Block -->
 
-<{block "datatable-config-pageLength"}><{$_pagesize}><{/block}>
-
-<{block "datatable-columns-plus"}>
-var columns_plus = [
-	{'data': 'name'},
-	{'data': 'display_name'},
-	{'data': 'description'}
-];
+<{block "table-td-plus"}>
+<td data-from="name">{{data}}</td>
+<td data-from="display_name">{{data}}</td>
+<td data-from="description">{{data}}</td>
 <{/block}>
-<{block "datatable-columns-options-delete-confirm"}>var columns_options_delete_confirm = '您确定删除这个权限：'+full['display_name']+'吗？';<{/block}>
+
+<{block "table-td-options-delete-confirm"}>您确定删除这项：{{full.display_name}}吗？<{/block}>

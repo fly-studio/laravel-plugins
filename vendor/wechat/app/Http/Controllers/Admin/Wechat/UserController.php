@@ -27,7 +27,7 @@ class UserController extends Controller
 		//view's variant
 		$this->_pagesize = $pagesize;
 		$this->_filters = $this->_getFilters($request);
-		return $this->view('wechat::admin.wechat.user.datatable');
+		return $this->view('wechat::admin.wechat.user.list');
 	}
 
 	public function data(Request $request, Account $account)
