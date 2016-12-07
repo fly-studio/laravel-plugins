@@ -29,7 +29,7 @@
 						<label class="col-md-3 control-label" for="pid">父用户组</label>
 						<div class="col-md-9">
 							<input type="hidden" name="pid" value="0" id="pid1">
-							<select class="form-control tree-model" style="width:100%" id="pid" data-model="admin/role" data-text="{display_name}({name})" ></select>
+							<select class="form-control tree-model" style="width:100%" id="pid" data-model="admin/role" data-text="{{display_name}}({{name}})" ></select>
 							<span class="help-block">(*) 请选择一个父用户组</span>
 						</div>
 					</div>
@@ -82,7 +82,7 @@
 					<div class="form-group">
 						<label class="col-md-3 control-label" for="name">待转移的组名</label>
 						<div class="col-md-9">
-							<select class="form-control tree-model" style="width:80%" name="role_id" id="role_id" data-model="admin/role" data-text="{display_name}({name})" ></select>
+							<select class="form-control tree-model" style="width:80%" name="role_id" id="role_id" data-model="admin/role" data-text="{{display_name}}({{name}})" ></select>
 							<span class="help-block">(*) 删除用户组，需要将组下的用户转移到其它组</span>
 						</div>
 					</div>		
