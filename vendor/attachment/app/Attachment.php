@@ -48,7 +48,7 @@ class Attachment extends Model{
 
 	public function chunks()
 	{
-		return $this->hasMany(get_namespace($this).'\\AttachmentChunk', 'aid', 'id')->orderBy('index', 'ASC');
+		return $this->hasMany(get_namespace($this).'\\AttachmentChunk', 'aid', 'id');
 	}
 
 	public function full_path()
@@ -249,7 +249,7 @@ class Attachment extends Model{
 		//合并文件
 		$merged_file_path = tempnam(sys_get_temp_dir(), 'attachment-'.$attachment->getKey());
 		$fw = fopen($merged_file_path, 'w');
-		foreach ($attachment->chunks as $chunk)
+		foreach ($attachment->chunks()->orderBy('index', 'ASC')->get() as $chunk) //严格模式下$attachment->chunks()->count()不能有orderBy，所以将orderBy放在这里
 		{
 			$path = $this->get_real_path($chunk->path);
 			if (!file_exists($path)) {DB::rollback();return FALSE;}
