@@ -13,11 +13,11 @@ use Plugins\Wechat\App\WechatDepot;
 use Plugins\Wechat\App\WechatUser;
 use Plugins\Wechat\App\Tools\Send;
 use Plugins\Wechat\App\Tools\Account;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 class MessageController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'wechat-message';
 	/**
 	 * Display a listing of the resource.

@@ -7,11 +7,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Plugins\Wechat\App\WechatAccount;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 class AccountController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'wechat-account';
 	/**
 	 * Display a listing of the resource.

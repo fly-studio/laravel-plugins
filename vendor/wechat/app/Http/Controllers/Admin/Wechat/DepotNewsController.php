@@ -8,11 +8,11 @@ use App\Http\Controllers\Controller;
 
 use Plugins\Wechat\App\WechatDepotNews;
 use Plugins\Wechat\App\Tools\Account;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 class DepotNewsController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'wechat-depot';
 	/**
 	 * Display a listing of the resource.

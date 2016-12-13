@@ -7,11 +7,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Permission;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 class PermissionController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'role';
 	/**
 	 * Display a listing of the resource.

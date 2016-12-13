@@ -6,12 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 use Plugins\Wechat\App\WechatBill;
 
 class StatementController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	/**
 	 * Display a listing of the resource.
 	 *
