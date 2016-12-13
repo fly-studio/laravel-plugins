@@ -21,10 +21,10 @@ class PermissionController extends Controller
 	public function index(Request $request)
 	{
 		$permission = new Permission;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$permission->getTable(), $this->site['pagesize']['common']);
+		$size = $request->input('size') ?: config('size.models.'.$permission->getTable(), config('size.common'));
 
 		//view's variant
-		$this->_pagesize = $pagesize;
+		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
 		return $this->view('system::admin.permission.list');
 	}
@@ -45,14 +45,14 @@ class PermissionController extends Controller
 		$permission = new Permission;
 		$builder = $permission->newQuery();
 		$page = $request->input('page') ?: 0;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
+		$size = $request->input('size') ?: config('size.export', 1000);
 		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
 			$this->_table = $permission->getTable();
 			$this->_total = $total;
-			$this->_pagesize = $pagesize > $total ? $total : $pagesize;
+			$this->_size = $size > $total ? $total : $size;
 			return $this->view('system::admin.permission.export');
 		}
 

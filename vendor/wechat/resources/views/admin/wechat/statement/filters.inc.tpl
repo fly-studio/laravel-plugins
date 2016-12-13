@@ -9,9 +9,9 @@
 		<label class="col-md-3 control-label" for="created_at-min">加入时间</label>
 		<div class="col-md-9">
 			<div class="input-group input-daterange">
-				<input type="text" id="created_at-min" name="filters[created_at][min]" class="form-control text-center" placeholder="开始时间" value="<{$_filters.created_at.min}>">
+				<input type="text" id="created_at-min" name="f[created_at][min]" class="form-control text-center" placeholder="开始时间" value="<{$_filters.created_at.min}>">
 				<span class="input-group-addon">～</span>
-				<input type="text" id="created_at-max" name="filters[created_at][max]" class="form-control text-center" placeholder="结束时间" value="<{$_filters.created_at.max}>">
+				<input type="text" id="created_at-max" name="f[created_at][max]" class="form-control text-center" placeholder="结束时间" value="<{$_filters.created_at.max}>">
 			</div>
 		</div>
 	</div>

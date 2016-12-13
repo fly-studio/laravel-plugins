@@ -5,7 +5,7 @@
 		<label class="col-md-3 control-label" for="name">名称</label>
 		<div class="col-md-9">
 			<div class="input-group">
-				<input type="text" id="name" name="filters[name][like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.name.like}>">
+				<input type="text" id="name" name="f[name][lk]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.name.lk}>">
 				<span class="input-group-addon"><i class="gi gi-user"></i></span>
 			</div>
 		</div>
@@ -15,7 +15,7 @@
 		<label class="col-md-3 control-label" for="display_name">显示名称</label>
 		<div class="col-md-9">
 			<div class="input-group">
-				<input type="text" id="display_name" name="filters[display_name][like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.display_name.like}>">
+				<input type="text" id="display_name" name="f[display_name][lk]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.display_name.lk}>">
 				<span class="input-group-addon"><i class="gi gi-user"></i></span>
 			</div>
 		</div>
@@ -25,9 +25,9 @@
 		<label class="col-md-3 control-label" for="created_at-min">加入时间</label>
 		<div class="col-md-9">
 			<div class="input-group input-daterange">
-				<input type="text" id="created_at-min" name="filters[created_at][min]" class="form-control text-center" placeholder="开始时间" value="<{$_filters.created_at.min}>">
+				<input type="text" id="created_at-min" name="f[created_at][min]" class="form-control text-center" placeholder="开始时间" value="<{$_filters.created_at.min}>">
 				<span class="input-group-addon">～</span>
-				<input type="text" id="created_at-max" name="filters[created_at][max]" class="form-control text-center" placeholder="结束时间" value="<{$_filters.created_at.max}>">
+				<input type="text" id="created_at-max" name="f[created_at][max]" class="form-control text-center" placeholder="结束时间" value="<{$_filters.created_at.max}>">
 			</div>
 		</div>
 	</div>

@@ -5,7 +5,7 @@
 		<label class="col-md-3 control-label" for="keywords">关键词</label>
 		<div class="col-md-9">
 			<div class="input-group">
-				<input type="text" id="keywords" name="keywords[like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.keywords.like}>">
+				<input type="text" id="keywords" name="f[keywords][lk]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.keywords.lk}>">
 				<span class="input-group-addon"><i class="gi gi-user"></i></span>
 			</div>
 		</div>
@@ -15,16 +15,16 @@
 		<label class="col-md-3 control-label" for="created_at-min">类型</label>
 		<div class="col-md-9">
 			<label class="radio-inline">
-				<input type="radio" name="filters[match_type]" value="" <{if empty($_filters.match_type.equal)}>checked="checked"<{/if}>> 不限
+				<input type="radio" name="f[match_type]" value="" <{if empty($_filters.match_type.eq)}>checked="checked"<{/if}>> 不限
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="filters[match_type]" value="subscribe" <{if $_filters.match_type.equal == 'subscribe'}>checked="checked"<{/if}>> 关注
+				<input type="radio" name="f[match_type]" value="subscribe" <{if $_filters.match_type.eq == 'subscribe'}>checked="checked"<{/if}>> 关注
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="filters[match_type]" value="part" <{if $_filters.match_type.equal == 'part'}>checked="checked"<{/if}>> 模糊
+				<input type="radio" name="f[match_type]" value="part" <{if $_filters.match_type.eq == 'part'}>checked="checked"<{/if}>> 模糊
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="filters[match_type]" value="whole" <{if $_filters.match_type.equal == 'whole'}>checked="checked"<{/if}>> 全字
+				<input type="radio" name="f[match_type]" value="whole" <{if $_filters.match_type.eq == 'whole'}>checked="checked"<{/if}>> 全字
 			</label>
 			<div class="clearfix"></div>
 		</div>

@@ -21,10 +21,10 @@ class AccountController extends Controller
 	public function index(Request $request)
 	{
 		$account = new WechatAccount;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$account->getTable(), $this->site['pagesize']['common']);
+		$size = $request->input('size') ?: config('size.models.'.$account->getTable(), config('size.common'));
 
 		//view's variant
-		$this->_pagesize = $pagesize;
+		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
 		return $this->view('wechat::admin.wechat.account.list');
 	}
@@ -52,14 +52,14 @@ class AccountController extends Controller
 		$account = new WechatAccount;
 		$builder = $account->newQuery();
 		$page = $request->input('page') ?: 0;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
+		$size = $request->input('size') ?: config('size.export', 1000);
 		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
 			$this->_table = $account->getTable();
 			$this->_total = $total;
-			$this->_pagesize = $pagesize > $total ? $total : $pagesize;
+			$this->_size = $size > $total ? $total : $size;
 			return $this->view('wechat::admin.wechat.account.export');
 		}
 
