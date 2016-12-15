@@ -3,12 +3,18 @@
 $router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['auth', 'role:administrator']], function($router) {
 	
 	$router->addAdminRoutes([
-		'role' => 'RoleController',
-		'permission' => 'PermissionController',
 		'password' => 'PasswordController',
 		'profile' => 'ProfileController',
-		//'field' => 'FieldController',
 	]);
 
+	$router->group(['middleware' => ['auth', 'role:super']], function($router) {
+
+		$router->get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+		$router->addAdminRoutes([
+			'role' => 'RoleController',
+			'permission' => 'PermissionController',
+		]);
+		
+	});
 
 });
