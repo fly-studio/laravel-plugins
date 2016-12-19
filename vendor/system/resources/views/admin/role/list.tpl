@@ -68,7 +68,7 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 						</h3>
 						<p><i><{$item->description}></i></p>
 						<p><b>组ID：</b><{$item->getKey()}></p>
-						<p><b>用户：</b><a href="<{'admin/member'|url}>?filters[role_id][in][]=<{$item->getKey()}>"><{$item->users()->count()}> 个</a></p>
+						<p><b>用户：</b><a href="<{'admin/member'|url}>?f[role_id][in][]=<{$item->getKey()}>"><{$item->users()->count()}> 个</a></p>
 						<{if empty($item->pid) || $item->children()->count() > 0}>
 						<div class="alert alert-danger">
 							<ul>

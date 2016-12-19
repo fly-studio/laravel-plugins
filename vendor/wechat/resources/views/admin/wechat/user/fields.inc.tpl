@@ -25,9 +25,9 @@
 <div class="form-group">
 	<label class="col-md-3 control-label">性别</label>
 	<div class="col-md-9">
-		<{foreach $_fields.gender as $v}>
+		<{foreach 'fields.gender.children'|catalogs as $v}>
 		<label class="radio-inline">
-			<input type="radio" name="gender" value="<{$v.id}>" <{if $_data.gender == $v.id}>checked="checked"<{/if}> > <{$v.title}>
+			<input type="radio" name="gender" value="<{$v.id}>" <{if !empty($_data.gender) && $_data.gender.id == $v.id}>checked="checked"<{/if}> > <{$v.title}>
 		</label>
 		<{/foreach}>
 		<div class="clearfix"></div>

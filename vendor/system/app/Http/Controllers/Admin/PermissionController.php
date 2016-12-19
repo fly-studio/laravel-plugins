@@ -7,11 +7,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Permission;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 class PermissionController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'role';
 	/**
 	 * Display a listing of the resource.
@@ -21,16 +21,12 @@ class PermissionController extends Controller
 	public function index(Request $request)
 	{
 		$permission = new Permission;
-		$builder = $permission->newQuery();
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$permission->getTable(), $this->site['pagesize']['common']);
-		$base = boolval($request->input('base')) ?: false;
+		$size = $request->input('size') ?: config('size.models.'.$permission->getTable(), config('size.common'));
 
 		//view's variant
-		$this->_base = $base;
-		$this->_pagesize = $pagesize;
-		$this->_filters = $this->_getFilters($request, $builder);
-		$this->_table_data = $base ? $this->_getPaginate($request, $builder, ['*'], ['base' => $base]) : [];
-		return $this->view('system::admin.permission.'. ($base ? 'list' : 'datatable'));
+		$this->_size = $size;
+		$this->_filters = $this->_getFilters($request);
+		return $this->view('system::admin.permission.list');
 	}
 
 	public function data(Request $request)
@@ -49,14 +45,14 @@ class PermissionController extends Controller
 		$permission = new Permission;
 		$builder = $permission->newQuery();
 		$page = $request->input('page') ?: 0;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
+		$size = $request->input('size') ?: config('size.export', 1000);
 		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
 			$this->_table = $permission->getTable();
 			$this->_total = $total;
-			$this->_pagesize = $pagesize > $total ? $total : $pagesize;
+			$this->_size = $size > $total ? $total : $size;
 			return $this->view('system::admin.permission.export');
 		}
 

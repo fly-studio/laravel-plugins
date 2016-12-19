@@ -320,7 +320,6 @@ class AttachmentController extends Controller {
 		$_config = config('attachment');
 		$action = $request->input('action');
 		$page = !empty($size) ? ceil($start / $size) : 1;
-		$pagesize = $size;
 		switch ($action) {
 			case 'config':
 				$data = array(
@@ -422,7 +421,7 @@ class AttachmentController extends Controller {
 			case 'listimage':
 			/* 列出文件 */
 			case 'listfile':
-				$list = $this->model->whereIn('ext', $_config['file_type']['image'])->orderBy('created_at', 'DESC')->paginate($pagesize, ['*'], 'page', $page);
+				$list = $this->model->whereIn('ext', $_config['file_type']['image'])->orderBy('created_at', 'DESC')->paginate($size, ['*'], 'page', $page);
 				
 				$url = [];
 				foreach($list as $v)

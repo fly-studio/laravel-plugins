@@ -6,12 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 use Plugins\Wechat\App\WechatBill;
 
 class StatementController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -20,11 +20,11 @@ class StatementController extends Controller
 	public function index(Request $request)
 	{
 		$bill = new WechatBill;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$bill->getTable(), $this->site['pagesize']['common']);
+		$size = $request->input('size') ?: config('size.models.'.$bill->getTable(), config('size.common'));
 
-		$this->_pagesize = $pagesize;
+		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
-		return $this->view('wechat::admin.wechat.statement.datatable');
+		return $this->view('wechat::admin.wechat.statement.list');
 	}
 
 	public function data(Request $request)
@@ -35,7 +35,7 @@ class StatementController extends Controller
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function export(Request $request)
@@ -43,19 +43,19 @@ class StatementController extends Controller
 		$bill = new WechatBill;
 		$builder = $bill->newQuery();
 		$page = $bill->input('page') ?: 0;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
+		$size = $request->input('size') ?: config('size.export', 1000);
 		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
 			$this->_table = $bill->getTable();
 			$this->_total = $total;
-			$this->_pagesize = $pagesize > $total ? $total : $pagesize;
+			$this->_size = $size > $total ? $total : $size;
 			return $this->view('wechat::admin.wechat.statement.export');
 		}
 
 		$data = $this->_getExport($request, $builder);
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 }
 

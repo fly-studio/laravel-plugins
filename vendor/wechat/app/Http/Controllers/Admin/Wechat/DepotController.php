@@ -9,11 +9,11 @@ use App\Http\Controllers\Controller;
 use Plugins\Wechat\App\WechatAccount;
 use Plugins\Wechat\App\WechatDepot;
 use Plugins\Wechat\App\Tools\Account;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 class DepotController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'wechat-depot';
 	/**
 	 * Display a listing of the resource.
@@ -36,7 +36,7 @@ class DepotController extends Controller
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 

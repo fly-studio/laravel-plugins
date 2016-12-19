@@ -1,11 +1,13 @@
 <?php
 namespace Plugins\Wechat\App;
 
-use Addons\Core\Models\Model;
+use App\Model;
 
 class WechatAccount extends Model{
-	public $auto_cache = true;
 	protected $guarded = ['id'];
+	protected $casts = [
+		'wechat_type' => 'catalog',
+	];
 
 	public function users()
 	{

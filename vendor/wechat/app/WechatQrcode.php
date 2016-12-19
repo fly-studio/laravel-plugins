@@ -1,11 +1,10 @@
 <?php
 namespace Plugins\Wechat\App;
 
-use Addons\Core\Models\Model;
+use App\Model;
 use Plugins\Wechat\App\WechatAccount;
 
 class WechatQrcode extends Model{
-	public $auto_cache = true;
 	protected $guarded = ['id'];
 
 	public function account()

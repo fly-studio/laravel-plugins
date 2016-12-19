@@ -1,12 +1,11 @@
 <?php
 namespace Plugins\Wechat\App;
 
-use Addons\Core\Models\Model;
+use App\Model;
 use Plugins\Wechat\App\WechatDepotTrait;
 class WechatDepot extends Model{
 	use WechatDepotTrait;
 
-	public $auto_cache = true;
 	protected $guarded = ['id'];
 
 	public function account()

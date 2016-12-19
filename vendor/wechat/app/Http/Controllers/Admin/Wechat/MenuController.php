@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 use Plugins\Wechat\App\WechatMenu;
 use Plugins\Wechat\App\WechatAccount;
@@ -15,7 +15,7 @@ use Plugins\Wechat\App\Tools\API;
 
 class MenuController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'wechat-menu';
 	
 	/**
@@ -42,7 +42,7 @@ class MenuController extends Controller
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
 		
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function show($id)

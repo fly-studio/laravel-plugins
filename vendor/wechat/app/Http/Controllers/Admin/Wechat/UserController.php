@@ -8,11 +8,11 @@ use App\Http\Controllers\Controller;
 
 use Plugins\Wechat\App\WechatUser;
 use Plugins\Wechat\App\Tools\Account;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 class UserController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'wechat-user';
 	/**
 	 * Display a listing of the resource.
@@ -22,45 +22,45 @@ class UserController extends Controller
 	public function index(Request $request, Account $account)
 	{
 		$user = new WechatUser;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$user->getTable(), $this->site['pagesize']['common']);
+		$size = $request->input('size') ?: config('size.models.'.$user->getTable(), config('size.common'));
 
 		//view's variant
-		$this->_pagesize = $pagesize;
+		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
-		return $this->view('wechat::admin.wechat.user.datatable');
+		return $this->view('wechat::admin.wechat.user.list');
 	}
 
 	public function data(Request $request, Account $account)
 	{
 		$user = new WechatUser;
-		$builder = $user->newQuery()->with('_gender')->where('waid', $account->getAccountID());
+		$builder = $user->newQuery()->where('waid', $account->getAccountID());
 		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function export(Request $request, Account $account)
 	{
 		$user = new WechatUser;
-		$builder = $user->newQuery()->with('_gender')->where('waid', $account->getAccountID());
+		$builder = $user->newQuery()->where('waid', $account->getAccountID());
 		$page = $request->input('page') ?: 0;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
+		$size = $request->input('size') ?: config('size.export', 1000);
 		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
 			$this->_table = $user->getTable();
 			$this->_total = $total;
-			$this->_pagesize = $pagesize > $total ? $total : $pagesize;
+			$this->_size = $size > $total ? $total : $size;
 			return $this->view('wechat::admin.wechat.user.export');
 		}
 
 		$data = $this->_getExport($request, $builder, function(&$v){
-			$v['_gender'] = !empty($v['_gender']) ? $v['_gender']['title'] : NULL;
+			$v['gender'] = !empty($v['gender']) ? $v['gender']['title'] : NULL;
 		});
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function show($id, Account $account)

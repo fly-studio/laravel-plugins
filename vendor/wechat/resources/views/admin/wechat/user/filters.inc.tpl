@@ -5,7 +5,7 @@
 		<label class="col-md-3 control-label" for="unionid">唯一ID</label>
 		<div class="col-md-9">
 			<div class="input-group">
-				<input type="text" id="unionid" name="filters[unionid][like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.unionid.like}>">
+				<input type="text" id="unionid" name="f[unionid][lk]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.unionid.lk}>">
 				<span class="input-group-addon"><i class="gi gi-user"></i></span>
 			</div>
 		</div>
@@ -15,7 +15,7 @@
 		<label class="col-md-3 control-label" for="openid">OPENID</label>
 		<div class="col-md-9">
 			<div class="input-group">
-				<input type="text" id="openid" name="filters[openid][like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.openid.like}>">
+				<input type="text" id="openid" name="f[openid][lk]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.openid.lk}>">
 				<span class="input-group-addon"><i class="gi gi-user"></i></span>
 			</div>
 		</div>
@@ -25,7 +25,7 @@
 		<label class="col-md-3 control-label" for="nickname">昵称</label>
 		<div class="col-md-9">
 			<div class="input-group">
-				<input type="text" id="nickname" name="filters[nickname][like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.nickname.like}>">
+				<input type="text" id="nickname" name="f[nickname][lk]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.nickname.lk}>">
 				<span class="input-group-addon"><i class="gi gi-user"></i></span>
 			</div>
 		</div>
@@ -35,11 +35,11 @@
 		<label class="col-md-3 control-label">性别</label>
 		<div class="col-md-9">
 			<label class="radio-inline">
-				<input type="radio" name="filters[gender]" value="0" checked="checked"> 不限
+				<input type="radio" name="f[gender]" value="0" checked="checked"> 不限
 			</label>
-		<{foreach $_fields.gender as $v}>
+		<{foreach 'fields.gender.children'|catalogs as $v}>
 			<label class="radio-inline">
-				<input type="radio" name="filters[gender]" value="<{$v.id}>" <{if $_filters.gender.equal == $v.id}>checked="checked"<{/if}> > <{$v.title}>
+				<input type="radio" name="f[gender]" value="<{$v.id}>" <{if $_filters.gender.eq == $v.id}>checked="checked"<{/if}> > <{$v.title}>
 			</label>
 		<{/foreach}>
 		</div>
@@ -49,9 +49,9 @@
 		<label class="col-md-3 control-label" for="created_at-min">加入时间</label>
 		<div class="col-md-9">
 			<div class="input-group input-daterange">
-				<input type="text" id="created_at-min" name="filters[created_at][min]" class="form-control text-center" placeholder="开始时间" value="<{$_filters.created_at.min}>">
+				<input type="text" id="created_at-min" name="f[created_at][min]" class="form-control text-center" placeholder="开始时间" value="<{$_filters.created_at.min}>">
 				<span class="input-group-addon">～</span>
-				<input type="text" id="created_at-max" name="filters[created_at][max]" class="form-control text-center" placeholder="结束时间" value="<{$_filters.created_at.max}>">
+				<input type="text" id="created_at-max" name="f[created_at][max]" class="form-control text-center" placeholder="结束时间" value="<{$_filters.created_at.max}>">
 			</div>
 		</div>
 	</div>

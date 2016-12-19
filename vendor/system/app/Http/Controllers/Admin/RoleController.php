@@ -8,11 +8,11 @@ use App\Http\Controllers\Controller;
 
 use App\Role;
 use App\Permission;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 use Illuminate\Support\Collection;
 class RoleController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'role';
 	/**
 	 * Display a listing of the resource.

@@ -5,7 +5,7 @@
 		<label class="col-md-3 control-label" for="content">内容</label>
 		<div class="col-md-9">
 			<div class="input-group">
-				<input type="text" id="content" name="content[like]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.content.like}>">
+				<input type="text" id="content" name="f[content][lk]" class="form-control" placeholder="请输入关键词..." value="<{$_filters.content.lk}>">
 				<span class="input-group-addon"><i class="gi gi-user"></i></span>
 			</div>
 		</div>

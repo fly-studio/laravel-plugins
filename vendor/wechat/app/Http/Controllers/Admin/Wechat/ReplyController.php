@@ -9,11 +9,11 @@ use App\Http\Controllers\Controller;
 use Plugins\Wechat\App\WechatAccount;
 use Plugins\Wechat\App\WechatReply;
 use Plugins\Wechat\App\Tools\Account;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 class ReplyController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'wechat-reply';
 	/**
 	 * Display a listing of the resource.
@@ -23,12 +23,12 @@ class ReplyController extends Controller
 	public function index(Request $request, Account $account)
 	{
 		$reply = new WechatReply;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$reply->getTable(), $this->site['pagesize']['common']);
+		$size = $request->input('size') ?: config('size.models.'.$reply->getTable(), config('size.common'));
 
 		//view's variant
-		$this->_pagesize = $pagesize;
+		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
-		return $this->view('wechat::admin.wechat.reply.datatable');
+		return $this->view('wechat::admin.wechat.reply.list');
 	}
 
 	public function data(Request $request, Account $account)
@@ -42,7 +42,7 @@ class ReplyController extends Controller
 		});
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function export(Request $request, Account $account)
@@ -50,19 +50,19 @@ class ReplyController extends Controller
 		$reply = new WechatReply;
 		$builder = $reply->newQuery();
 		$page = $request->input('page') ?: 0;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
+		$size = $request->input('size') ?: config('size.export', 1000);
 		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
 			$this->_table = $reply->getTable();
 			$this->_total = $total;
-			$this->_pagesize = $pagesize > $total ? $total : $pagesize;
+			$this->_size = $size > $total ? $total : $size;
 			return $this->view('wechat::admin.wechat.reply.export');
 		}
 
 		$data = $this->_getExport($request, $builder)->where('waid', $account->getAccountID());
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function show($id)

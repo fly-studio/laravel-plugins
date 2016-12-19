@@ -16,6 +16,10 @@ $('#username').replaceWith('<p class="form-control-static"><{$_data.username}></
 
 <{block "name"}>password<{/block}>
 
+<{block "block-title-title"}>
+<{include file="admin/member/fields-nav.inc.tpl"}>
+<{/block}>
+
 <{block "fields"}>
 <{include file="admin/member/fields.inc.tpl"}>
 <{/block}>

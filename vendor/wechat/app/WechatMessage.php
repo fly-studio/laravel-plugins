@@ -1,12 +1,11 @@
 <?php
 namespace Plugins\Wechat\App;
 
-use Addons\Core\Models\Model;
+use App\Model;
 use Plugins\Wechat\App\WechatMessageTrait;
 class WechatMessage extends Model{
 	use WechatMessageTrait;
 
-	public $auto_cache = true;
 	protected $guarded = ['id'];
 
 	public function account()

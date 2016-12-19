@@ -13,11 +13,11 @@ use Plugins\Wechat\App\WechatDepot;
 use Plugins\Wechat\App\WechatUser;
 use Plugins\Wechat\App\Tools\Send;
 use Plugins\Wechat\App\Tools\Account;
-use Addons\Core\Controllers\AdminTrait;
+use Addons\Core\Controllers\ApiTrait;
 
 class MessageController extends Controller
 {
-	use AdminTrait;
+	use ApiTrait;
 	public $RESTful_permission = 'wechat-message';
 	/**
 	 * Display a listing of the resource.
@@ -27,10 +27,10 @@ class MessageController extends Controller
 	public function index(Request $request, Account $account)
 	{
 		$message = new WechatMessage;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.admin.'.$message->getTable(), $this->site['pagesize']['common']);
+		$size = $request->input('size') ?: config('size.models.'.$message->getTable(), config('size.common'));
 
 		//view's variant
-		$this->_pagesize = $pagesize;
+		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
 		return $this->view('wechat::admin.wechat.message.list');
 	}
@@ -44,7 +44,7 @@ class MessageController extends Controller
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function export(Request $request, Account $account)
@@ -52,19 +52,19 @@ class MessageController extends Controller
 		$message = new WechatMessage;
 		$builder = $message->newQuery()->with(['account', 'user', 'depot', 'link', 'location', 'text', 'media'])->where('waid', $account->getAccountID());
 		$page = $request->input('page') ?: 0;
-		$pagesize = $request->input('pagesize') ?: config('site.pagesize.export', 1000);
+		$size = $request->input('size') ?: config('size.export', 1000);
 		$total = $this->_getCount($request, $builder);
 
 		if (empty($page)){
 			$this->_of = $request->input('of');
 			$this->_table = $message->getTable();
 			$this->_total = $total;
-			$this->_pagesize = $pagesize > $total ? $total : $pagesize;
+			$this->_size = $size > $total ? $total : $size;
 			return $this->view('wechat::admin.wechat.message.export');
 		}
 
 		$data = $this->_getExport($request, $builder);
-		return $this->success('', FALSE, $data);
+		return $this->api($data);
 	}
 
 	public function show($id)

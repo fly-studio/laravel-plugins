@@ -1,7 +1,7 @@
 <?php
 namespace Plugins\Attachment\App;
 
-use Addons\Core\Models\Model;
+use App\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AttachmentChunk extends Model{

@@ -1,8 +1,4 @@
 <{extends file="admin/extends/list.block.tpl"}>
-<!-- 
-公共Block 
-由于extends中无法使用if/include，所以需要将公共Block均写入list.tpl、datatable.tpl
--->
 
 <{block "title"}>对帐<{/block}>
 <{block "namespace"}>admin<{/block}>
@@ -20,19 +16,14 @@
 <th>状态信息</th>
 <{/block}>
 
-<!-- 基本视图的Block -->
-<{block "table-td-options"}>
-	<td class="text-center">
-		<div class="btn-group">
-			无
-		</div>
-	</td>
+<!-- DataTable的Block -->
+<{block "table-td-plus"}>
+<td data-from="transaction_id">{{data}}</td>
+<td data-from="out_trade_no">{{data}}</td>
+<td data-from="total_fee">{{data}}</td>
+<td data-from="return_code">{{data}}</td>
+<td data-from="return_msg">{{data}}</td>
 <{/block}>
 
-<{block "table-td-plus"}>
-<td><{$item->transaction_id}></td>
-<td><{$item->out_trade_no}></td>
-<td><{$item->total_fee}></td>
-<td><{$item->return_code}></td>
-<td><{$item->return_msg}></td>
-<{/block}>
+<{block "table-th-options"}><{/block}>
+<{block "table-td-options"}><{/block}>

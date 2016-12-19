@@ -16,6 +16,10 @@ $('#password,#password_confirmation,#role_ids', '#form').closest('div.form-group
 
 <{block "name"}>profile<{/block}>
 
+<{block "block-title-title"}>
+<{include file="admin/member/fields-nav.inc.tpl"}>
+<{/block}>
+
 <{block "fields"}>
 <{include file="admin/member/fields.inc.tpl"}>
 <{/block}>
