@@ -26,22 +26,16 @@ class AccountController extends Controller
 		//view's variant
 		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
+		$this->_queries = $this->_getQueries($request);
 		return $this->view('wechat::admin.wechat.account.list');
 	}
 
 	public function data(Request $request)
 	{
 		$account = new WechatAccount;
-		$builder = $account->newQuery();
-		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
-		$data = $this->_getData($request, $builder, function($page){
-			foreach ($page as $v)
-			{
-				$v['users-count'] = $v->users()->count();
-				$v['depots-count'] = $v->depots()->count();
-				$v['messages-count'] = $v->messages()->count();
-			}
-		});
+		$builder = $account->newQuery()->withCount(['users', 'depots', 'messages']);
+		$total = $this->_getCount($request, $builder, FALSE);
+		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
 		return $this->api($data);
@@ -51,17 +45,7 @@ class AccountController extends Controller
 	{
 		$account = new WechatAccount;
 		$builder = $account->newQuery();
-		$page = $request->input('page') ?: 0;
 		$size = $request->input('size') ?: config('size.export', 1000);
-		$total = $this->_getCount($request, $builder);
-
-		if (empty($page)){
-			$this->_of = $request->input('of');
-			$this->_table = $account->getTable();
-			$this->_total = $total;
-			$this->_size = $size > $total ? $total : $size;
-			return $this->view('wechat::admin.wechat.account.export');
-		}
 
 		$data = $this->_getExport($request, $builder);
 		return $this->api($data);

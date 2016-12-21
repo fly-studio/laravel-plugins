@@ -26,9 +26,9 @@
 <td data-from="name">{{data}}</td>
 <td data-from="account">{{data}}</td>
 <td data-from="appid">{{data}}</td>
-<td data-from="users-count" data-orderable="false">{{data}}</td>
-<td data-from="messages-count" data-orderable="false">{{data}}</td>
-<td data-from="depots-count" data-orderable="false">{{data}}</td>
+<td data-from="users_count" data-orderable="false">{{data}}</td>
+<td data-from="messages_count" data-orderable="false">{{data}}</td>
+<td data-from="depots_count" data-orderable="false">{{data}}</td>
 <{/block}>
 
 <{block "table-td-options-delete-confirm"}>您确定删除这个微信：{{full.name}}吗？<{/block}>

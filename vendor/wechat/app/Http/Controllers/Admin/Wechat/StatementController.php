@@ -24,6 +24,7 @@ class StatementController extends Controller
 
 		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
+		$this->_queries = $this->_getQueries($request);
 		return $this->view('wechat::admin.wechat.statement.list');
 	}
 
@@ -31,7 +32,7 @@ class StatementController extends Controller
 	{
 		$bill = new WechatBill;
 		$builder = $bill->newQuery();
-		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
+		$total = $this->_getCount($request, $builder, FALSE);
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
@@ -44,15 +45,6 @@ class StatementController extends Controller
 		$builder = $bill->newQuery();
 		$page = $bill->input('page') ?: 0;
 		$size = $request->input('size') ?: config('size.export', 1000);
-		$total = $this->_getCount($request, $builder);
-
-		if (empty($page)){
-			$this->_of = $request->input('of');
-			$this->_table = $bill->getTable();
-			$this->_total = $total;
-			$this->_size = $size > $total ? $total : $size;
-			return $this->view('wechat::admin.wechat.statement.export');
-		}
 
 		$data = $this->_getExport($request, $builder);
 		return $this->api($data);

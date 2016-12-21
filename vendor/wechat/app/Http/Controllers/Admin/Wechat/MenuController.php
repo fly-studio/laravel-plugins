@@ -37,7 +37,7 @@ class MenuController extends Controller
 	{
 		$menu = new WechatMenu;
 		$builder = $menu->newQuery()->with('children')->where('waid', $account->getAccountID())->where('pid', 0)->orderBy('order','ASC');
-		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
+		$total = $this->_getCount($request, $builder, FALSE);
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];

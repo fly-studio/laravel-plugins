@@ -32,7 +32,7 @@ class DepotController extends Controller
 		$type = $request->input('f.type') ?: ['news','text','image','callback','video','voice','music'];
 		$depot = new WechatDepot;
 		$builder = $depot->newQuery()->with($type)->where('waid', $account->getAccountID());
-		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
+		$total = $this->_getCount($request, $builder, FALSE);
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
