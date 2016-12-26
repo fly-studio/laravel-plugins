@@ -28,18 +28,16 @@ class ReplyController extends Controller
 		//view's variant
 		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
+		$this->_queries = $this->_getQueries($request);
 		return $this->view('wechat::admin.wechat.reply.list');
 	}
 
 	public function data(Request $request, Account $account)
 	{
 		$reply = new WechatReply;
-		$builder = $reply->newQuery()->where('waid', $account->getAccountID());
-		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
-		$data = $this->_getData($request, $builder, function($page){
-			foreach($page as $v)
-				$v['depots-count'] = $v->depots()->count();
-		});
+		$builder = $reply->newQuery()->withCount(['depots', 'replies'])->where('waid', $account->getAccountID());
+		$total = $this->_getCount($request, $builder, FALSE);
+		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
 		return $this->api($data);
@@ -49,17 +47,7 @@ class ReplyController extends Controller
 	{
 		$reply = new WechatReply;
 		$builder = $reply->newQuery();
-		$page = $request->input('page') ?: 0;
 		$size = $request->input('size') ?: config('size.export', 1000);
-		$total = $this->_getCount($request, $builder);
-
-		if (empty($page)){
-			$this->_of = $request->input('of');
-			$this->_table = $reply->getTable();
-			$this->_total = $total;
-			$this->_size = $size > $total ? $total : $size;
-			return $this->view('wechat::admin.wechat.reply.export');
-		}
 
 		$data = $this->_getExport($request, $builder)->where('waid', $account->getAccountID());
 		return $this->api($data);

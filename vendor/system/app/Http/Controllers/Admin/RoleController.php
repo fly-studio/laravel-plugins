@@ -35,7 +35,7 @@ class RoleController extends Controller
 	{
 		$role = new Role;
 		$builder = $role->newQuery()->with('perms');
-		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
+		$total = $this->_getCount($request, $builder, FALSE);
 		$data = $this->_getData($request, $builder, function($page) use($request, $role) {
 			if ($request->input('tree') == 'true')
 			{

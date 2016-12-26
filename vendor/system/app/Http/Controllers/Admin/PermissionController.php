@@ -26,6 +26,7 @@ class PermissionController extends Controller
 		//view's variant
 		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
+		$this->_queries = $this->_getQueries($request);
 		return $this->view('system::admin.permission.list');
 	}
 
@@ -33,7 +34,8 @@ class PermissionController extends Controller
 	{
 		$permission = new Permission;
 		$builder = $permission->newQuery();
-		$_builder = clone $builder;$total = $_builder->count();unset($_builder);
+
+		$total = $this->_getCount($request, $builder, FALSE);
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
@@ -44,17 +46,7 @@ class PermissionController extends Controller
 	{
 		$permission = new Permission;
 		$builder = $permission->newQuery();
-		$page = $request->input('page') ?: 0;
 		$size = $request->input('size') ?: config('size.export', 1000);
-		$total = $this->_getCount($request, $builder);
-
-		if (empty($page)){
-			$this->_of = $request->input('of');
-			$this->_table = $permission->getTable();
-			$this->_total = $total;
-			$this->_size = $size > $total ? $total : $size;
-			return $this->view('system::admin.permission.export');
-		}
 
 		$data = $this->_getExport($request, $builder);
 		return $this->success('', FALSE, $data);

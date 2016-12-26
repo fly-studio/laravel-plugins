@@ -27,8 +27,8 @@
 <span class="label label-danger">关注时</span>
 {{/if}}
 </td>
-<td data-from="depots-count" data-orderable="false">{{data}}</td>
-<td data-from="reply_count-count" data-orderable="false">{{data}}</td>
+<td data-from="depots_count" data-orderable="false">{{data}}</td>
+<td data-from="reply_count" data-orderable="false">{{data}}</td>
 <{/block}>
 
 <{block "table-td-options-delete-confirm"}>您确定删除这个关键词：{{full.keywords}}吗？<{/block}>
