@@ -85,13 +85,13 @@ class RoleController extends Controller
 	public function destroy(Request $request, $id)
 	{
 
-		$keys = 'role_id,original_role_id';
+		$keys = ['role_id', 'original_role_id'];
 		$data = $this->autoValidate($request, 'role.destroy', $keys);
 
 		$originalRole = Role::find($data['original_role_id']);
 		foreach ($originalRole->users()->get(['id']) as $user)
-			!in_array($data['role_id'], $user->roles()->get('id')->pluck('id')) && $user->attachRole($data['role_id']);
-		$originalRole->delete();
+			$user->roles()->syncWithoutDetaching([$data['role_id']]);
+		$originalRole->delete(); // 外键级联删除
 		return $this->success('', TRUE, compact('id'));
 	}
 }
