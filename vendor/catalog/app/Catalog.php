@@ -9,8 +9,8 @@ class Catalog extends Tree {
 
 	//不能批量赋值
 	public $orderKey = 'order_index';
-	public $pathKey = NULL;
-	public $levelKey = NULL;
+	public $pathKey = 'path';
+	public $levelKey = 'level';
 
 	public $casts = [
 		'extra' => 'array',
