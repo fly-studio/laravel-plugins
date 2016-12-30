@@ -400,8 +400,8 @@ class AttachmentController extends Controller {
 			/* 抓取远程文件 */
 			case 'catchimage':
 				$url = isset($_POST['Filedata']) ? $_POST['Filedata'] : $_GET['Filedata'];
-				$url = to_array($url);$list = array();
-				foreach ($url as $value) {
+				$urls = to_array($url);$list = array();
+				foreach ($urls as $value) {
 					$attachment = $this->model->download($this->user->getKey(), $value);
 					$list[] = !($attachment instanceof Attachment) ? array('state' => $this->read_message($attachment), 'source' => $value) : array (
 						'state' => 'SUCCESS',
@@ -423,13 +423,13 @@ class AttachmentController extends Controller {
 			case 'listfile':
 				$list = $this->model->whereIn('ext', $_config['file_type']['image'])->orderBy('created_at', 'DESC')->paginate($size, ['*'], 'page', $page);
 				
-				$url = [];
+				$urls = [];
 				foreach($list as $v)
-					$url[] = [ 'url' => $v->url() ];
+					$urls[] = [ 'url' => $v->url() ];
 
 				$data = array(
 					'state' => 'SUCCESS',
-					'list' => $url,
+					'list' => $urls,
 					'start' => $list->firstItem(),
 					'total' => $list->total(),
 				);

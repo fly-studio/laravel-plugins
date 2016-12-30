@@ -7,6 +7,10 @@ use \Curl\Curl;
 use Addons\Core\SSH;
 use Plugins\Attachment\App\AttachmentFile;
 use Plugins\Attachment\App\AttachmentChunk;
+use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\MessageFormatter;
 use DB, Cache;
 class Attachment extends Model{
 	
@@ -96,53 +100,64 @@ class Attachment extends Model{
 
 	public function upload($uid, $field_name, $chunks = [], $extra = [])
 	{
-		if (!isset($_FILES[$field_name]) || !is_uploaded_file($_FILES[$field_name]["tmp_name"]) || $_FILES[$field_name]["error"] != 0) {
-			return $_FILES[$field_name]['error'];
+		$request = app('request');
+		$file = $request->file($field_name);
+		if (!$request->hasFile($field_name) || !$file->isValid()) {
+			return $file->getError();
 		}
 
 		//ignore_user_abort(TRUE);
 		set_time_limit(0);
 
-		//$ext = strtolower(pathinfo($_FILES[$field_name]['name'],PATHINFO_EXTENSION));
 		if (empty($chunks)  || $chunks['count'] == 1) //只有一个分块
-			return $this->savefile($uid, $_FILES[$field_name]["tmp_name"], $_FILES[$field_name]['name'], NULL, NULL, $extra);
+			return $this->savefile($uid, $file, NULL, NULL, $extra);
 		else
-			return $this->savechunk($uid, $_FILES[$field_name]["tmp_name"], $_FILES[$field_name]['name'], $chunks, NULL, NULL, $extra);
+			return $this->savechunk($uid, $file, $chunks, NULL, NULL, $extra);
 	}
 
-	public function download($uid, $url, $filename = NULL, $ext = NULL)
+	public function download($uid, $url, $newFileName = NULL, $newExt = NULL)
 	{
 		if (empty($url))
 			return static::DOWNLOAD_ERR_URL;
 
-		ignore_user_abort(TRUE);
+		ignore_user_abort(true);
 		set_time_limit(0);
 
+		$stack = HandlerStack::create();
+		$stack->push(
+			Middleware::log(
+				app('log'),
+				new MessageFormatter('GuzzleHttp {uri}'.PHP_EOL.PHP_EOL.'{request}'.PHP_EOL.PHP_EOL.'{response}'.PHP_EOL.PHP_EOL.'{error}')
+			)
+		);
 		$file_path = tempnam(storage_path('utils'),'download-');
 
-		$curl = new Curl();
-		$curl->setOpt(CURLOPT_BINARYTRANSFER, TRUE);
-		$curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
-		$curl->setOpt(CURLOPT_SSL_VERIFYHOST, false);
-		//$curl->setOpt(CURLOPT_NOSIGNAL, 1); //cURL毫秒就报错的BUG http://www.laruence.com/2014/01/21/2939.html
-		$curl->download($url, $file_path);
-
-		if ($curl->error)
+		try {
+			 $client = new \GuzzleHttp\Client([
+				'handler' => $stack,
+				'verify' => false,
+				'sink' => $file_path,
+			]);
+			$res = $client->get($url);
+		} catch (Exception $e) {
+			return static::DOWNLOAD_ERR_FILE;
+		}
+		if ($res->getStatusCode() != 200)
 			return static::DOWNLOAD_ERR_FILE;
 
-		$download_filename = $curl->responseHeaders['Content-Disposition'];
+		$download_filename = $res->getHeader('Content-Disposition');
 
 		$basename = mb_basename($url);//pathinfo($url,PATHINFO_BASENAME);
 		if (!empty($download_filename))
 		{
-			preg_match('/filename\s*=\s*(\S*)/i',  $download_filename, $tmp);
-			!empty($tmp) && $basename = mb_basename(trim($tmp[1],'\'"'));//pathinfo($download_filename,PATHINFO_BASENAME);
+			if (preg_match('/filename\s*=\s*(\S*)/i',  $download_filename, $matches))
+				$basename = mb_basename(trim($matches[1],'\'"'));
 		}
 
-		return $this->savefile($uid, $file_path, $basename, $filename, $ext, ['description' => 'Download from:' . $url]);
+		return $this->savefile($uid, new SymfonyUploadedFile($file_path, $basename), $newFileName, $newExt, ['description' => 'Download from:' . $url]);
 	}
 
-	public function hash($uid, $hash, $size, $original_basename, $file_name = NULL, $file_ext = NULL, $extra = NULL)
+	public function hash($uid, $hash, $size, $original_basename, $newFileName = NULL, $newFileExt = NULL, $extra = NULL)
 	{
 		if (empty($hash) || empty($size))
 			return FALSE;
@@ -150,13 +165,13 @@ class Attachment extends Model{
 		if (empty($file))
 			return FALSE;
 
-		is_null($file_ext) && $file_ext = strtolower(pathinfo($original_basename, PATHINFO_EXTENSION));
-		is_null($file_name) && $file_name = mb_basename($original_basename, '.'.$file_ext); //支持中文的basename
+		is_null($newFileExt) && $newFileExt = strtolower(pathinfo($original_basename, PATHINFO_EXTENSION));
+		is_null($newFileName) && $newFileName = mb_basename($original_basename, '.'.$newFileExt); //支持中文的basename
 		
 		$attachment = $this->create([
 			'afid' => $file->getKey(),
-			'filename' => $file_name,
-			'ext' => $file_ext,
+			'filename' => $newFileName,
+			'ext' => $newFileExt,
 			'original_basename' => $original_basename,
 			'description' => !empty($extra['description']) ? $extra['description'] : '',
 			'uid' => $uid,
@@ -164,17 +179,17 @@ class Attachment extends Model{
 		return $this->get($attachment->getKey());
 	}
 
-	private function _saveCheck($original_file_path, $original_basename, &$size = 0, &$file_name = NULL, &$file_ext = NULL)
+	private function _saveCheck(SymfonyUploadedFile $uploadedFile, &$size = 0, &$newFileName = NULL, &$newFileExt = NULL)
 	{
-		if (!file_exists($original_file_path))
+		if (!$uploadedFile->isFile())
 			return FALSE;
 
-		is_null($file_ext) && $file_ext = strtolower(pathinfo($original_basename, PATHINFO_EXTENSION));
-		is_null($file_name) && $file_name = mb_basename($original_basename, '.'.$file_ext); //支持中文的basename
+		is_null($newFileExt) && $newFileExt = strtolower($uploadedFile->getClientOriginalExtension());
+		is_null($newFileName) && $newFileName = mb_basename($uploadedFile->getClientOriginalName(), '.'.$newFileExt); //支持中文的basename
 
-		$size = filesize($original_file_path);
+		$size = $uploadedFile->getSize();
 
-		if(!in_array($file_ext, $this->_config['ext']))
+		if(!in_array($newFileExt, $this->_config['ext']))
 			return static::UPLOAD_ERR_EXT;
 		if ($size > $this->_config['maxsize'])
 			return static::UPLOAD_ERR_MAXSIZE;
@@ -185,16 +200,16 @@ class Attachment extends Model{
 	}
 
 
-	public function savechunk($uid, $original_file_path, $original_basename, $chunks, $file_name = NULL, $file_ext = NULL, $extra = [])
+	public function savechunk($uid, SymfonyUploadedFile $uploadedFile, $chunks, $newFileName = NULL, $newFileExt = NULL, $extra = [])
 	{
 		if (empty($chunks['uuid']) || empty($chunks['count'])) return FALSE;
 
 		$size = 0;
-		$r = $this->_saveCheck($original_file_path, $original_basename, $size, $file_name, $file_ext);
+		$r = $this->_saveCheck($uploadedFile, $size, $newFileName, $newFileExt);
 		if ($r !== TRUE) return $r;
 
 		//传文件都耗费了那么多时间,还怕md5?
-		$hash = md5_file($original_file_path);
+		$hash = md5_file($uploadedFile->getPathName());
 
 		DB::beginTransaction();
 		//此处如果使用先select再insert，容易出现uuid重复冲突，如果在select中启用for update，则会DeadLock
@@ -204,16 +219,16 @@ class Attachment extends Model{
 			'uuid' => $chunks['uuid'],
 			'chunk_count' => $chunks['count'],
 			'afid' => 0,
-			'filename' => $file_name,
-			'ext' => $file_ext,
-			'original_basename' => $original_basename,
+			'filename' => $newFileName,
+			'ext' => $newFileExt,
+			'original_basename' => $file->getClientOriginalName(),
 			'description' => !empty($extra['description']) ? $extra['description'] : '',
 			'uid' => $uid,
 		]);
 
 		$new_basename = $this->_get_hash_basename();
 		$new_hash_path = $this->get_hash_path($new_basename);
-		if (!$this->_save_file($original_file_path, $new_basename))
+		if (!$this->_save_file($uploadedFile->getPathName(), $new_basename))
 		{
 			DB::rollback();
 			return static::UPLOAD_ERR_SAVE;
@@ -293,14 +308,14 @@ class Attachment extends Model{
 		return TRUE;
 	}
 
-	public function savefile($uid, $original_file_path, $original_basename, $file_name = NULL, $file_ext = NULL, $extra = [])
+	public function savefile($uid, SymfonyUploadedFile $uploadedFile, $newFileName = NULL, $newFileExt = NULL, $extra = [])
 	{
 		$size = 0;
-		$r = $this->_saveCheck($original_file_path, $original_basename, $size, $file_name, $file_ext);
+		$r = $this->_saveCheck($uploadedFile, $size, $newFileName, $newFileExt);
 		if ($r !== TRUE) return $r;
 
 		//传文件都耗费了那么多时间,还怕md5?
-		$hash = md5_file($original_file_path);
+		$hash = md5_file($uploadedFile->getPathName());
 
 		$file = $this->fileModel->get_byhash($hash, $size);
 		if (empty($file))
@@ -308,7 +323,7 @@ class Attachment extends Model{
 			$new_basename = $this->_get_hash_basename();
 			$new_hash_path = $this->get_hash_path($new_basename);
 
-			if (!$this->_save_file($original_file_path, $new_basename))
+			if (!$this->_save_file($uploadedFile->getPathName(), $new_basename))
 				return static::UPLOAD_ERR_SAVE;
 
 			$file = AttachmentFile::create([
@@ -319,13 +334,13 @@ class Attachment extends Model{
 			]);
 		}
 		else //已经存在此文件
-			@unlink($original_file_path);
+			@unlink($uploadedFile->getPathName());
 
 		$attachment = $this->create([
 			'afid' => $file->getKey(),
-			'filename' => $file_name,
-			'ext' => $file_ext,
-			'original_basename' => $original_basename,
+			'filename' => $newFileName,
+			'ext' => $newFileExt,
+			'original_basename' => $uploadedFile->getClientOriginalName(),
 			'description' => !empty($extra['description']) ? $extra['description'] : '',
 			'uid' => $uid,
 		]);
