@@ -1,16 +1,16 @@
 <?php
 namespace Plugins\Catalog\App;
 
-use App\Catalog;
+use App\Catalog as AppCatalog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 trait CatalogCastTrait {
 	
 	public function asCatalog($value) {
-		$data = Catalog::getCatalogsById($value);
+		$data = AppCatalog::getCatalogsById($value);
 		unset($data['children']);
-		return (new Catalog())->setRawAttributes($data);
+		return (new AppCatalog())->setRawAttributes($data);
 	}
 
 	public function catalogToArray($value) {
@@ -18,9 +18,9 @@ trait CatalogCastTrait {
 	}
 
 	public function asCatalogName($value) {
-		$data = Catalog::getCatalogsByName($value);
+		$data = AppCatalog::getCatalogsByName($value);
 		unset($data['children']);
-		return (new Catalog())->setRawAttributes($data);
+		return (new AppCatalog())->setRawAttributes($data);
 	}
 
 	public function catalogNameToArray($value) {

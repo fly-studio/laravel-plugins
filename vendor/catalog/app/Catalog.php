@@ -40,4 +40,14 @@ class Catalog extends Tree {
 		return $builder->whereIn($this->getKeyName(), $catalogs);
 
 	}
+
+	public static function import(&$data, $parentNode)
+	{
+		foreach($data as $k => $v)
+		{
+			@list($name, $title, $extra) = explode('|', $k);
+			$node = $parentNode->children()->create(compact('name', 'title', 'extra'));
+			!empty($v) && static::import($v, $node);
+		}
+	}
 }
