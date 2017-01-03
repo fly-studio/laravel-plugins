@@ -22,7 +22,7 @@ class RoleController extends Controller
 	public function index(Request $request)
 	{
 		$role = new Role;
-		$roles = $role->newQuery()->with('perms')->where($role->getKeyName(), '!=', 0)->orderBy($role->getKeyName())->get();
+		$roles = $role->newQuery()->with('perms')->withCount(['users', 'children'])->where($role->getKeyName(), '!=', 0)->orderBy($role->getKeyName())->get();
 
 
 		//view's variant
