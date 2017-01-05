@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 class RoleController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'role';
+	public $permissions = ['role'];
 	/**
 	 * Display a listing of the resource.
 	 *

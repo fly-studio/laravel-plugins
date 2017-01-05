@@ -18,7 +18,7 @@ use Addons\Core\Controllers\ApiTrait;
 class MessageController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'wechat-message';
+	public $permissions = ['wechat-message'];
 	/**
 	 * Display a listing of the resource.
 	 *

@@ -16,7 +16,7 @@ use Plugins\Wechat\App\Tools\API;
 class MenuController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'wechat-menu';
+	public $permissions = ['wechat-menu'];
 	
 	/**
 	 * Display a listing of the resource.

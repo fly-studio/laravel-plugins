@@ -12,7 +12,7 @@ use Addons\Core\Controllers\ApiTrait;
 class AccountController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'wechat-account';
+	public $permissions = ['wechat-account'];
 	/**
 	 * Display a listing of the resource.
 	 *

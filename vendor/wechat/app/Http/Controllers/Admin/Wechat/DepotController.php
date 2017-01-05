@@ -14,7 +14,7 @@ use Addons\Core\Controllers\ApiTrait;
 class DepotController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'wechat-depot';
+	public $permissions = ['wechat-depot'];
 	/**
 	 * Display a listing of the resource.
 	 *

@@ -14,7 +14,7 @@ use Addons\Core\Controllers\ApiTrait;
 class ReplyController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'wechat-reply';
+	public $permissions = ['wechat-reply'];
 	/**
 	 * Display a listing of the resource.
 	 *
