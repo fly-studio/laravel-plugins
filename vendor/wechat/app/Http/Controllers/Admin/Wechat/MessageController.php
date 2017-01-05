@@ -55,7 +55,7 @@ class MessageController extends Controller
 		$size = $request->input('size') ?: config('size.export', 1000);
 
 		$data = $this->_getExport($request, $builder);
-		return $this->api($data);
+		return $this->export($data);
 	}
 
 	public function show($id)
