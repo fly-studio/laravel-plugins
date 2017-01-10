@@ -46,6 +46,7 @@ class Catalog extends Tree {
 		foreach($data as $k => $v)
 		{
 			@list($name, $title, $extra) = explode('|', $k);
+			!empty($extra) && $extra = json_decode($extra, true);
 			$node = $parentNode->children()->create(compact('name', 'title', 'extra'));
 			!empty($v) && static::import($v, $node);
 		}

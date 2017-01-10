@@ -6,7 +6,8 @@ use Plugins\Attachment\App\AttachmentFile;
 use Addons\Core\Controllers\Controller;
 use Illuminate\Http\Request;
 use Addons\Core\File\Mimes;
-use Lang,Crypt,Agent,Image,Session;
+use Addons\Core\Http\OutputResponse;
+use Lang, Crypt, Agent, Image, Session, Auth;
 class AttachmentController extends Controller {
 
 	public $permissions = ['uploaderQuery,avatarUploadQuery,fullavatarQuery,kindeditorUploadQuery,ueditorUploadQuery,dataurlUploadQuery,editormdUploadQuery,hashQuery' => 'attachment.create'];
@@ -28,7 +29,7 @@ class AttachmentController extends Controller {
 		$this->model = new Attachment();
 	}
 
-	public function download($id)
+	public function download(Request $request, $id)
 	{
 		$id = intval($id);
 
@@ -54,7 +55,7 @@ class AttachmentController extends Controller {
 
 	}
 
-	public function info($id)
+	public function info(Request $request, $id)
 	{
 		$id = intval($id);
 
@@ -70,7 +71,7 @@ class AttachmentController extends Controller {
 		return $this->api($attachment->toArray());
 	}
 
-	public function index($id, $width = NULL, $height = NULL, $m = NULL)
+	public function index(Request $request, $id, $width = NULL, $height = NULL, $m = NULL)
 	{
 		$id = intval($id);
 		if (empty($id))
@@ -86,26 +87,26 @@ class AttachmentController extends Controller {
 		if ($attachment->file_type() == 'image')
 		{
 			if (!empty($m))
-				return $this->watermark($id, $m, $width, $height);
+				return $this->watermark($request, $id, $m, $width, $height);
 			else if (!empty($width) || !empty($height))
-				return $this->resize($id, $width, $height);
+				return $this->resize($request, $id, $width, $height);
 			else
 			{
 	 			if ( Agent::isMobile() && !Agent::isTablet() )
-					return $this->phone($id);
+					return $this->phone($request, $id);
 				else
-					return $this->preview($id);
+					return $this->preview($request, $id);
 			}
 		}
 		else
 		{
-			return $this->download($id);
+			return $this->download($request, $id);
 		}
 	}
 
-	public function resize($id, $width = NULL, $height = NULL, $m = NULL)
+	public function resize(Request $request, $id, $width = NULL, $height = NULL, $m = NULL)
 	{
-		if (!empty($m)) return $this->watermark($id, $m, $width, $height);
+		if (!empty($m)) return $this->watermark($request, $id, $m, $width, $height);
 		
 		$id = intval($id);
 		if (empty($id))
@@ -148,7 +149,7 @@ class AttachmentController extends Controller {
 		return response()->preview($new_path, [], compact('mime_type', 'etag', 'last_modified', 'content_length', 'cache'));
 	}
 
-	public function phone($id)
+	public function phone(Request $request, $id)
 	{
 		$id = intval($id);
 		if (empty($id))
@@ -162,12 +163,12 @@ class AttachmentController extends Controller {
 			return $this->failure('attachment::attachment.failure_file_noexists')->setStatusCode(404);
 
 		if ($attachment->file_type() == 'image')
- 			return $this->resize($id, 640, 960);
+ 			return $this->resize($request, $id, 640, 960);
 		else
-			return $this->preview($id);
+			return $this->preview($request, $id);
 	}
 
-	public function preview($id)
+	public function preview(Request $request, $id)
 	{
 		$id = intval($id);
 		if (empty($id))
@@ -191,7 +192,7 @@ class AttachmentController extends Controller {
 		return response()->preview($full_path, [], compact('mime_type', 'etag', 'last_modified', 'content_length', 'cache'));
 	}
 
-	public function watermark($id, $m, $width = NULL, $height = NULL)
+	public function watermark(Request $request, $id, $m, $width = NULL, $height = NULL)
 	{
 		$id = intval($id);
 		if (empty($id) || empty($m))
@@ -239,7 +240,7 @@ class AttachmentController extends Controller {
 		return response()->preview($new_path, [], compact('mime_type', 'etag', 'last_modified', 'content_length', 'cache'));
 	}
 
-	public function redirect($id)
+	public function redirect(Request $request, $id)
 	{
 		$id = intval($id);
 		if (empty($id))
@@ -266,7 +267,7 @@ class AttachmentController extends Controller {
 		if (!isset($_FILES['Filedata']))
 			return $this->error_param();
 
-		$attachment = $this->model->upload($this->user->getKey(), 'Filedata', compact('uuid', 'count', 'index', 'start', 'end', 'total', 'hash'));
+		$attachment = $this->model->upload($request->user(), 'Filedata', compact('uuid', 'count', 'index', 'start', 'end', 'total', 'hash'));
 		if (!($attachment instanceof Attachment))
 			return $this->failure_attachment($attachment);
 		return $this->success('', FALSE, $attachment->toArray());
@@ -281,37 +282,37 @@ class AttachmentController extends Controller {
 
 		if (empty($hash) || empty($size) || empty($filename))
 			return $this->error_param()->setStatusCode(404);
-		$attachment = $this->model->hash($this->user->getKey(), $hash, $size, $filename);
+		$attachment = $this->model->hash($request->user(), $hash, $size, $filename);
 		if (!($attachment instanceof Attachment))
 			return $this->failure_attachment($attachment);
-		return $this->success('', FALSE, $attachment->toArray());
+		return $this->success(null, FALSE, $attachment->toArray());
 	}
 
-	public function editormdUploadQuery()
+	public function editormdUploadQuery(Request $request)
 	{
 		$data = array('success' => 1, 'message' => '');
-		$attachment = $this->model->upload($this->user->getKey(), 'editormd-image-file');
+		$attachment = $this->model->upload($request->user(), 'editormd-image-file');
 		if (!($attachment instanceof Attachment))
 		{
 			$data = array('success' => 0, 'message' => $this->read_message($attachment));
 		} else {
 			$data['url'] = $attachment->url();
 		}
-		return $this->output($data);
+		return (new OutputResponse)->setData($data, true);
 	}
 
-	public function kindeditorUploadQuery()
+	public function kindeditorUploadQuery(Request $request)
 	{
 		$data = array('error' => 0, 'url' => '');
 		
-		$attachment = $this->model->upload($this->user->getKey(), 'Filedata');
+		$attachment = $this->model->upload($request->user(), 'Filedata');
 		if (!($attachment instanceof Attachment))
 		{
 			$data = array('error' => 1, 'message' => $this->read_message($attachment));
 		} else
 			$data['url'] = $attachment->url();
 		
-		return $this->output($data);
+		return (new OutputResponse)->setData($data, true);
 	}
 
 	public function ueditorUploadQuery(Request $request, $start = 0, $size = NULL)
@@ -371,7 +372,7 @@ class AttachmentController extends Controller {
 			case 'uploadvideo':
 			/* 上传文件 */
 			case 'uploadfile':
-				$attachment = $this->model->upload($this->user->getKey(), 'Filedata');
+				$attachment = $this->model->upload($request->user(), 'Filedata');
 				$data = !($attachment instanceof Attachment) ? array('state' => $this->read_message($attachment)) : array(
 					'state' => 'SUCCESS',
 					'url' => $attachment->url(),
@@ -387,7 +388,7 @@ class AttachmentController extends Controller {
 				$fp = fopen($file_path,'wb+');
 				fwrite($fp, base64_decode($_POST['Filedata']));
 				fclose($fp);
-				$attachment = $this->model->savefile($this->user->getKey(), $file_path, 'scrawl_'.$this->user->getKey().'_'.date('Ymdhis').'.png');
+				$attachment = $this->model->savefile($request->user(), $file_path, 'scrawl_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.png');
 				$data = !($attachment instanceof Attachment) ? array('state' => $this->read_message($attachment)) : array(
 					'state' => 'SUCCESS',
 					'url' => $attachment->url(),
@@ -402,7 +403,7 @@ class AttachmentController extends Controller {
 				$url = isset($_POST['Filedata']) ? $_POST['Filedata'] : $_GET['Filedata'];
 				$urls = to_array($url);$list = array();
 				foreach ($urls as $value) {
-					$attachment = $this->model->download($this->user->getKey(), $value);
+					$attachment = $this->model->download($request->user(), $value);
 					$list[] = !($attachment instanceof Attachment) ? array('state' => $this->read_message($attachment), 'source' => $value) : array (
 						'state' => 'SUCCESS',
 						'url' => $attachment->url(),
@@ -437,10 +438,10 @@ class AttachmentController extends Controller {
 			default:
 				break;
 		}
-		return $this->output($data);
+		return (new OutputResponse)->setData($data, true);
 	}
 
-	public function avatarUploadQuery()
+	public function avatarUploadQuery(Request $request)
 	{
 
 		$input = file_get_contents('php://input');
@@ -451,7 +452,7 @@ class AttachmentController extends Controller {
 		fwrite($fp, $data[0]);
 		fclose($fp);
 
-		$attachment = $this->model->savefile($this->user->getKey(), $file_path, 'avatar_'.$this->user->getKey().'_'.date('Ymdhis').'.jpg');
+		$attachment = $this->model->savefile($request->user(), $file_path, 'avatar_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.jpg');
 		return $this->success('', $url, array('id' => $attachment->getKey(), 'url' => $attachment->url()));
 	}
 
@@ -461,7 +462,7 @@ class AttachmentController extends Controller {
 		$result = ['success' => true];
 		if (isset($_FILES['__source']))
 		{
-			$attachment = $this->model->upload($this->user->getKey(), '__source');
+			$attachment = $this->model->upload($request->user(), '__source');
 			if (!($attachment instanceof Attachment))
 				$result = ['success' => false, 'message' => $this->read_message($attachment)];
 			else
@@ -470,7 +471,7 @@ class AttachmentController extends Controller {
 		if ($result['success'])
 		foreach (['__avatar1', '__avatar2', '__avatar3'] as $v) {
 			if (isset($_FILES[$v]) && is_uploaded_file($_FILES[$v]["tmp_name"]) && !$_FILES[$v]["error"]){
-				$attachment = $this->model->savefile($this->user->getKey(), $_FILES[$v]["tmp_name"], $v.$this->user->getKey().'_'.date('Ymdhis').'.jpg');
+				$attachment = $this->model->savefile($request->user(), $_FILES[$v]["tmp_name"], $v.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.jpg');
 				if (!($attachment instanceof Attachment))
 					$result = ['success' => false, 'message' => $this->read_message($attachment)];
 				else
@@ -478,7 +479,7 @@ class AttachmentController extends Controller {
 			}
 		}
 
-		return response()->json($result);
+		return (new OutputResponse)->setData($result, true);
 	}
 
 	public function dataurlUploadQuery(Request $request)
@@ -494,7 +495,7 @@ class AttachmentController extends Controller {
 		fclose($fp);
 		unset($dataurl, $data, $part);
 
-		$attachment = $this->model->savefile($this->user->getKey(), $file_path, 'datauri_'.$this->user->getKey().'_'.date('Ymdhis').'.'.$ext);
+		$attachment = $this->model->savefile($request->user(), $file_path, 'datauri_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.'.$ext);
 		return $this->success('', $url, array('id' => $attachment->getKey(), 'url' => $attachment->url()));
 	}
 

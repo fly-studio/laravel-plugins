@@ -2,7 +2,7 @@
 namespace Plugins\Attachment\App;
 
 use App\Model;
-
+use Illuminate\Database\Eloquent\Model as BaseModel;
 use \Curl\Curl;
 use Addons\Core\SSH;
 use Plugins\Attachment\App\AttachmentFile;
@@ -174,7 +174,7 @@ class Attachment extends Model{
 			'ext' => $newFileExt,
 			'original_basename' => $original_basename,
 			'description' => !empty($extra['description']) ? $extra['description'] : '',
-			'uid' => $uid,
+			'uid' => $uid instanceof BaseModel ? $uid->getKey() : $uid,
 		]);
 		return $this->get($attachment->getKey());
 	}
@@ -223,7 +223,7 @@ class Attachment extends Model{
 			'ext' => $newFileExt,
 			'original_basename' => $file->getClientOriginalName(),
 			'description' => !empty($extra['description']) ? $extra['description'] : '',
-			'uid' => $uid,
+			'uid' => $uid instanceof BaseModel ? $uid->getKey() : $uid,
 		]);
 
 		$new_basename = $this->_get_hash_basename();
@@ -342,7 +342,7 @@ class Attachment extends Model{
 			'ext' => $newFileExt,
 			'original_basename' => $uploadedFile->getClientOriginalName(),
 			'description' => !empty($extra['description']) ? $extra['description'] : '',
-			'uid' => $uid,
+			'uid' => $uid instanceof BaseModel ? $uid->getKey() : $uid,
 		]);
 		//当前Model更新
 		//$this->setRawAttributes($attachment->getAttributes(), true);
