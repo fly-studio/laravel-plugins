@@ -12,7 +12,7 @@ use Addons\Core\Controllers\ApiTrait;
 class PermissionController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'role';
+	public $permissions = ['role'];
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -49,12 +49,13 @@ class PermissionController extends Controller
 		$size = $request->input('size') ?: config('size.export', 1000);
 
 		$data = $this->_getExport($request, $builder);
-		return $this->success('', FALSE, $data);
+		return $this->export($data);
 	}
 
 	public function show($id)
 	{
-		return '';
+		$perm = Permission::findOrFail($id);
+		return $this->api($perm);
 	}
 
 	public function create()

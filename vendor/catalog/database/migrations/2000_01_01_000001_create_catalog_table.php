@@ -18,8 +18,10 @@ class CreateCatalogTable extends Migration
 			$table->string('title', 150)->comment = '名称';
 			$table->string('description', 250)->nullable()->comment = '';
 			$table->text('extra')->nullable()->comment = '扩展数据';
-			$table->unsignedInteger('pid')->default(0)->comment = '父ID';
-			$table->unsignedInteger('order_index')->default(0)->index()->comment = '排序序号';
+			$table->unsignedInteger('pid')->index()->default(0)->comment = '父ID';
+			$table->unsignedInteger('level')->index()->default(0)->comment = 'tree level';
+			$table->text('path')->nullable()->comment = 'tree path';
+			$table->unsignedInteger('order_index')->default(0)->index()->comment = 'tree order';
 			$table->timestamps();
 			$table->softDeletes();
 

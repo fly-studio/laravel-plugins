@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 class RoleController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'role';
+	public $permissions = ['role'];
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -22,7 +22,7 @@ class RoleController extends Controller
 	public function index(Request $request)
 	{
 		$role = new Role;
-		$roles = $role->newQuery()->with('perms')->where($role->getKeyName(), '!=', 0)->orderBy($role->getKeyName())->get();
+		$roles = $role->newQuery()->with('perms')->withCount(['users', 'children'])->where($role->getKeyName(), '!=', 0)->orderBy($role->getKeyName())->get();
 
 
 		//view's variant

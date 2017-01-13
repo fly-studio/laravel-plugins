@@ -18,7 +18,7 @@ use Addons\Core\Controllers\ApiTrait;
 class MessageController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'wechat-message';
+	public $permissions = ['wechat-message'];
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -55,7 +55,7 @@ class MessageController extends Controller
 		$size = $request->input('size') ?: config('size.export', 1000);
 
 		$data = $this->_getExport($request, $builder);
-		return $this->api($data);
+		return $this->export($data);
 	}
 
 	public function show($id)

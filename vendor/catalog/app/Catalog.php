@@ -9,8 +9,8 @@ class Catalog extends Tree {
 
 	//不能批量赋值
 	public $orderKey = 'order_index';
-	public $pathKey = NULL;
-	public $levelKey = NULL;
+	public $pathKey = 'path';
+	public $levelKey = 'level';
 
 	public $casts = [
 		'extra' => 'array',
@@ -46,6 +46,7 @@ class Catalog extends Tree {
 		foreach($data as $k => $v)
 		{
 			@list($name, $title, $extra) = explode('|', $k);
+			!empty($extra) && $extra = json_decode($extra, true);
 			$node = $parentNode->children()->create(compact('name', 'title', 'extra'));
 			!empty($v) && static::import($v, $node);
 		}

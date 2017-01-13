@@ -68,8 +68,8 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 						</h3>
 						<p><i><{$item->description}></i></p>
 						<p><b>组ID：</b><{$item->getKey()}></p>
-						<p><b>用户：</b><a href="<{'admin/member'|url}>?f[role_id][in][]=<{$item->getKey()}>"><{$item->users()->count()}> 个</a></p>
-						<{if empty($item->pid) || $item->children()->count() > 0}>
+						<p><b>用户：</b><a href="<{'admin/member'|url}>?f[role_id][in][]=<{$item->getKey()}>"><{$item->users_count}> 个</a></p>
+						<{if empty($item->pid) || $item->children_count > 0}>
 						<div class="alert alert-danger">
 							<ul>
 								<li>不建议给此用户组设置权限，因为它「拥有子用户组」或是「根用户组」</li>

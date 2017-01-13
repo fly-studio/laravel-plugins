@@ -14,7 +14,7 @@ use Addons\Core\Controllers\ApiTrait;
 class ReplyController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'wechat-reply';
+	public $permissions = ['wechat-reply'];
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -50,7 +50,7 @@ class ReplyController extends Controller
 		$size = $request->input('size') ?: config('size.export', 1000);
 
 		$data = $this->_getExport($request, $builder)->where('waid', $account->getAccountID());
-		return $this->api($data);
+		return $this->export($data);
 	}
 
 	public function show($id)

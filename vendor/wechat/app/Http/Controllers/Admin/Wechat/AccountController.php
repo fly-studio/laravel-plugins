@@ -12,7 +12,7 @@ use Addons\Core\Controllers\ApiTrait;
 class AccountController extends Controller
 {
 	use ApiTrait;
-	public $RESTful_permission = 'wechat-account';
+	public $permissions = ['wechat-account'];
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -48,7 +48,7 @@ class AccountController extends Controller
 		$size = $request->input('size') ?: config('size.export', 1000);
 
 		$data = $this->_getExport($request, $builder);
-		return $this->api($data);
+		return $this->export($data);
 	}
 
 	public function show($id)

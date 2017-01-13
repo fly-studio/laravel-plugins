@@ -1,6 +1,5 @@
 <!-- Form Content -->
 <form action="<{'admin'|url}>/<{block "name"}><{/block}>/" method="GET" class="form-bordered form-horizontal">
-	<input type="hidden" name="base" value="<{$_base}>">
 	<div class="form-group col-sm-4">
 		<label class="col-md-3 control-label" for="unionid">唯一ID</label>
 		<div class="col-md-9">
