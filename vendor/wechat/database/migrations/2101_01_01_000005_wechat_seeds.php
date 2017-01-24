@@ -11,7 +11,7 @@ class WechatSeeds extends Migration
 	 */
 	public function up()
 	{
-		\DB::transaction(function() use ($fill) {
+		\DB::transaction(function() {
 			\Illuminate\Database\Eloquent\Model::unguard(true);
 
 			$fields = [
