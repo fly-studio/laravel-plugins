@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use Auth;
 use App\User;
 use Addons\Core\Controllers\ApiTrait;
 
@@ -16,16 +17,17 @@ class ProfileController extends Controller
 	public function index()
 	{
 		$keys = 'nickname,realname,gender,email,phone,idcard,avatar_aid';
-		$this->_data = $this->user;
+		$this->_data = Auth::user();
 		$this->_validates = $this->getScriptValidate('member.store', $keys);
 		return $this->view('system::admin.profile.profile');
 	}
 
 	public function update(Request $request, $id)
 	{
+		$user = Auth::user();
 		$keys = 'nickname,realname,gender,email,phone,idcard,avatar_aid';
-		$data = $this->autoValidate($request, 'member.store', $keys, $this->user);
-		$this->user->update($data);
+		$data = $this->autoValidate($request, 'member.store', $keys, $user);
+		$user->update($data);
 		return $this->success();
 	}
 
