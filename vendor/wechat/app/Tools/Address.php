@@ -4,7 +4,7 @@ namespace Plugins\Wechat\App\Tools;
 use Plugins\Wechat\App\Tools\API;
 use Cache,Session;
 use Plugins\Wechat\App\WechatUser;
-use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class Address {
 

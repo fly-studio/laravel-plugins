@@ -4,7 +4,7 @@ namespace Plugins\Wechat\App\Tools;
 use Plugins\Wechat\App\Tools\API;
 use Plugins\Wechat\App\Tools\User as  WechatUserTool;
 use Plugins\Wechat\App\WechatUser;
-use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Role as RoleModel;
 use Session;
 class OAuth2 {
