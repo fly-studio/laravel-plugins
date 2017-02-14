@@ -1,12 +1,16 @@
 <?php
 namespace Plugins\Catalog\App\Http\Controllers\Admin;
 
+use DB;
+use App\Catalog;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Addons\Core\Controllers\ApiTrait;
 
 class CatalogController extends Controller
 {
 	use ApiTrait;
-	public $permissions = ['catalog'];
+	//public $permissions = ['catalog'];
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -14,18 +18,12 @@ class CatalogController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$user = new User;
-		$size = $request->input('size') ?: config('size.models.'.$user->getTable(), config('size.common'));
-		//view's variant
-		$this->_size = $size;
-		$this->_filters = $this->_getFilters($request);
-		$this->_queries = $this->_getQueries($request);
-		return $this->view('admin.member.list');
+		return redirect('admin/catalog/0');
 	}
 
 	public function data(Request $request)
 	{
-		$user = new User;
+		$user = new Catalog;
 		$builder = $user->newQuery()->with(['roles']);
 
 		$total = $this->_getCount($request, $builder, FALSE);
@@ -35,108 +33,75 @@ class CatalogController extends Controller
 		return $this->api($data);
 	}
 
-	public function export(Request $request)
-	{
-		$user = new User;
-		$builder = $user->newQuery()->with(['roles']);
-		$size = $request->input('size') ?: config('size.export', 1000);
-
-		$data = $this->_getExport($request, $builder, function(&$v){
-			$v['gender'] = !empty($v['gender']) ? $v['gender']['title'] : NULL;
-		}, ['users.*']);
-		return $this->export($data);
-	}
-
 	public function show(Request $request, $id)
 	{
-		$user = User::with(['roles'])->find($id);
-		if (empty($user))
+		$root = Catalog::find($id);
+		if (empty($root))
 			return $this->failure_noexists();
+		if ($request->offsetExists('of'))
+			return $this->api($root->toArray());
 
-		$this->_data = $user;
-		return !$request->offsetExists('of') ? $this->view('admin.member.show') : $this->api($user->toArray());
+		$this->_topNodes = Catalog::find('0')->children->where('name', '>', '')->where('title', '>', '');
+		$this->_root = $root;
+		$this->_table_data = empty($id) ? null : $root->getDescendant()->prepend($root);
+		return $this->view('catalog::admin.catalog.list');
 	}
 
-	public function create()
+	public function orderQuery(Request $request)
 	{
-		$keys = ['username', 'password', 'nickname', 'realname', 'gender', 'email', 'phone', 'idcard', 'avatar_aid', 'role_ids'];
-		$this->_data = [];
-		$this->_validates = $this->getScriptValidate('member.store', $keys);
-		return $this->view('admin.member.create');
+		$keys = ['orders'];
+		$data = $this->autoValidate($request, 'catalog.store', $keys);
+
+		DB::transaction(function() use ($data) {
+			foreach($data['orders'] as $id => $order)
+				Catalog::where('id', $id)->update(['order_index' => intval($order)]);
+		});
+		return $this->success('', false);
 	}
 
 	public function store(Request $request)
 	{
-		$keys = ['username', 'password', 'nickname', 'realname', 'gender', 'email', 'phone', 'idcard', 'avatar_aid', 'role_ids'];
-		$data = $this->autoValidate($request, 'member.store', $keys);
-
-		$extraKeys = [];
-		$multipleKeys = [];
-		$extra = array_only($data, $extraKeys);
-		$multiples = array_only($data, $multipleKeys);
-
-		$role_ids = array_pull($data, 'role_ids');
-		$data = array_except($data, array_merge($extraKeys, $multipleKeys));
-		DB::transaction(function() use ($data, $extra, $multiples, $role_ids){
-			$user = (new User)->add($data);
-			$user->extra()->create($extra);
-			foreach((array)$multiples as $k => $v)
-			{
-				$catalog = Catalog::getCatalogsByName('fields.'.Str::singular($k));
-				$game->$k()->attach($v, ['parent_cid' => $catalog['id']]);
-			}
-			$user->roles()->sync($role_ids);
+		$keys = ['name', 'title', 'pid', 'extra'];
+		$data = $this->autoValidate($request, 'catalog.store', $keys);
+		DB::transaction(function() use ($data) {
+			Catalog::create($data);
 		});
-		return $this->success('', url('admin/member'));
-	}
-
-	public function edit($id)
-	{
-		$user = User::find($id);
-		if (empty($user))
-			return $this->failure_noexists();
-
-		$keys = ['username', 'nickname', 'realname', 'gender', 'email', 'phone', 'idcard', 'avatar_aid', 'role_ids'];
-		$this->_validates = $this->getScriptValidate('member.store', $keys);
-		$this->_data = $user;
-		return $this->view('admin.member.edit');
+		return $this->success();
 	}
 
 	public function update(Request $request, $id)
 	{
-		$user = User::find($id);
-		if (empty($user))
+		$catalog = Catalog::find($id);
+		if (empty($catalog))
 			return $this->failure_noexists();
 
-		//modify the password
-		if (!empty($request->input('password')))
-		{
-			$data = $this->autoValidate($request, 'member.store', 'password');
-			$data['password'] = bcrypt($data['password']);
-			$user->update($data);
-		}
-		$keys = ['nickname', 'realname', 'gender', 'email', 'phone', 'idcard', 'avatar_aid', 'role_ids'];
-		$data = $this->autoValidate($request, 'member.store', $keys, $user);
+		$keys = ['name', 'title', 'extra'];
+		$data = $this->autoValidate($request, 'catalog.store', $keys, $catalog);
 
-		$extraKeys = [];
-		$multipleKeys = [];
-		$extra = array_only($data, $extraKeys);
-		$multiples = array_only($data, $multipleKeys);
-
-		$role_ids = array_pull($data, 'role_ids');
-		$data = array_except($data, array_merge($extraKeys, $multipleKeys));
-		DB::transaction(function() use ($user, $extra, $multiples, $data, $role_ids){
-			$user->update($data);
-			$user->extra()->update($extra);
-			foreach((array)$multiples as $k => $v)
-			{
-				$catalog = Catalog::getCatalogsByName('fields.'.Str::singular($k));
-				$game->$k()->detach();
-				$game->$k()->attach($v, ['parent_cid' => $catalog['id']]);
-			}
-			$user->roles()->sync($role_ids);
+		DB::transaction(function() use ($data, $catalog) {
+			$catalog->update($data);
 		});
 		return $this->success();
+	}
+
+	public function move(Request $request)
+	{
+		$keys = 'original_id,target_id,move_type';
+		$data = $this->autoValidate($request, 'catalog.move', $keys);
+
+		$c0 = Catalog::find($data['target_id']);
+		if (empty($c0))
+			return $this->failure_noexists();
+
+		$c1 = Catalog::find($data['original_id']);
+		if (empty($c1))
+			return $this->failure_noexists();
+
+		DB::transaction(function() use ($c0, $c1, $data) {
+			$c1->move($c0->getKey(), $data['move_type']);
+		});
+
+		return $this->success('catalog::catalog.move_success', false, $data);
 	}
 
 	public function destroy(Request $request, $id)
@@ -145,7 +110,7 @@ class CatalogController extends Controller
 		$id = (array) $id;
 		
 		foreach ($id as $v)
-			$user = User::destroy($v);
-		return $this->success('', count($id) > 5, compact('id'));
+			$user = Catalog::destroy($v);
+		return $this->success();
 	}
 }

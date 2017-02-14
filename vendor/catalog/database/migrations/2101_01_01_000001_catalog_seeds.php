@@ -26,7 +26,7 @@ class CatalogSeeds extends Migration
 				'title' => '状态',
 			])->forceCreate([
 				'id' => 3,
-				'name' => 'news',
+				'name' => 'site',
 				'title' => '网站栏目',
 			])->forceCreate([
 				'id' => 4,
