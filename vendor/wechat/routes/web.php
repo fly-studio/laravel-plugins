@@ -1,6 +1,6 @@
 <?php
 
-$router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['auth', 'role:administrator']], function($router) {
+$router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['auth', 'role:super']], function($router) {
 	
 	$router->addAdminRoutes([
 		'wechat/account' => 'Wechat\\AccountController',

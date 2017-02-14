@@ -2,11 +2,11 @@
 return [
 	'enable' => true,
 	'register' => [
-		'view' => false,
+		'view' => true,
 		'migrate' => true, 
-		'translator' => false,
-		'router' => false,
-		'validation' => false,
+		'translator' => true,
+		'router' => true,
+		'validation' => true,
 		'config' => false,
 	],
 ];

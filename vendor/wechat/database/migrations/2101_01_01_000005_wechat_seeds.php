@@ -56,27 +56,14 @@ class WechatSeeds extends Migration
 			\App\Catalog::import($fields, \App\Catalog::findByName('fields'));
 
 			//添加权限
-			foreach([
+			\App\Permission::import([
 				'wechat-account' => '微信公众号',
 				'wechat-depot' => '微信素材',
 				'wechat-menu' => '微信菜单',
 				'wechat-message' => '微信消息',
 				'wechat-reply' => '微信自定义回复',
 				'wechat-user' => '微信用户',
-			] as $k => $v) {
-				foreach([
-					'view' => '查看',
-					'create' => '新建',
-					'edit' => '编辑',
-					'destroy' => '删除',
-					'export' => '导出'
-				] as $k1 => $v1) {
-					\App\Permission::create([
-						'name' => $k.'.'.$k1,
-						'display_name' => '允许'.$v1.$v,
-					]);
-				}
-			}
+			]);
 			\App\Role::findByName('super')->perms()->sync(\App\Permission::all());
 
 			\Illuminate\Database\Eloquent\Model::unguard(false);
