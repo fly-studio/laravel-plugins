@@ -39,7 +39,7 @@ class CatalogController extends Controller
 		if (empty($root))
 			return $this->failure_noexists();
 		if ($request->offsetExists('of'))
-			return $this->api($root->toArray());
+			return $this->api($root->load(['parent'])->toArray());
 
 		$this->_topNodes = Catalog::find('0')->children->where('name', '>', '')->where('title', '>', '');
 		$this->_root = $root;

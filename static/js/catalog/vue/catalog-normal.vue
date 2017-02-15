@@ -1,11 +1,11 @@
 <template>
-	<form :action="action" method="POST" class="hidden form-horizontal form-bordered" id="form">
+	<form :action="action" method="POST" class="form-horizontal form-bordered" id="form" v-show="typeof node.parent.id != 'undefined'"">
 	<input type="hidden" name="_token" v-model="csrf">
 		<input type="hidden" name="_method" :value="method">
 		<div class="form-group">
 			<label for="name" class="col-sm-2 control-label">名称</label>
 			<div class="col-sm-10">
-				<input type="text" id="name" name="name" v-model="node.name" class="form-control" placeholder="请输入名称">
+				<input type="text" id="name" name="name" v-model="node.name" class="form-control" placeholder="请输入名称" :disabled="typeof node.id != 'undefined'">
 				<span class="help-block">对内名称，同层级下唯一，只允许英文、下划线、数字，<b>设置后无法修改</b></span>
 			</div>
 		</div>
@@ -13,7 +13,7 @@
 			<label for="name" class="col-sm-2 control-label">父级</label>
 			<div class="col-sm-10">
 				<input type="hidden" id="pid" name="pid" v-model="node.parent.id">
-				<p class="form-control-static" id="p-title">{{parent.title}}</p>
+				<p class="form-control-static" id="p-title">{{node.parent.title}}</p>
 			</div>
 		</div>
 		<div class="form-group">
@@ -23,12 +23,14 @@
 				<span class="help-block">对外显示的标题，<b></b></span>
 			</div>
 		</div>
-		<component v-bind:is="catalog-extra">
+		<keep-alive>
+		<component v-bind:is="catalogExtra">
 			<!-- 组件在 vm.currentview 变化时改变！ -->
 		</component>
+		</keep-alive>
 		<div class="form-group">
 			<div class="col-sm-10 col-sm-offset-2 text-center">
-				<button type="submit" class="btn btn-success">保存</button>
+				<button type="submit" class="btn btn-success" :disabled="typeof node.parent.id == 'undefined'">保存</button>
 			</div>
 		</div>
 	</form>	
@@ -42,29 +44,30 @@
 				action: '',
 				method: '',
 				catalogExtra: '',
-				csrf,
 				node: {
+					parent: {
 
+					}
 				}
 			}
 		},
 		methods: {
 			get(id) {
-				$this.
-				return $.GET(this.urlPrefix + '/' + id + '?of=json');
+				return LP.get(this.urlPrefix + '/' + id + '?of=json');
 			},
 			create (pid) {
-				this.get(pid).then(response => {
+				this.get(pid).done(response => {
 					this.action = this.urlPrefix;
 					this.method = 'POST';
 					this.node = {
 						parent: response.data
 					};
+					console.log(this.method);
 				});
 			},
 			edit(id) {
-				this.get(pid).then(response => {
-					this.action =  + id;
+				this.get(id).done(response => {
+					this.action =  this.urlPrefix + '/' + id;
 					this.method = 'PUT';
 					this.node = response.data;
 				});

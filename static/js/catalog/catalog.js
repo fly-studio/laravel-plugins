@@ -1,12 +1,24 @@
+Vue.component(
+    'catalog-normal',
+    require('./vue/catalog-normal.vue')
+);
+
 (function($){
 	$().ready(function(){
+		var catalogForm = new Vue({
+			el: '#catalog-form',
+			methods: {
+				create(pid, tId) {
+					this.$refs['catalog-form-container'].create(pid, tId);
+				},
+				edit(id, tId) {
+					this.$refs['catalog-form-container'].edit(id, tId);
+				}
+			}
+		});
 
 		var $form = $('#form').query();
 		$('a[method]').query();
-
-		new Vue({
-			el: '#catalog-form'
-		});
 
 		var method = {}, variant = {curDragNodes : null},dom = {lastConnection: null};
 		var $zTree = null;
@@ -23,7 +35,7 @@
 			var btn = $("#addBtn_"+treeNode.tId);
 			btn.off('click').on("click", function(){
 				$zTree.selectNode(treeNode);
-				method.create(treeNode.id, treeNode.title, treeNode.tId);
+				catalogForm.create(treeNode.id, treeNode.tId);
 				return false;
 			});
 		};
@@ -62,11 +74,11 @@
 			var node = treeNodes[0];
 			if (node.parentTId != targetNode.parentTId) return false; //如果父级不一致
 
-			$.PUT($.baseuri + 'admin/catalog/move', {original_id: node.id , target_id: targetNode.id, move_type: moveType }, function(json){
+			LP.queryTip('PUT', LP.baseuri + 'admin/catalog/move', {original_id: node.id , target_id: targetNode.id, move_type: moveType }).done(function(json){
 				var src_node = $zTree.getNodeByParam("id", json.data.original_id, null);
 				var target_node = $zTree.getNodeByParam("id", json.data.target_id, null);
 				$zTree.moveNode(target_node,src_node,json.data.move_type);
-			}, true);
+			});
 			return false; //always false,manual it;
 		};
 		method.beforeRemove = function(treeId, treeNode) {
@@ -75,24 +87,24 @@
 			$.confirm(
 				'<p style="text-align:left;">你<b>确认删除</b>此项：<span style="color:red">[' + treeNode.title +']</span>，此操作是不可恢復的</p>',
 				function(){
-					$.DELETE($.baseuri + 'admin/catalog/' + treeNode.id, null, function(json){}, true);
+					$.LP.queryTip('DELETE', LP.baseuri + 'admin/catalog/' + treeNode.id);
 				}
 			);
 			return false;
 		};
 		method.showRemoveBtn = function(treeId, treeNode){
-			return !treeNode.isParent && treeNode.level != 0; //不是根,也不是父级
+			return !treeNode.isParent && (~~treeNode.level) !== 0; //不是根,也不是父级
 		};
 
 		method.onclick = function(event, treeId, treeNode) {
-			if (treeNode.id != 0)
+			if ((~~treeNode.id) !== 0)
 			{
 				var p = treeNode.getParentNode();
 				if (!p) return false;
-				method.edit(treeNode.id, p.id, p.title, treeNode.tId);
+				catalogForm.edit(treeNode.id, treeNode.tId);
 			}
-			else 
-				method.create(treeNode.id, treeNode.title, treeNode.tId);
+			else
+				catalogForm.create(treeNode.id, treeNode.tId);
 		};
 
 		var setting = {
@@ -141,4 +153,4 @@
 
 		
 	});
-})(jQuery);
+})(window.jQuery);

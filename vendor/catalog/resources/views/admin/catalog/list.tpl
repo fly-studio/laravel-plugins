@@ -21,8 +21,7 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 </script>
 <script src="<{'js/jquery.connections.js'|static nofilter}>"></script>
 <script src="<{'js/vue/vue.js'|static nofilter}>"></script>
-<script src="<{'js/vue/vue-resource.js'|static nofilter}>"></script>
-<script src="<{'js/catalog/catalog.js'|plugins nofilter}>"></script>
+<script src="<{'js/catalog/catalog.min.js'|plugins nofilter}>"></script>
 <{/if}>
 <{/block}>
 
@@ -76,7 +75,7 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 			</div>
 			<div class="col-md-8">
 				<div class="catalog-form" id="catalog-form">
-					<catalog-normal csrf="<{csrf_token()}>" url-prefix="<{'admin/catalog'|url}>"></catalog-normal>
+					<catalog-normal csrf="<{csrf_token()}>" url-prefix="<{'admin/catalog'|url}>" ref="catalog-form-container" ></catalog-normal>
 				</div>
 			</div>
 			<div class="clearfix"></div>

@@ -1,16 +1,20 @@
 {
-  "name": "l++",
-  "version": "5.3.0",
-  "main": "index.js",
+  "name": "laravel-plus-plugins",
+  "version": "5.4.0",
+  "private": true,
   "scripts": {
-    "prod": "gulp --production",
-    "dev": "gulp watch"
+    "dev": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "repository": {
     "type": "git",
     "url": "https://git.load-page.com/r/lpp.git"
   },
   "devDependencies": {
+    "axios": "^0.15.2",
+    "bootstrap-sass": "^3.3.7",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
@@ -23,10 +27,12 @@
     "gulp-sourcemaps": "^2.2.0",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
-    "path": "^0.12.7",
     "jshint": "^2.9.4",
+    "jshint-stylish": "^2.2.1",
+    "laravel-mix": "^0.6.0",
+    "lodash": "^4.16.2",
     "map-stream": "^0.0.6",
-    "path": "^0.12.7"
-
+    "path": "^0.12.7",
+    "vue": "^2.0.1"
   }
 }
