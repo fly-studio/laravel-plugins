@@ -20,7 +20,8 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 //TreeData.push({id: 0, pid: -1, title: '总分类'} );
 </script>
 <script src="<{'js/jquery.connections.js'|static nofilter}>"></script>
-<script src="<{'js/catalog/form-check.js'|plugins nofilter}>"></script>
+<script src="<{'js/vue/vue.js'|static nofilter}>"></script>
+<script src="<{'js/vue/vue-resource.js'|static nofilter}>"></script>
 <script src="<{'js/catalog/catalog.js'|plugins nofilter}>"></script>
 <{/if}>
 <{/block}>
@@ -68,62 +69,24 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 	<{else}>
 		<div class="row catalog-container">
 			<div class="col-md-4">
-				<form action="<{'admin/catalog/order'|url}>" method="POST" id="order-form">
-				<{csrf_field() nofilter}>
 				<div class="page-header">
 					<span class="text-right">可拖动排序</span>
 				</div>
 				<ul id="tree" class="ztree"></ul>
-
-				</form>
 			</div>
 			<div class="col-md-8">
-				<div class="catalog-form">
-					<form action="" method="POST" class="hidden form-horizontal form-bordered" id="form">
-						<{csrf_field() nofilter}>
-						<input type="hidden" name="_method" value="POST">
-						<input type="hidden" name="field_class" value="<{$_filters.catalog}>">
-						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">名称</label>
-							<div class="col-sm-10">
-								<input type="text" id="name" name="name" class="form-control" placeholder="请输入名称">
-								<span class="help-block">唯一值。允许英文、下划线、数字，<b>请参考已设置项</b></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">父级</label>
-							<div class="col-sm-10">
-								<input type="hidden" id="pid" name="pid">
-								<p class="form-control-static" id="p-title"></p>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="title" class="col-sm-2 control-label">标题</label>
-							<div class="col-sm-10">
-								<input type="text" id="title" name="title" class="form-control" placeholder="请输入标题">
-								<span class="help-block">汉字名称，<b>请参考已设置项</b></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-10 col-sm-offset-2 text-center">
-								<button type="submit" class="btn btn-success">保存</button>
-							</div>
-						</div>
-					</form>
+				<div class="catalog-form" id="catalog-form">
+					<catalog-normal csrf="<{csrf_token()}>" url-prefix="<{'admin/catalog'|url}>"></catalog-normal>
 				</div>
 			</div>
 			<div class="clearfix"></div>
 			<div class="col-xs-12" style="border-top:1px #ccc solid;">
 				<h3 class="bold">操作事项：</h3>
 				<ol class="help">
-					<li><b>操作：</b>鼠标移动到项目上，会出现2个图标，分别是
-						<ol class="help">
-							<li><span class="button add"></span> <code>新增节点</code>，给当前节点添加一个子项</li>
-							<li><span class="button edit"></span> <code>点击节点</code>，修改当前节点</li>
-							<li><span class="button remove"></span> <code>删除节点</code>，删除当前节点</li>
-						</ol>
-					</li>
-					<li><b>排序：</b>选中一项后，拖拽就可以进行排序（限制在同父级、同级别内），排序直接影响到前台显示</li>
+					<li><b>新增：</b><span class="button add"></span> 给当前节点添加一个子项</li>
+					<li><b>排序：</b>选中一项后，拖拽就可以进行排序（限制在同父级、同级别内），排序完成自动保存</li>
+					<li><b>编辑：</b>点击任意节点编辑</li>
+					<li><b>删除：</b><span class="button remove"></span> 删除当前节点，但是当其子节点不为空，不允许删除</li>
 				</ol>
 			</div>
 		</div>

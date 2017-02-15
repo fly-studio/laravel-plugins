@@ -4,55 +4,14 @@
 		var $form = $('#form').query();
 		$('a[method]').query();
 
-		var method = {fields: ['extra[aid]', 'extra[color]', 'name', 'title']}, variant = {curDragNodes : null},dom = {lastConnection: null};
+		new Vue({
+			el: '#catalog-form'
+		});
+
+		var method = {}, variant = {curDragNodes : null},dom = {lastConnection: null};
 		var $zTree = null;
 		$('[name="catalog/"]').addClass('active').parents('li').addClass('active');
 
-		method.create = function(pid, title, tid){
-			//init empty
-			form_check.init(method.fields, $form);$form.removeClass('hide hidden').show();
-			//modify form action
-			$('[name="pid"]', $form).val(pid);
-			$('#p-title').text(title);
-			$('[name="_method"]', $form).val('POST');
-			$form.attr('action', $.baseuri + 'admin/catalog');
-			$('li', '.catalog-list').removeClass('active');
-			$(':submit', $form).text('新建一条');
-			if(dom.lastConnection) dom.lastConnection.connections('remove');
-			dom.lastConnection = $('#'+tid+'_span').add('#p-title').connections({'class': 'zTree-create'});
-			$('.zTree-create').html('<span>新建子项</span>');
-			method.uploader();
-		}
-
-		method.edit = function(id, pid, title, tid) {
-			//init empty
-			form_check.init(method.fields, $form);$form.removeClass('hide hidden').show();
-			//modify form action
-			$('[name="_method"]', $form).val('PUT');
-			$form.attr('action', $.baseuri + 'admin/catalog/' + id);
-			$('li', '.catalog-list').removeClass('active').filter('#li-' + id).addClass('active');
-			$(':submit', $form).text('保存');
-			$('[name="pid"]', $form).val(pid);
-			$('#p-title').text(title);
-			$.GET($.baseuri + 'admin/catalog/'+id+'?of=json', null, function(json){
-				if (json.result == 'api') {
-					form_check.fill(method.fields, $form, json.data);
-
-					if(dom.lastConnection) dom.lastConnection.connections('remove');
-					dom.lastConnection = $('#'+tid+'_span').add('#name').connections({'class': 'zTree-edit'});
-					$('.zTree-edit').html('<span>修改</span>');
-
-					method.uploader();
-				} else 
-					$.showtips(json);
-			});
-		}
-
-		method.uploader = function()
-		{
-			if ($('#extra-aid').closest('.form-group').is(':visible'))
-				$('#extra-aid').uploader();
-		}
 
 		method.addHoverDom = function(treeId, treeNode) {
 			var sObj = $("#" + treeNode.tId + "_span");
@@ -81,7 +40,7 @@
 				}
 			}
 			return true;
-		}
+		};
 		method.dropNext = method.dropPrev;
 		
 		method.beforeDrag = function(treeId, treeNodes) {
@@ -97,7 +56,7 @@
 			}
 			variant.curDragNodes = treeNodes;
 			return true;
-		}
+		};
 		method.beforeDrop = function(treeId, treeNodes, targetNode, moveType) {
 			if (!treeNodes.length || !targetNode) return false;
 			var node = treeNodes[0];
@@ -109,7 +68,7 @@
 				$zTree.moveNode(target_node,src_node,json.data.move_type);
 			}, true);
 			return false; //always false,manual it;
-		}
+		};
 		method.beforeRemove = function(treeId, treeNode) {
 			$zTree.selectNode(treeNode);
 			
@@ -120,10 +79,10 @@
 				}
 			);
 			return false;
-		}
+		};
 		method.showRemoveBtn = function(treeId, treeNode){
 			return !treeNode.isParent && treeNode.level != 0; //不是根,也不是父级
-		}
+		};
 
 		method.onclick = function(event, treeId, treeNode) {
 			if (treeNode.id != 0)
@@ -134,7 +93,7 @@
 			}
 			else 
 				method.create(treeNode.id, treeNode.title, treeNode.tId);
-		}
+		};
 
 		var setting = {
 			view: {
