@@ -23,12 +23,12 @@
 <{block "body-scripts"}>
 <script>
 (function($){
-	//editormd.urls.atLinkBase = $.baseuri + 'member/';
+	//editormd.urls.atLinkBase = LP.baseuri + 'member/';
 	editormd('editormd', {
 		width   : '100%',
 		height  : 640,
 		syncScrolling : 'single',
-		path    : $.baseuri + 'static/js/editor.md/lib/',
+		path    : LP.baseuri + 'static/js/editor.md/lib/',
 		//theme : "dark",
 		//previewTheme : "dark",
 		//editorTheme : "pastel-on-dark",
@@ -56,7 +56,7 @@
 		//dialogMaskBgColor : "#000", // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
 		imageUpload : true,
 		imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-		imageUploadURL : $.baseuri+"attachment/editormd_upload_query?of=json&_token=" + $.csrf,
+		imageUploadURL : LP.baseuri+"attachment/editormd_upload_query?of=json&_token=" + $.csrf,
 		onload : function() {
 			//console.log('onload', this);
 			//this.fullscreen();

@@ -33,7 +33,7 @@
 		}
 		
 		jQuery.ajax({
-			url : $.baseuri + files[index],
+			url : LP.baseuri + files[index],
 			cache : true,
 			async: true,
 			dataType: 'text',

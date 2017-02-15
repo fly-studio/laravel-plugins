@@ -124,7 +124,7 @@ ins {
 <script>
 (function($){
 // You can custom @link base url.
-//editormd.urls.atLinkBase = $.baseuri + 'member/';
+//editormd.urls.atLinkBase = LP.baseuri + 'member/';
 editormd.markdownToHTML("editormd-view", {
 	markdown        : "\r\n" + $("#markdown").text(),
 	htmlDecode      : "style,script,iframe",  // you can filter tags decode
