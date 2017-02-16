@@ -3,6 +3,11 @@ Vue.component(
     require('./vue/catalog-normal.vue')
 );
 
+Vue.component(
+    'catalog-extra-site',
+    require('./vue/catalog-extra-site.vue')
+);
+
 (function($){
 	$().ready(function(){
 		var catalogForm = new Vue({
@@ -99,8 +104,6 @@ Vue.component(
 		method.onclick = function(event, treeId, treeNode) {
 			if ((~~treeNode.id) !== 0)
 			{
-				var p = treeNode.getParentNode();
-				if (!p) return false;
 				catalogForm.edit(treeNode.id, treeNode.tId);
 			}
 			else

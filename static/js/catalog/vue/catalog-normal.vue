@@ -1,5 +1,5 @@
 <template>
-	<form :action="action" method="POST" class="form-horizontal form-bordered" id="form" v-show="typeof node.parent.id != 'undefined'"">
+	<form :action="action" method="POST" class="form-horizontal form-bordered" id="form" v-show="typeof node.parent.id != 'undefined'">
 	<input type="hidden" name="_token" v-model="csrf">
 		<input type="hidden" name="_method" :value="method">
 		<div class="form-group">
@@ -24,8 +24,8 @@
 			</div>
 		</div>
 		<keep-alive>
-		<component v-bind:is="catalogExtra">
-			<!-- 组件在 vm.currentview 变化时改变！ -->
+		<component v-bind:is="catalogExtra" :node="node">
+			<!-- 组件在 catalogExtra 变化时改变！ -->
 		</component>
 		</keep-alive>
 		<div class="form-group">
@@ -47,22 +47,46 @@
 				node: {
 					parent: {
 
+					},
+					extra: {
+
 					}
 				}
 			}
 		},
 		methods: {
 			get(id) {
-				return LP.get(this.urlPrefix + '/' + id + '?of=json');
+				return LP.get(this.urlPrefix + '/' + id + '?of=json').done(json => {
+					if (typeof json.data != 'undefined' && !json.data.extra)
+						json.data.extra = {};
+					let parents = [json.data.name];
+					for(let v of json.data.parents)
+						parents.push(v.name);
+					parents.reverse();
+					this.extraTemplate(parents);
+				});
+			},
+			extraTemplate(parents) {
+				let components = ['catalog-extra'];
+				for (let v of parents)
+					components.push(components[components.length - 1] + '-' + v);
+				components.reverse();
+				for(let v of components)
+					if (typeof Vue.options.components[v] != 'undefined')
+					{
+						this.catalogExtra = v;
+						return;
+					}
+				this.catalogExtra = '';
 			},
 			create (pid) {
 				this.get(pid).done(response => {
 					this.action = this.urlPrefix;
 					this.method = 'POST';
 					this.node = {
-						parent: response.data
+						parent: response.data,
+						extra: {}
 					};
-					console.log(this.method);
 				});
 			},
 			edit(id) {

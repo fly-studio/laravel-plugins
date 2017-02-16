@@ -38,6 +38,7 @@ class CatalogController extends Controller
 		$root = Catalog::find($id);
 		if (empty($root))
 			return $this->failure_noexists();
+		$root->parents = $root->getParents();
 		if ($request->offsetExists('of'))
 			return $this->api($root->load(['parent'])->toArray());
 
@@ -75,7 +76,7 @@ class CatalogController extends Controller
 		if (empty($catalog))
 			return $this->failure_noexists();
 
-		$keys = ['name', 'title', 'extra'];
+		$keys = ['title', 'extra'];
 		$data = $this->autoValidate($request, 'catalog.store', $keys, $catalog);
 
 		DB::transaction(function() use ($data, $catalog) {
