@@ -36,7 +36,7 @@ $().ready(function(){
 		<h3>Windows 8+ 必须启用Administrator权限，方可mklink</h3>
 		1. <kbd>Win + X</kbd> - 命令提示符(管理员)(A)
 		<p>
-		<pre><code>&gt; cd /d <{APPPATH}>
+		<pre><code>&gt; cd /d <{base_path()}>
 &gt; mklink /D static\common ..\..\static
 &gt; mklink /D static\plugins ..\..\l++\static</code></pre>
 		</p>
