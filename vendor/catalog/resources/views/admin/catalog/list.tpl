@@ -5,23 +5,30 @@
 <{block "name"}>catalog<{/block}>
 
 <{block "head-scripts-plus"}>
-<{include file="common/uploader.inc.tpl"}>
+<{block "head-scripts-zTree"}>
 <script type="text/javascript" src="<{'js/zTree/jquery.ztree.core.min.js'|static}>"></script>
 <script type="text/javascript" src="<{'js/zTree/jquery.ztree.exedit.min.js'|static}>"></script>
 <link rel="stylesheet" href="<{'css/zTree/zTreeStyle/zTreeStyle.css'|static}>"/>
-
 <script type="text/javascript" src="<{'js/zTree/jquery.ztree.core.min.js'|static}>"></script>
 <script type="text/javascript" src="<{'js/zTree/jquery.ztree.exedit.min.js'|static}>"></script>
 <link rel="stylesheet" href="<{'css/zTree/zTreeStyle/zTreeStyle.css'|static}>"/>
-<link rel="stylesheet" href="<{'css/catalog/catalog.css'|plugins nofilter}>">
+<{/block}>
+<{block "head-scripts-vue"}>
+<script src="<{'js/vue/vue.min.js'|static nofilter}>"></script>
+<{/block}>
 <{if !empty($_table_data)}>
+<{block "head-scripts-inner-data"}>
 <script>
+var RootData = <{$_root->toArray()|json_encode nofilter}>;
 var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 //TreeData.push({id: 0, pid: -1, title: '总分类'} );
 </script>
-<script src="<{'js/jquery.connections.js'|static nofilter}>"></script>
-<script src="<{'js/vue/vue.js'|static nofilter}>"></script>
+<{/block}>
+<link rel="stylesheet" href="<{'css/catalog/catalog.css'|plugins nofilter}>">
+<{block "head-script-other-vues"}><{/block}>
+<{block "head-scripts-catalog"}>
 <script src="<{'js/catalog/catalog.min.js'|plugins nofilter}>"></script>
+<{/block}>
 <{/if}>
 <{/block}>
 
@@ -41,9 +48,9 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<{foreach $_topNodes as $node}>
-					<li class="<{if $_root->getKey() == $node->getKey()}>active<{/if}>"><a href="<{'admin/catalog'|url}>/<{$node->getKey()}>"><{$node->title}>(<{$node->name}>)</a></li>
+					<li class="<{if $_root->getKey() == $node->getKey()}>active<{/if}>"><a href="<{if !empty($_urlPrefix)}><{$_urlPrefix nofilter}><{else}><{'admin/catalog'|url}><{/if}>/<{$node->getKey()}>"><{$node->title}>(<{$node->name}>)</a></li>
 					<{/foreach}>
-					<li><a href="" class="btn btn-link"><i class="fa fa-plus"></i> 顶级分类</a></li>
+					<!-- <li><a href="" class="btn btn-link"><i class="fa fa-plus"></i> 顶级分类</a></li> -->
 				</ul>
 				<div class="block-options pull-right">
 					<a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary enable-tooltip" data-toggle="block-toggle-content" title="折叠/展示" data-original-title="折叠/展示"><i class="fa fa-arrows-v"></i></a>
@@ -61,7 +68,7 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 			<p>请选择：<b>顶级分类</b>后，再操作。</p>
 			<ul>
 				<{foreach $_topNodes as $node}>
-				<li><a href="<{'admin/catalog'|url}>/<{$node->getKey()}>"><{$node->title}>(<{$node->name}>)</a></li>
+				<li><a href="<{if !empty($_urlPrefix)}><{$_urlPrefix nofilter}><{else}><{'admin/catalog'|url}><{/if}>/<{$node->getKey()}>"><{$node->title}>(<{$node->name}>)</a></li>
 				<{/foreach}>
 			</ul>
 		</div>
@@ -75,7 +82,8 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 			</div>
 			<div class="col-md-8">
 				<div class="catalog-form" id="catalog-form">
-					<catalog-normal csrf="<{csrf_token()}>" url-prefix="<{'admin/catalog'|url}>" ref="catalog-form-container" ></catalog-normal>
+					<component v-bind:is="catalogContainer" csrf="<{csrf_token()}>" url-prefix="<{if !empty($_urlPrefix)}><{$_urlPrefix nofilter}><{else}><{'admin/catalog'|url}><{/if}>" ref="catalog-form-container">
+					</component>
 				</div>
 			</div>
 			<div class="clearfix"></div>

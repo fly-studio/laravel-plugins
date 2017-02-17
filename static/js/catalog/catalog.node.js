@@ -1,17 +1,26 @@
-Vue.component(
-    'catalog-normal',
-    require('./vue/catalog-normal.vue')
-);
+if (typeof Vue.options.components['catalog-normal'] == 'undefined')
+	Vue.component(
+		'catalog-normal',
+		require('./vue/catalog-normal.vue')
+	);
 
-Vue.component(
-    'catalog-extra-site',
-    require('./vue/catalog-extra-site.vue')
-);
+if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
+	Vue.component(
+		'catalog-extra-site',
+		require('./vue/catalog-extra-site.vue')
+	);
 
 (function($){
 	$().ready(function(){
-		var catalogForm = new Vue({
+		$('a[method]').query();
+
+		let catalogForm = new Vue({
 			el: '#catalog-form',
+			data() {
+				return {
+					catalogContainer : typeof RootData != 'undefined' && typeof RootData.name != 'undefined' && Vue.options.components['catalog-' + RootData.name] ? 'catalog-' + RootData.name : 'catalog-normal'
+				}
+			},
 			methods: {
 				create(pid, tId) {
 					this.$refs['catalog-form-container'].create(pid, tId);
@@ -19,15 +28,16 @@ Vue.component(
 				edit(id, tId) {
 					this.$refs['catalog-form-container'].edit(id, tId);
 				}
+			},
+			mounted() {
+				let $form = $('#form').query();
+				$('a[method]', $form).query();
 			}
 		});
 
-		var $form = $('#form').query();
-		$('a[method]').query();
-
-		var method = {}, variant = {curDragNodes : null},dom = {lastConnection: null};
-		var $zTree = null;
-		$('[name="catalog/"]').addClass('active').parents('li').addClass('active');
+		let method = {}, variant = {curDragNodes : null};
+		let $zTree = null;
+		$('[name="catalog/list"]').addClass('active').parents('li').addClass('active');
 
 
 		method.addHoverDom = function(treeId, treeNode) {

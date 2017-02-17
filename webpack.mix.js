@@ -1,5 +1,7 @@
 const { mix } = require('laravel-mix');
-mix.autoload({}).
+mix.autoload({});
+mix.config.publicDir = './';
+mix.config.publicPath = './';
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,5 +13,4 @@ mix.autoload({}).
  |
  */
 
-mix.js('static/js/catalog/catalog.js', 'static/js/catalog/catalog.min.js')
-;
+mix.js('static/js/catalog/catalog.node.js', 'static/js/catalog/catalog.min.js');

@@ -9,7 +9,7 @@ return [
 			],
 			'name' => [
 				'name' => '名称',
-				'rules' => 'required|regex:/^[a-z0-9_\.\-]*$/|min:1|unique:catalogs,{{attribute}},{{id}}',
+				'rules' => 'required|regex:/^[a-z][a-z0-9_\.\-]*$/|min:1',
 			],
 			'title' => [
 				'name' => '标题',

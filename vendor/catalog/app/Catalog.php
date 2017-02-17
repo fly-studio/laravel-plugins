@@ -11,7 +11,7 @@ class Catalog extends Tree {
 	public $orderKey = 'order_index';
 	public $pathKey = 'path';
 	public $levelKey = 'level';
-	protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'path', 'order_index', 'level'];
+	protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'path', 'order_index'/*, 'level'*/];
 	protected $casts = [
 		'extra' => 'array',
 	];

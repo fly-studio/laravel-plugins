@@ -10,7 +10,7 @@ use Addons\Core\Controllers\ApiTrait;
 class CatalogController extends Controller
 {
 	use ApiTrait;
-	//public $permissions = ['catalog'];
+	public $permissions = ['catalog'];
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -64,6 +64,10 @@ class CatalogController extends Controller
 	{
 		$keys = ['name', 'title', 'pid', 'extra'];
 		$data = $this->autoValidate($request, 'catalog.store', $keys);
+
+		if (Catalog::findByNamePid($data['name'], $data['pid']) !== false)
+			return $this->failure('catalog::catalog.name_exists', false, $data);
+
 		DB::transaction(function() use ($data) {
 			Catalog::create($data);
 		});

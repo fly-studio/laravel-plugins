@@ -6,7 +6,7 @@
 			<label for="name" class="col-sm-2 control-label">名称</label>
 			<div class="col-sm-10">
 				<input type="text" id="name" name="name" v-model="node.name" class="form-control" placeholder="请输入名称" :disabled="typeof node.id != 'undefined'">
-				<span class="help-block">对内名称，同层级下唯一，只允许英文、下划线、数字，<b>设置后无法修改</b></span>
+				<span class="help-block">对内名称，同层级下唯一，只允许英文、数字、[ - ]、[ _ ]、[ . ]，<b>设置后无法修改</b></span>
 			</div>
 		</div>
 		<div class="form-group">
@@ -53,6 +53,10 @@
 					}
 				}
 			}
+		},
+		mounted() {
+			let $form = jQuery('#form').query();
+			jQuery('a[method]', $form).query();
 		},
 		methods: {
 			get(id) {
