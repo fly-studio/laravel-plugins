@@ -25,10 +25,11 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 </script>
 <{/block}>
 <link rel="stylesheet" href="<{'css/catalog/catalog.css'|plugins nofilter}>">
-<{block "head-script-other-vues"}><{/block}>
-<{block "head-scripts-catalog"}>
+<{block "head-script-before-vue"}><{/block}>
+<{block "head-scripts-vue"}>
 <script src="<{'js/catalog/catalog.min.js'|plugins nofilter}>"></script>
 <{/block}>
+<{block "head-script-after-vue"}><{/block}>
 <{/if}>
 <{/block}>
 
