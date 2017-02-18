@@ -13,13 +13,14 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 (function($){
 	$().ready(function(){
 		$('a[method]').query();
-
+		let urlPrefix = $('#catalog-form').attr('url-prefix');
 		let catalogForm = new Vue({
 			el: '#catalog-form',
 			data() {
 				return {
-					catalogContainer : typeof RootData != 'undefined' && typeof RootData.name != 'undefined' && Vue.options.components['catalog-' + RootData.name] ? 'catalog-' + RootData.name : 'catalog-normal'
-				}
+					catalogContainer : typeof RootData != 'undefined' && typeof RootData.name != 'undefined' && Vue.options.components['catalog-' + RootData.name] ? 'catalog-' + RootData.name : 'catalog-normal',
+					urlPrefix: urlPrefix
+				};
 			},
 			methods: {
 				create(pid, tId) {
@@ -89,7 +90,7 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 			var node = treeNodes[0];
 			if (node.parentTId != targetNode.parentTId) return false; //如果父级不一致
 
-			LP.queryTip('PUT', LP.baseuri + 'admin/catalog/move', {original_id: node.id , target_id: targetNode.id, move_type: moveType }).done(function(json){
+			LP.queryTip('PUT', urlPrefix + '/move', {original_id: node.id , target_id: targetNode.id, move_type: moveType }).done(function(json){
 				var src_node = $zTree.getNodeByParam("id", json.data.original_id, null);
 				var target_node = $zTree.getNodeByParam("id", json.data.target_id, null);
 				$zTree.moveNode(target_node,src_node,json.data.move_type);
@@ -102,7 +103,7 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 			$.confirm(
 				'<p style="text-align:left;">你<b>确认删除</b>此项：<span style="color:red">[' + treeNode.title +']</span>，此操作是不可恢復的</p>',
 				function(){
-					$.LP.queryTip('DELETE', LP.baseuri + 'admin/catalog/' + treeNode.id);
+					$.LP.queryTip('DELETE', urlPrefix + '/' + treeNode.id);
 				}
 			);
 			return false;

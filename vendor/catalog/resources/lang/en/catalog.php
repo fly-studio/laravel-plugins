@@ -3,7 +3,7 @@
 return [
 	'move_success' => [
 		'title' => 'Move Success',
-		'content' => 'Nodes setted new order successful.',
+		'content' => 'Node moves to the new place.',
 	],
 	'catalog.name_exists' => [
 		'title' => 'Duplicate Name',

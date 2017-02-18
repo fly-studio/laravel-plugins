@@ -82,8 +82,8 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 				<ul id="tree" class="ztree"></ul>
 			</div>
 			<div class="col-md-8">
-				<div class="catalog-form" id="catalog-form">
-					<component v-bind:is="catalogContainer" csrf="<{csrf_token()}>" url-prefix="<{if !empty($_urlPrefix)}><{$_urlPrefix nofilter}><{else}><{'admin/catalog'|url}><{/if}>" ref="catalog-form-container">
+				<div class="catalog-form" id="catalog-form" url-prefix="<{if !empty($_urlPrefix)}><{$_urlPrefix nofilter}><{else}><{'admin/catalog'|url}><{/if}>">
+					<component :is="catalogContainer" csrf="<{csrf_token()}>" :url-prefix="urlPrefix" ref="catalog-form-container">
 					</component>
 				</div>
 			</div>
