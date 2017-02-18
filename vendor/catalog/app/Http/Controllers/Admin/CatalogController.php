@@ -4,6 +4,7 @@ namespace Plugins\Catalog\App\Http\Controllers\Admin;
 use DB;
 use App\Catalog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Addons\Core\Controllers\ApiTrait;
 
@@ -23,11 +24,18 @@ class CatalogController extends Controller
 
 	public function data(Request $request)
 	{
-		$user = new Catalog;
-		$builder = $user->newQuery()->with(['roles']);
+		$catalog = new Catalog;
+		$builder = $catalog->newQuery();
 
 		$total = $this->_getCount($request, $builder, FALSE);
-		$data = $this->_getData($request, $builder, null, ['users.*']);
+		$data = $this->_getData($request, $builder, function($page) use($request, $catalog) {
+			if ($request->input('tree') == 'true')
+			{
+				$items = $page->getCollection()->keyBy($catalog->getKeyName())->toArray();
+				unset($items[0]);
+				$page->setCollection(new Collection($catalog->_data_to_tree($items, 0, false)));
+			}
+		});
 		$data['recordsTotal'] = $total; //不带 f q 条件的总数
 		$data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
 		return $this->api($data);
@@ -112,10 +120,11 @@ class CatalogController extends Controller
 	public function destroy(Request $request, $id)
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
-		$id = (array) $id;
+		$ids = array_wrap($id);
 		
-		foreach ($id as $v)
-			$user = Catalog::destroy($v);
+		DB::transaction(function() use ($ids) {
+			Catalog::destroy($ids);
+		});
 		return $this->success();
 	}
 }

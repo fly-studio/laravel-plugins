@@ -2,14 +2,13 @@
 namespace Plugins\System\App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
+use Addons\Core\Controllers\ApiTrait;
 
 use App\Role;
 use App\Permission;
-use Addons\Core\Controllers\ApiTrait;
-use Illuminate\Support\Collection;
+
 class RoleController extends Controller
 {
 	use ApiTrait;

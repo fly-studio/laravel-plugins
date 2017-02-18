@@ -108,10 +108,11 @@ class UserController extends Controller
 	public function destroy(Request $request, $id)
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
-		$id = (array) $id;
+		$ids = array_wrap($id);
 		
-		foreach ($id as $v)
-			$user = WechatUser::destroy($v);
+		DB::transaction(function() use ($ids) {
+			WechatUser::destroy($ids);
+		});
 		return $this->success('', count($id) > 5, compact('id'));
 	}
 }

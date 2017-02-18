@@ -3,6 +3,11 @@
 	<input type="hidden" name="_token" v-model="csrf">
 		<input type="hidden" name="_method" :value="method">
 		<div class="form-group">
+			<div class="col-sm-10 col-sm-offset-2">
+				<h1>{{typeof node.id != 'undefined' ? '修改 ' + node.name : '新建子项'}}</h1>
+			</div>
+		</div>
+		<div class="form-group">
 			<label for="name" class="col-sm-2 control-label">名称</label>
 			<div class="col-sm-10">
 				<input type="text" id="name" name="name" v-model="node.name" class="form-control" placeholder="请输入名称" :disabled="typeof node.id != 'undefined'">
