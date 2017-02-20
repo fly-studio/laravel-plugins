@@ -221,7 +221,7 @@ class Attachment extends Model{
 			'afid' => 0,
 			'filename' => $newFileName,
 			'ext' => $newFileExt,
-			'original_basename' => $file->getClientOriginalName(),
+			'original_basename' => $uploadedFile->getClientOriginalName(),
 			'description' => !empty($extra['description']) ? $extra['description'] : '',
 			'uid' => $uid instanceof BaseModel ? $uid->getKey() : $uid,
 		]);
