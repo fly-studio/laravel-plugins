@@ -50,7 +50,7 @@ class ReplyController extends Controller
 		$size = $request->input('size') ?: config('size.export', 1000);
 
 		$data = $this->_getExport($request, $builder)->where('waid', $account->getAccountID());
-		return $this->export($data);
+		return $this->office($data);
 	}
 
 	public function show($id)
