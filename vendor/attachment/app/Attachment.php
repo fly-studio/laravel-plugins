@@ -4,7 +4,7 @@ namespace Plugins\Attachment\App;
 use App\Model;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use \Curl\Curl;
-use Addons\Core\SSH;
+use Addons\Core\Tools\SSH;
 use Plugins\Attachment\App\AttachmentFile;
 use Plugins\Attachment\App\AttachmentChunk;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
