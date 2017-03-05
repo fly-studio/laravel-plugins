@@ -71,7 +71,7 @@ class RoleController extends Controller
 		{
 			$role = Role::find($id);
 			if (empty($role))
-				return $this->failure_noexists();
+				return $this->failure_notexists();
 
 			$keys = 'display_name,description,url';
 			$data = $this->autoValidate($request, 'role.store', $keys);

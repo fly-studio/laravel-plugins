@@ -63,7 +63,7 @@ class DepotController extends Controller
 	{
 		$depot = WechatDepot::find($id);
 		if (empty($depot))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		if ($depot->type == 'news')
 			$this->storeNews($request, $depot, $depot->type, false);

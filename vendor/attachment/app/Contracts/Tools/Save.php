@@ -1,0 +1,83 @@
+<?php
+
+namespace Plugins\Attachment\App\Contracts\Tools;
+
+use Plugins\Attachment\App\Tools\File;
+use Plugins\Attachment\App\Tools\Utils\Path;
+use Plugins\Attachment\App\Tools\SaveManager;
+use Plugins\Attachment\App\Tools\SyncManager;
+use Plugins\Attachment\App\Exceptions\AttachmentException;
+
+use Plugins\Attachment\App\AttachmentFile;
+
+abstract class Save {
+
+	protected $manager;
+
+	public function __construct(SaveManager $manager)
+	{
+		$this->manager = $manager;
+	}
+
+	abstract function save();
+
+	protected function saveToLocal($fromPath, $hashPath)
+	{
+		if (config('attachment.local.enabled')) //本地存储打开
+			return $this->forceSaveToLocal($fromPath, $hashPath);
+
+		return true;
+	}
+
+	protected function forceSaveToLocal($fromPath, $hashPath)
+	{
+		$result = false;
+		$localPath = Path::realPath($hashPath);
+		$dir = dirname($localPath);
+		Path::mkLocalDir($dir);
+		if ($this->manager->deleteAfter())
+		{
+			if(is_uploaded_file($fromPath))
+				$result = @move_uploaded_file($fromPath, $localPath);
+			else
+				$result = @rename($fromPath, $localPath);
+		} else
+			$result = @copy($fromPath, $localPath);
+
+		if ($result)
+			Path::chLocalMod($localPath);
+		else
+			throw new AttachmentException('write_no_permission');
+		return true;
+	}
+
+	protected function saveToSync($fromPath, $hashPath)
+	{
+		return app(SyncManager::class)->send($fromPath, $hashPath);
+	}
+
+	public function saveToAttachmentFile(File $file)
+	{
+		$hash = $file->hash();
+		$size = $file->size();
+		$attachmentFile = AttachmentFile::findByHashSize($hash, $size);
+
+		if (empty($attachmentFile) && $file->isFile())
+		{
+			$hashName = Path::generateHashName();
+			$hashPath = Path::hashNameToPath($hashName);
+
+			$this->saveToLocal($file->getPathName(), $hashPath);
+			$this->saveToSync($file->getPathName(), $hashPath);
+
+			$attachmentFile = AttachmentFile::create([
+				'basename' => $hashName,
+				'path' => $hashPath,
+				'hash' => $hash,
+				'size' => $size,
+			]);
+		}
+		return $attachmentFile;
+	}
+
+}

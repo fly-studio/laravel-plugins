@@ -2,6 +2,7 @@
 namespace Plugins\Attachment\App;
 
 use App\Model;
+use Plugins\Attachment\App\Tools\Utils\Path;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AttachmentChunk extends Model{
@@ -13,24 +14,26 @@ class AttachmentChunk extends Model{
 	{
 		return $this->hasOne(get_namespace($this).'\\Attachment', 'id', 'aid');
 	}
-	
-	public function get_byhash($hash, $size)
+
+	/**
+	 * 得到附件的完整路径
+	 * 同下
+	 * 
+	 * @return string
+	 */
+	public function getFullPathAttribute()
 	{
-		return $this->where('hash', $hash)->where('size', $size)->first();
+		return Path::realPath($this->path);
 	}
 
-	public function get_bybasename($basename)
+	/**
+	 * 得到附件的完整路径
+	 * 同上
+	 * 
+	 * @return string
+	 */
+	public function getRealPathAttribute()
 	{
-		return $this->where('basename', $basename)->first();
-	}
-
-	public function get_byhash_path($hash_path)
-	{
-		return $this->where('path', $hash_path)->first();
-	}
-
-	public function get($id)
-	{
-		return $this->find($id)->toArray();
+		return Path::realPath($this->path);
 	}
 }

@@ -8,29 +8,44 @@ class AttachmentFile extends Model{
 	use SoftDeletes;
 
 	protected $guarded = ['id'];
+	protected $hidden = ['basename', 'path'];
 	
 	public function attachments()
 	{
 		return $this->hasMany(get_namespace($this).'\\Attachment', 'afid', 'id');
 	}
 
-	public function get_byhash($hash, $size)
+	/**
+	 * 得到附件的完整路径
+	 * 同下
+	 * 
+	 * @return string
+	 */
+	public function getFullPathAttribute()
 	{
-		return $this->where('hash',$hash)->where('size',$size)->first();
+		return Path::realPath($this->path);
 	}
 
-	public function get_bybasename($basename)
+	/**
+	 * 得到附件的完整路径
+	 * 同上
+	 * 
+	 * @return string
+	 */
+	public function getRealPathAttribute()
 	{
-		return $this->where('basename',$basename)->first();
+		return Path::realPath($this->path);
 	}
 
-	public function get_byhash_path($hash_path)
+	/**
+	 * 得到附件相对base_path()的相对路径
+	 * 
+	 * @return string
+	 */
+	public function getRelativePathAttribute()
 	{
-		return $this->where('path',$hash_path)->first();
+		return Path::relativePath($this->path);
 	}
 
-	public function get($id)
-	{
-		return $this->find($id)->toArray();
-	}
+
 }

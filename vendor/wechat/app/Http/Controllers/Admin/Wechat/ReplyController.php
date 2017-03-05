@@ -81,7 +81,7 @@ class ReplyController extends Controller
 	{
 		$reply = WechatReply::find($id);
 		if (empty($reply))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'keywords,match_type,wdid,reply_count';
 		$this->_validates = $this->getScriptValidate('wechat-reply.store', $keys);
@@ -93,7 +93,7 @@ class ReplyController extends Controller
 	{
 		$reply = WechatReply::find($id);
 		if (empty($reply))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'keywords,match_type,wdid,reply_count';
 		$data = $this->autoValidate($request, 'wechat-reply.store', $keys);

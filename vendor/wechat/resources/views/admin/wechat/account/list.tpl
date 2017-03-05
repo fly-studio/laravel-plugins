@@ -21,7 +21,7 @@
 <!-- DataTable的Block -->
 <{block "table-td-plus"}>
 <td data-from="qr_aid" data-orderable="false">
-	<img src="<{'attachment/resize'|url}>?id={{data}}&width=80&height=80" alt="avatar" class="img-responsive">
+	<img src="<{'attachment'|url}>/{{data}}/80x80" alt="avatar" class="img-responsive">
 </td>
 <td data-from="name">{{data}}</td>
 <td data-from="account">{{data}}</td>

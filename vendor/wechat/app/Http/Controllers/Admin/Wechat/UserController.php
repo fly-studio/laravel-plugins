@@ -58,7 +58,7 @@ class UserController extends Controller
 	{
 		$user = WechatUser::find($id);
 		if (empty($user))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$this->_data = $user;
 		return $this->view('wechat::admin.wechat.user.show');
@@ -85,7 +85,7 @@ class UserController extends Controller
 	{
 		$user = WechatUser::find($id);
 		if (empty($user))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'openid,nickname,gender,avatar_aid,country,province,city,language,unionid,remark,is_subscribed,subscribed_at,uid';
 		$this->_validates = $this->getScriptValidate('wechat-user.store', $keys);
@@ -97,7 +97,7 @@ class UserController extends Controller
 	{
 		$user = WechatUser::find($id);
 		if (empty($user))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'openid,nickname,gender,avatar_aid,country,province,city,language,unionid,remark,is_subscribed,subscribed_at,uid';
 		$data = $this->autoValidate($request, 'wechat-user.store', $keys);

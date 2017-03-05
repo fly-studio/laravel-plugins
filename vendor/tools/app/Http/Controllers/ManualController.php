@@ -27,7 +27,7 @@ class ManualController extends Controller
 	public function show(Request $request, $id)
 	{
 		$data = (new Manual)->getNode($id);
-		if (empty($data)) return $this->failure_noexists();
+		if (empty($data)) return $this->failure_notexists();
 
 		$this->_data = $data;
 		$this->_parents = $this->_data->getParents(['id','pid','title']);

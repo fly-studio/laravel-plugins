@@ -2,40 +2,43 @@
 
 return [
 	'remote' => [
-		'enabled' => FALSE,
-		'host' => 'SSH\'s ip', //ip only
-		//'host_fingerprint' => NULL,
-		'port' => 22,
-		'authentication_method' => 'PASS', //PASS KEY 
-		'user' => NULL, //set it if authentication_method == 'PASS'
-		'password' => NULL, //set it if authentication_method == 'PASS'
-		//'pub_key' => NULL, //set it if authentication_method == 'KEY'
-		//'private_key' => NULL, //set it if authentication_method == 'KEY'
-		//'passphrase' => NULL, //set it if authentication_method == 'KEY'
-		'auto_connect' => TRUE,
-		'path' => '/path/to/attachments/', //远程存放的路径
-		'file_own' => NULL, //文件所属用户，比如：nobody
-		'file_grp' => NULL, //文件所属组，比如：nobody
-		'file_mod' => 0644, //文件的权限
-		'folder_own' => NULL, //文件夹所属用户，比如：nobody
-		'folder_grp' => NULL, //文件夹所属组，比如：nobody
-		'folder_mod' => 0777, //文件夹的权限，一般情况下必须要777
+		'driver' => 'null', // string: null, SSH
+
+		'SSH' => [
+			'host' => 'SSH\'s ip', //ip only
+			//'host_fingerprint' => null,
+			'port' => 22,
+			'authentication_method' => 'PASS', //PASS KEY 
+			'user' => null, //set it if authentication_method == 'PASS'
+			'password' => null, //set it if authentication_method == 'PASS'
+			//'pub_key' => null, //set it if authentication_method == 'KEY'
+			//'private_key' => null, //set it if authentication_method == 'KEY'
+			//'passphrase' => null, //set it if authentication_method == 'KEY'
+			'auto_connect' => true,
+			'path' => '/path/to/attachments/', //远程存放的路径
+			'file_own' => null, //文件所属用户，比如：nobody
+			'file_grp' => null, //文件所属组，比如：nobody
+			'file_mod' => 0644, //文件的权限
+			'folder_own' => null, //文件夹所属用户，比如：nobody
+			'folder_grp' => null, //文件夹所属组，比如：nobody
+			'folder_mod' => 0777, //文件夹的权限，一般情况下必须要777
+		],
 	],
 	'local' => [
-		'enabled' => TRUE,
-		'life_time' => 0, //enabled为TRUE时无效，0表示永不过期，
+		'enabled' => true,
+		'life_time' => 0, //enabled为true时无效，0表示永不过期，
 		'path' => env('ATTACHMENT_PATH', 'attachments/'), //本地存放路径
-		'file_own' => NULL, //文件所属用户，比如：nobody
-		'file_grp' => NULL, //文件所属组，比如：nobody
+		'file_own' => null, //文件所属用户，比如：nobody
+		'file_grp' => null, //文件所属组，比如：nobody
 		'file_mod' => 0644,
-		'folder_own' => NULL, //文件夹所属用户，比如：nobody
-		'folder_grp' => NULL, //文件夹所属组，比如：nobody
+		'folder_own' => null, //文件夹所属用户，比如：nobody
+		'folder_grp' => null, //文件夹所属组，比如：nobody
 		'folder_mod' => 0777, //文件夹的权限，一般情况下必须要777
 	],
 	'ext' => ['mov','ogg','tp','ts','mkv','webm','webp','rmvb','rm','asf','mpeg','mpg','avi','midi','mid','wmv','wma','wav','mp4','mp3','amr','f4v','flv','swf','bz2','gz','pptx','ppt','xslx','xsl','csv','docx','doc','pdf','7z','rar','zip','gif','png','bmp','jpeg','jpg','svg'],
 	'maxsize' => 1024 * 1024 * 100,  //最大上传 100M
 	'write_cache' => 1024 * 512, //分块写入缓存 512K
-	'normal_ext' => 'gf',
+	'saved_ext' => '.gf',
 	'file_type' => [
 		'text' => [
 			'php','php5','phps',

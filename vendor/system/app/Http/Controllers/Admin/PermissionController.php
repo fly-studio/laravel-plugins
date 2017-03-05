@@ -94,7 +94,7 @@ class PermissionController extends Controller
 	{
 		$permission = Permission::find($id);
 		if (empty($permission))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 		$keys = 'display_name,description';
 		$this->_validates = $this->getScriptValidate('permission.store', $keys);
 		$this->_data = $permission;
@@ -105,7 +105,7 @@ class PermissionController extends Controller
 	{
 		$permission = Permission::find($id);
 		if (empty($permission))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'display_name,description';
 		$data = $this->autoValidate($request, 'permission.store', $keys, $permission);

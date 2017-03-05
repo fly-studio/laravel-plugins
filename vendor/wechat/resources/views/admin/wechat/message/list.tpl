@@ -41,7 +41,7 @@ $().ready(function(){
 			<!-- Status Updated -->
 			<li class="media">
 				<a href="<{'admin/wechat/user'|url}>/<{$item->user->getKey()}>" class="pull-left">
-					<img src="<{'attachment'|url}>?id=<{$item.user.avatar_aid}>&width=120&height=120" alt="Avatar" class="img-circle">
+					<img src="<{'attachment'|url}>/<{$item.user.avatar_aid}>/120x120" alt="Avatar" class="img-circle">
 				</a>
 				<div class="media-body">
 					<p class="push-bit">
@@ -56,9 +56,9 @@ $().ready(function(){
 					</p>
 					<p>
 						<{if $item->type == 'text'}> <{$item->text->content|escape|nl2br nofilter}>
-						<{else if $item->type == 'image'}> <a href="<{'attachment'|url}>?id=<{$item->media->aid}>" target="_blank"><img src="<{'attachment'|url}>?id=<{$item->media->aid}>" alt="" onload="resizeImg(this, 320, 200);"></a>
-						<{else if $item->type == 'voice'}> <audio src="<{'attachment'|url}>?id=<{$item->media->aid}>" controls="controls"></audio> <a href="<{'attachment/download'|url}>?id=<{$item->media->aid}>" target="_blank">下载</a>
-						<{else if $item->type == 'video' || $item->type == 'shortvideo'}> <video src="<{'attachment'|url}>?id=<{$item->media->aid}>" controls="controls" style="max-width:320px;max-height:240px;"></video> <a href="<{'attachment/download'|url}>?id=<{$item->media->aid}>" target="_blank">下载</a>
+						<{else if $item->type == 'image'}> <a href="<{'attachment'|url}>/<{$item->media->aid}>" target="_blank"><img src="<{'attachment'|url}>/<{$item->media->aid}>" alt="" onload="resizeImg(this, 320, 200);"></a>
+						<{else if $item->type == 'voice'}> <audio src="<{'attachment'|url}>/<{$item->media->aid}>" controls="controls"></audio> <a href="<{'attachment/download'|url}>/<{$item->media->aid}>" target="_blank">下载</a>
+						<{else if $item->type == 'video' || $item->type == 'shortvideo'}> <video src="<{'attachment'|url}>/<{$item->media->aid}>" controls="controls" style="max-width:320px;max-height:240px;"></video> <a href="<{'attachment/download'|url}>/<{$item->media->aid}>" target="_blank">下载</a>
 						<{else if $item->type == 'location'}> <{$item->location->x}>, <{$item->location->y}> <a href="">查看地图</a><br /><{$item->location->label}>
 						<{else if $item->type == 'link'}> <a href="<{$item->link->url}>" target="_blank"><{$item->link->title}></a> <br /><{$item->link->description}>
 						<{/if}>

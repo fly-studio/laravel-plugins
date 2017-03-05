@@ -77,7 +77,7 @@ class AccountController extends Controller
 	{
 		$account = WechatAccount::find($id);
 		if (empty($account))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'name,description,wechat_type,account,appid,appsecret,token,encodingaeskey,qr_aid,mchid,mchkey,sub_mch_id';
 		$this->_validates = $this->getScriptValidate('wechat-account.store', $keys);
@@ -89,7 +89,7 @@ class AccountController extends Controller
 	{
 		$account = WechatAccount::find($id);
 		if (empty($account))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'name,description,wechat_type,account,appid,appsecret,token,encodingaeskey,qr_aid,mchid,mchkey,sub_mch_id';
 		$data = $this->autoValidate($request, 'wechat-account.store', $keys, $account);

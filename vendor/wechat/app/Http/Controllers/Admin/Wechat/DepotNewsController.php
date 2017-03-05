@@ -78,7 +78,7 @@ class DepotNewsController extends Controller
 	{
 		$news = WechatDepotNews::find($id);
 		if (empty($news))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'title,author,description,content,cover_aid,cover_in_content,redirect,url';
 		$this->_validates = $this->getScriptValidate('wechat-news.store', $keys);
@@ -90,7 +90,7 @@ class DepotNewsController extends Controller
 	{
 		$news = WechatDepotNews::find($id);
 		if (empty($news))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'title,author,description,content,cover_aid,cover_in_content,redirect,url';
 		$data = $this->autoValidate($request, 'wechat-news.store', $keys);

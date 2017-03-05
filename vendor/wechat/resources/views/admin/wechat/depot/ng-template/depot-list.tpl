@@ -6,7 +6,7 @@
 				<a href="<{'wechat/news'|url}>?id={{item.id}}" target="_blank">{{item.title}}</a>
 			</h4>
 			<div class="cover">
-				<img ng-src="<{'attachment'|url}>?id={{item.cover_aid}}" alt="" class="img-responsive">
+				<img ng-src="<{'attachment'|url}>/{{item.cover_aid}}" alt="" class="img-responsive">
 			</div>
 			<p class="description">
 				{{item.description}}
@@ -35,10 +35,10 @@
 <div class="row depot-col depot-col-image" ng-if="depot.image">
 	<div class="items">
 		<div class="image">
-			<a href="<{'attachment'|url}>?id={{depot.image.aid}}" target="_blank"><img ng-src="<{'attachment'|url}>?id={{depot.image.aid}}" alt="" class="img-responsive"></a>
+			<a href="<{'attachment'|url}>/{{depot.image.aid}}" target="_blank"><img ng-src="<{'attachment'|url}>/{{depot.image.aid}}" alt="" class="img-responsive"></a>
 		</div>
 		<h4 class="title">
-			<a href="<{'attachment'|url}>?id={{depot.image.aid}}" target="_blank">{{depot.image.title}}</a>
+			<a href="<{'attachment'|url}>/{{depot.image.aid}}" target="_blank">{{depot.image.title}}</a>
 			<span class="size pull-right">{{depot.image.size|byte2size}}</span>
 		</h4>
 		<div class="clearfix"></div>
@@ -66,10 +66,10 @@
 <div class="row depot-col depot-col-video" ng-if="depot.video">
 	<div class="items">
 		<div class="video">
-			<video ng-src="{{'<{'attachment'|url}>?id='+depot.video.aid|trustUrl}}" controls="controls"></video>
+			<video ng-src="{{'<{'attachment'|url}>/'+depot.video.aid|trustUrl}}" controls="controls"></video>
 		</div>
 		<h4 class="title">
-			<a href="<{'attachment'|url}>?id={{depot.video.aid}}" target="_blank">{{depot.video.title}}</a>
+			<a href="<{'attachment'|url}>/{{depot.video.aid}}" target="_blank">{{depot.video.title}}</a>
 			<span class="size pull-right">{{depot.video.size|byte2size}}</span>
 		</h4>
 		<div depot-list-options="mode" depot-id="depot.id"></div>
@@ -81,10 +81,10 @@
 <div class="row depot-col depot-col-voice" ng-if="depot.voice">
 	<div class="items">
 		<div class="voice">
-			<audio ng-src="{{'<{'attachment'|url}>?id='+depot.voice.aid|trustUrl}}" controls="controls"></audio>
+			<audio ng-src="{{'<{'attachment'|url}>/'+depot.voice.aid|trustUrl}}" controls="controls"></audio>
 		</div>
 		<h4 class="title">
-			<a href="<{'attachment'|url}>?id={{depot.voice.aid}}" target="_blank">{{depot.voice.title}}</a>
+			<a href="<{'attachment'|url}>/{{depot.voice.aid}}" target="_blank">{{depot.voice.title}}</a>
 			<span class="size pull-right">{{depot.voice.size|byte2size}}</span>
 		</h4>
 		<div depot-list-options="mode" depot-id="depot.id"></div>
@@ -96,10 +96,10 @@
 <div class="row depot-col depot-col-music" ng-if="depot.music">
 	<div class="items">
 		<div class="music">
-			<audio ng-src="{{'<{'attachment'|url}>?id='+depot.music.aid|trustUrl}}" controls="controls"></audio>
+			<audio ng-src="{{'<{'attachment'|url}>/'+depot.music.aid|trustUrl}}" controls="controls"></audio>
 		</div>
 		<h4 class="title">
-			<a href="<{'attachment'|url}>?id={{depot.music.aid}}" target="_blank">{{depot.music.title}}</a>
+			<a href="<{'attachment'|url}>/{{depot.music.aid}}" target="_blank">{{depot.music.title}}</a>
 			<span class="size pull-right">{{depot.music.size|byte2size}}</span>
 		</h4>
 		<div depot-list-options=""></div>

@@ -29,10 +29,10 @@ class CreateAttachmentsTable extends Migration
 			$table->unsignedInteger('afid')->default(0)->comment = 'AttachmentFile ID';
 			$table->string('uuid', 50)->nullable()->unique()->comment = '上传的uuid';
 			$table->unsignedInteger('chunk_count')->default(1)->index()->comment = '块数';
+			$table->string('original_name', 255)->comment = '原始文件名';
+			$table->string('filename', 255)->comment = '新文件名(下载用)';
 			$table->string('ext', 50)->index()->comment = '文件扩展名';
-			$table->string('original_basename', 255)->comment = '原始文件名';
-			$table->string('filename', 255)->comment = '原始文件名(无后缀)';
-			$table->text('description')->nullable()->comment = '摘要';
+			$table->json('extra')->nullable()->comment = '其它内容';
 			$table->unsignedInteger('uid')->nullable()->default(0)->comment = '用户ID';
 
 			$table->timestamps(); //创建/修改时间
@@ -44,7 +44,7 @@ class CreateAttachmentsTable extends Migration
 			$table->unsignedInteger('index')->default(0)->index()->comment = '第几块';
 			$table->unsignedInteger('start')->default(0)->index()->comment = '起始字节';
 			$table->unsignedInteger('end')->default(0)->index()->comment = '结束字节';
-			$table->string('basename', 255)->comment = '存储的文件名';
+			$table->string('basename', 255)->comment = '存储的文件名(包含扩展名)';
 			$table->string('path', 255)->comment = '存储文件路径';
 			$table->string('hash', 50)->index()->comment = '文件MD5';
 			$table->unsignedInteger('size')->index()->comment = '文件大小';

@@ -67,7 +67,7 @@ class MessageController extends Controller
 	{
 		$user = WechatUser::find($uid);
 		if (empty($user))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'type,content';
 		$data = $this->autoValidate($request, 'wechat-message.store', $keys);

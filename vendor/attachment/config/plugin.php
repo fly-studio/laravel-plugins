@@ -12,4 +12,7 @@ return [
 	'config' => [
 		'attachment'
 	],
+	'routeMiddleware' => [
+		'flash-session' => \Plugins\Attachment\App\Http\Middleware\FlashSession::class, 
+	],
 ];

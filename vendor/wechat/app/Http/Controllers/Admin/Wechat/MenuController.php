@@ -69,7 +69,7 @@ class MenuController extends Controller
 	{
 		$menu = WechatMenu::find($id);
 		if (empty($menu))
-			return $this->failure_noexists();
+			return $this->failure_notexists();
 
 		$keys = 'title,type,event,url,wdid';
 		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);

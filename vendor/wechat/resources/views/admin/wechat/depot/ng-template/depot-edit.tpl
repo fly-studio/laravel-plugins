@@ -7,7 +7,7 @@
 					{{item.title || '请输入标题'}}
 				</h4>
 				<div class="cover">
-					<img ng-src="<{'attachment'|url}>?id={{item.cover_aid}}" src="<{'placeholder'|url}>?size=250x160&text=请上传封面" alt="" class="img-responsive">
+					<img ng-src="<{'attachment'|url}>/{{item.cover_aid}}" src="<{'placeholder'|url}>?size=250x160&text=请上传封面" alt="" class="img-responsive">
 				</div>
 				<p class="description">
 					{{item.description || '请输入摘要'}}
