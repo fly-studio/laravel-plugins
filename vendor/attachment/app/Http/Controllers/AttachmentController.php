@@ -57,7 +57,7 @@ class AttachmentController extends Controller {
 
 	public function info(Request $request, $id)
 	{
-		$factory = $this->factory($id);
+		$attachment = $this->factory($id);
 
 		return $this->api($attachment->toArray());
 	}
@@ -298,7 +298,7 @@ class AttachmentController extends Controller {
 				
 				$urls = [];
 				foreach($list as $v)
-					$urls[] = [ 'url' => $v->url() ];
+					$urls[] = [ 'url' => $v->url ];
 
 				$data = array(
 					'state' => 'SUCCESS',
