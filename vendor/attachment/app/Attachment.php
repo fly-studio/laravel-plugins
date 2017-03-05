@@ -79,7 +79,7 @@ class Attachment extends Model{
 	 */
 	public function getUrlAttribute()
 	{
-		return url()->route('attachment', ['id' => $this->id, 'filename' => $this->original_basename]);
+		return url()->route('attachment', ['id' => $this->id, 'filename' => $this->original_name]);
 	}
 
 	/**

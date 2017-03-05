@@ -1,7 +1,7 @@
 <?php
 namespace Plugins\Attachment\App\Http\Controllers;
 
-use Agent, Auth;
+use Agent, Auth, Mimes;
 use Illuminate\Http\Request;
 use Addons\Core\Http\OutputResponse;
 use Addons\Core\Controllers\Controller;
@@ -158,7 +158,7 @@ class AttachmentController extends Controller {
 	{
 		$data = ['error' => 0, 'url' => ''];
 		try {
-			$attachment =  app(InputManager::class)
+			$attachment = app(InputManager::class)
 				->upload('Filedata')
 				->user($request->user())
 				->save();
@@ -227,7 +227,7 @@ class AttachmentController extends Controller {
 			/* 上传文件 */
 			case 'uploadfile':
 				try {
-					$attachment =  app(InputManager::class)
+					$attachment = app(InputManager::class)
 						->upload('Filedata')
 						->user($request->user())
 						->save();
@@ -246,7 +246,7 @@ class AttachmentController extends Controller {
 			/* 上传涂鸦 */
 			case 'uploadscrawl':
 				try {
-					$attachment =  app(InputManager::class)
+					$attachment = app(InputManager::class)
 						->raw(base64_decode($request->input('Filedata')), 'scrawl_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.png')
 						->user($request->user())
 						->save();
@@ -268,7 +268,7 @@ class AttachmentController extends Controller {
 				$list = [];
 				foreach ($urls as $url) {
 					try {
-						$attachment =  app(InputManager::class)
+						$attachment = app(InputManager::class)
 						->download($url)
 						->extra(['url' => $url])
 						->user($request->user())
@@ -319,20 +319,32 @@ class AttachmentController extends Controller {
 		$result = ['success' => true];
 		if (isset($_FILES['__source']))
 		{
-			$attachment = $this->model->upload($request->user(), '__source');
-			if (!($attachment instanceof Attachment))
-				$result = ['success' => false, 'message' => $this->read_message($attachment)];
-			else
+			try {
+				$attachment = app(InputManager::class)
+					->upload('__source')
+					->user($request->user())
+					->save();
 				$result['original_aid'] = $attachment['id'];
+			} catch (\Exception $e) {
+				$result = ['success' => false, 'message' => $e->getMessage()];
+			}
 		}
 		if ($result['success'])
-		foreach (['__avatar1', '__avatar2', '__avatar3'] as $v) {
+		foreach (['__avatar1', '__avatar2', '__avatar3'] as $v)
+		{
 			if (isset($_FILES[$v]) && is_uploaded_file($_FILES[$v]["tmp_name"]) && !$_FILES[$v]["error"]){
-				$attachment = $this->model->savefile($request->user(), $_FILES[$v]["tmp_name"], $v.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.jpg');
-				if (!($attachment instanceof Attachment))
-					$result = ['success' => false, 'message' => $this->read_message($attachment)];
-				else
+
+				try {
+					$attachment = app(InputManager::class)
+						->upload($v)
+						->user($request->user())
+						->filename($v.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.jpg')
+						->save();
 					$result['avatar_aids'][] = $attachment['id'];
+				} catch (Exception $e) {
+					$result = ['success' => false, 'message' => $e->getMessage()];
+					break;
+				}
 			}
 		}
 
@@ -345,14 +357,11 @@ class AttachmentController extends Controller {
 		
 		$part = parse_dataurl($dataurl);
 		$ext = Mimes::getInstance()->ext_by_mime($part['mine']);
-		$data = $part['data'];
-		$file_path = tempnam(sys_get_temp_dir(),'');
-		$fp = fopen($file_path,'wb+');
-		fwrite($fp, $data);
-		fclose($fp);
-		unset($dataurl, $data, $part);
-
-		$attachment = $this->model->savefile($request->user(), $file_path, 'datauri_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.'.$ext);
+		$attachment = app(InputManager::class)
+			->raw($part['data'], 'datauri_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.'.$ext)
+			->user($request->user())
+			->save();
+		unset($dataurl, $part);
 		return $this->success('', $url, array('id' => $attachment->getKey(), 'url' => $attachment->url));
 	}
 

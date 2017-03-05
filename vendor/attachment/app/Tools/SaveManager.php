@@ -125,7 +125,7 @@ class SaveManager extends Manager {
 			$attachment = $this->driver('chunk')->save();
 
 		if ($this->deleteAfter)
-			unlink($this->file()->getPathName());
+			@unlink($this->file()->getPathName());
 
 		return Attachment::mix($attachment->getKey());
 	}

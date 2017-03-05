@@ -19,7 +19,7 @@ class Raw extends Input{
 
 	public function raw($data, $originalName)
 	{
-		$filePath = tempnam(storage_path('utils'), 'raw-');
+		$filePath = tempnam(sys_get_temp_dir(), 'raw-');
 		try {
 			file_put_contents($filePath, $data);
 			return $this->newSave()->file(new File($filePath, $originalName))->deleteFileAfterSaved();

@@ -24,7 +24,7 @@ class Download extends Input {
 		if (empty($url) || !filter_var($url, 'FILTER_VALIDATE_URL'))
 			throw new AttachmentException('url_invalid');
 
-		$filePath = tempnam(storage_path('utils'),'download-');
+		$filePath = tempnam(sys_get_temp_dir(),'download-');
 		try {
 			$originalName = $this->GuzzleHttp($filePath);
 			return $this->newSave()->file(new File($filePath, $originalName))->deleteFileAfterSaved();
