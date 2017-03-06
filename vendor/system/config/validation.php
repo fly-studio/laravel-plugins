@@ -20,7 +20,7 @@ return [
 			],
 			'perms' => [
 				'name' => '权限',
-				'rules' => 'array',
+				'rules' => 'nullable|array',
 			],
 			'pid' => [
 				'name' => '父用户组',

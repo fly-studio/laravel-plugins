@@ -8,7 +8,7 @@ return [
 			],
 			'content' => [
 				'name' => '简介',
-				'rules' => 'string',
+				'rules' => 'nullable|string',
 			],
 			'pid' => [
 				'name' => '父级',

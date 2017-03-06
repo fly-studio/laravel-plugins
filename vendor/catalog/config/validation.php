@@ -21,7 +21,7 @@ return [
 			],
 			'extra' => [
 				'name' => '其它数据',
-				'rules' => 'array',
+				'rules' => 'nullable|array',
 			],
 			'orders' => [
 				'name' => '排序',

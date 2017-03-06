@@ -32,23 +32,23 @@ return [
 			],
 			'avatar_aid' => [
 				'name' => '二维码',
-				'rules' => 'numeric',
+				'rules' => 'nullable|numeric',
 			],
 			'encodingaeskey' => [
 				'name' => '加密KEY',
-				'rules' => 'min:10',
+				'rules' => 'nullable|min:10',
 			],
 			'mchid' => [
 				'name' => '商戶ID',
-				'rules' => 'min:1',
+				'rules' => 'nullable|min:1',
 			],
 			'mchkey' => [
 				'name' => '商户支付密钥',
-				'rules' => 'min:1',
+				'rules' => 'nullable|min:1',
 			],
 			'sub_mch_id' => [
 				'name' => '子商户号',
-				'rules' => 'min:1',
+				'rules' => 'nullable|min:1',
 			],
 
 		],
@@ -96,15 +96,15 @@ return [
 			],
 			'nickname' => [
 				'name' => '昵称',
-				'rules' => 'min:1',
+				'rules' => 'nullable|min:1',
 			],
 			'gender' => [
 				'name' => '性别',
-				'rules' => 'catalog:fields.gender',
+				'rules' => 'nullable|catalog:fields.gender',
 			],
 			'avatar_aid' => [
 				'name' => '头像(AID)',
-				'rules' => 'numeric',
+				'rules' => 'nullable|numeric',
 			],
 			'country' => [
 				'name' => '国家',
@@ -140,7 +140,7 @@ return [
 			],
 			'subscribed_at' => [
 				'name' => '关注时间',
-				'rules' => 'date',
+				'rules' => 'nullable|date',
 			],
 			'uid' => [
 				'name' => 'UID',
@@ -156,11 +156,11 @@ return [
 			],
 			'author' => [
 				'name' => '作者',
-				'rules' => 'max:50',
+				'rules' => 'nullable|max:50',
 			],
 			'description' => [
 				'name' => '摘要',
-				'rules' => 'max:250',
+				'rules' => 'nullable|max:250',
 			],
 			'cover_aid' => [
 				'name' => '封面(AID)',
@@ -209,7 +209,7 @@ return [
 			],
 			'thumb_aid' => [
 				'name' => '缩略图文件(AID)',
-				'rules' => 'numeric',
+				'rules' => 'nullable|numeric',
 			],
 			'content' => [ // 文本
 				'name' => '内容',
