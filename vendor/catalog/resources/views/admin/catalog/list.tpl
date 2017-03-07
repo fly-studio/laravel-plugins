@@ -15,6 +15,7 @@
 <{/block}>
 <{block "head-scripts-vue"}>
 <script src="<{'js/vue/vue.min.js'|static nofilter}>"></script>
+<script src="<{'js/vue/vuex.min.js'|static nofilter}>"></script>
 <{/block}>
 <{if !empty($_table_data)}>
 <{block "head-scripts-inner-data"}>

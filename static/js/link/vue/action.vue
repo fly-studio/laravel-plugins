@@ -4,7 +4,7 @@
 		<h3>
 			{{$store.state.title ? $store.state.title : '未命名'}}
 			<span class="pull-right action-remove" v-if="k != undefined">
-				<a href="javascript:" @click="remove">&times;</a>
+				<a href="javascript:" @click="remove()">&times;</a>
 			</span>
 		</h3>
 	</div>
@@ -84,12 +84,11 @@
 										(typeof parameters[k].value != 'undefined' ? parameters[k].value : null)
 									)
 							);
-					}
+					},
 				}
 			});
 	    },
 	    created() {
-
 	    	['title', 'img', 'parameters', 'method'].forEach(v => this.$store.state[v] = this.parsedValue[v] ? this.parsedValue[v] : this.$store.state[v])
 	    },
 		computed: {
