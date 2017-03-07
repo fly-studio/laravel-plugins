@@ -115,10 +115,14 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 		method.onclick = function(event, treeId, treeNode) {
 			if ((~~treeNode.id) !== 0)
 			{
+				$.bbq.pushState({id: treeNode.id});
 				catalogForm.edit(treeNode.id, treeNode.tId);
 			}
 			else
+			{
+				$.bbq.pushState({id: treeNode.id});
 				catalogForm.create(treeNode.id, treeNode.tId);
+			}
 		};
 
 		var setting = {
@@ -161,8 +165,14 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 			}
 		};
 		$zTree = $.fn.zTree.init($("#tree"), setting, TreeData);
-		var node = $zTree.expandAll(true);
-		$zTree.selectNode(node);
+		$zTree.expandAll(true);
+		var config = $.bbq.getState();
+		if (!isNaN(config.id))
+		{
+			var node = $zTree.getNodeByParam('id', config.id);
+			$zTree.selectNode(node, false, true);
+			method.onclick({}, node.tId, node);
+		}
 		$zTree.expandNode(node, true);
 
 		

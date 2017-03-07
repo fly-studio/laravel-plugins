@@ -72,8 +72,7 @@ class CatalogController extends Controller
 	{
 		$keys = ['name', 'title', 'pid', 'extra'];
 		$data = $this->autoValidate($request, 'catalog.store', $keys);
-
-		if (Catalog::findByNamePid($data['name'], $data['pid']) !== false)
+		if (!empty(Catalog::findByNamePid($data['name'], $data['pid'])))
 			return $this->failure('catalog::catalog.name_exists', false, $data);
 
 		DB::transaction(function() use ($data) {
