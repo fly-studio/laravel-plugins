@@ -63,7 +63,7 @@ class Chunk extends Save {
 	private function mergeChunk($aid)
 	{
 		DB::beginTransaction();
-		$attachment = Attachment::where($this->getKeyName(), $aid)->lockForUpdate()->first();
+		$attachment = Attachment::where('id', $aid)->lockForUpdate()->first();
 
 		if ($attachment->chunks()->count() != $attachment->chunk_count || !empty($attachment->afid))
 		{

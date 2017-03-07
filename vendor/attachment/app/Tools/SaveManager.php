@@ -66,10 +66,10 @@ class SaveManager extends Manager {
 	public function ext($ext = null)
 	{
 		if (is_null($ext))
-			return $this->ext ?: pathinfo($this->filename(), PATHINFO_EXTENSION);
+			return $this->ext ?: strtolower(pathinfo($this->filename(), PATHINFO_EXTENSION));
 
-		$this->ext = $ext;
-		if(!in_array($ext, config('attachment.ext', [])))
+		$this->ext = strtolower($ext);
+		if(!in_array($this->ext, config('attachment.ext', [])))
 			throw new AttachmentException('ext_deny');
 
 		return $this;
