@@ -14,3 +14,4 @@ mix.config.publicPath = './';
  */
 
 mix.js('static/js/catalog/catalog.node.js', 'static/js/catalog/catalog.min.js');
+mix.js('static/js/link/action.node.js', 'static/js/link/action.min.js');
