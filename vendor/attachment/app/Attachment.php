@@ -13,9 +13,12 @@ use Illuminate\Database\Eloquent\Model as BaseModel;
 class Attachment extends Model{
 	
 	protected $guarded = ['id'];
-	protected $hidden = ['full_path', 'real_path', 'relative_path', 'afid', 'basename', 'path', 'cdn_at', 'chunks_count', 'created_at', 'deleted_at', 'updated_at', 'uuid'];
+	protected $hidden = ['full_path', 'real_path', 'relative_path', 'afid', 'basename', 'path', 'cdn_at', 'chunk_count', 'created_at', 'deleted_at', 'updated_at', 'uuid', 'extra'];
 	protected $casts = [
 		'extra' => 'array'
+	];
+	protected $appends = [
+		'url'
 	];
 
 	/**
