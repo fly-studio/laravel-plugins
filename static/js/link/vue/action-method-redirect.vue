@@ -1,6 +1,6 @@
 <template>
 <div>
-	<action-parameter v-for="(settings, key, index) in parameters" :settings="settings" class="" v-model="$store.state.parameters[key]"></action-parameter>
+	<action-parameter v-for="(settings, key) in fields" :settings="settings" class="" v-model="$store.state.parameters[key]"></action-parameter>
 </div>
 </template>
 
@@ -8,7 +8,7 @@
 export default {
 	data() {
 		return {
-			parameters: {
+			fields: {
 				url: {
 					title: '网址',
 					placeholder: 'https://',
@@ -17,7 +17,7 @@ export default {
 				target: {
 					title: '跳转方式',
 					type: 'radio',
-					value:'_self',
+					defaultValue:'_self',
 					//multiple: true,
 					list:{
 						_self: '当前页面跳转',
@@ -28,7 +28,7 @@ export default {
 		};
 	},
 	activated() {
-		this.$store.commit('setParameters', this.parameters);
+		this.$emit('input', this.fields);
 	}
 }
 </script>

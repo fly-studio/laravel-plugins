@@ -21,7 +21,6 @@
 			<div class="col-sm-10">
 				<image-upload v-model="$store.state.img"></image-upload>
 			</div>
-
 			<div class="clearfix"></div>
 		</div>
 	</div>
@@ -67,51 +66,57 @@
 	export default {
 		props: ['value', 'k', 'name'],
 		beforeCreate() {
-	        this.$store = new Vuex.Store({
+			this.$store = new Vuex.Store({
 				state: {
 					title:  '',
 					img: '',
-					method: 'redirect',
-					parameters: [],
+					method: '',
+					parameters: {},
+					fields: {}
 				},
 				mutations: {
-					setParameters(state, parameters) {
-						Vue.set(state, 'parameters', {});
-						for(let k in parameters)
-							Vue.set(state.parameters, k, 
-								state.parameters[k] ? state.parameters[k] : 
-									(typeof parameters[k] == 'string' ? null : 
-										(typeof parameters[k].value != 'undefined' ? parameters[k].value : null)
-									)
-							);
+					fill(state, attributes) {
+						attributes = JSON.parse(JSON.stringify(attributes)); 
+
+						console.log('fill ', attributes);
+						Vue.set(state, 'title', attributes.title || null );
+						Vue.set(state, 'img', attributes.img || null);
+						Vue.set(state, 'parameters', attributes.parameters || {});
+						Vue.set(state, 'method', attributes.method || 'redirect'); //第一个
+					},
+					setFields(state) {
+						let parameters = {};
+						let p = JSON.parse(JSON.stringify(state.parameters)); 
+						for(let k in state.fields)
+						{
+							parameters[k] = p && p[k] ? p[k] : 
+								(typeof state.fields[k] == 'string' ? null : 
+									(typeof state.fields[k].defaultValue != 'undefined' ? state.fields[k].defaultValue : null)
+								);
+						}
+						Vue.set(state, 'parameters', parameters);
 					},
 				}
 			});
-	    },
-	    created() {
-	    	['title', 'img', 'parameters', 'method'].forEach(v => this.$store.state[v] = this.parsedValue[v] ? this.parsedValue[v] : this.$store.state[v])
-	    },
+		},
+		data() {
+			return {
+			};
+		},
+		created() {
+			//初始化读取value的值
+			this.$store.commit('fill', this.parseValue(this.value));
+		},
 		computed: {
 			...Vuex.mapState([
 				'title',
 				'img',
 				'parameters',
 				'method',
+				'fields'
 			]),
 			json() {
-				return JSON.stringify(this.$store.state, null, 4);
-			},
-			parsedValue() {
-				if (typeof this.value == 'string')
-				{
-					try	{
-						return JSON.parse(this.value);
-					} catch (e) {
-						return {};
-					}
-				} else if (typeof this.value == 'object')
-					return this.value;
-				return {};
+				return JSON.stringify( this.returnValue()/*, null, 4*/);
 			},
 			methods() {
 				return methods;
@@ -119,24 +124,55 @@
 		},
 		methods : {
 			...Vuex.mapMutations([
-				'setParameters'
+				'fill',
 			]),
+			parseValue(v) {
+				if (typeof v == 'string')
+				{
+					try	{
+						return JSON.parse(v);
+					} catch (e) {
+						return {};
+					}
+				} else if (typeof v == 'object')
+					return JSON.parse(JSON.stringify(v));
+				return {};
+			},
+			returnValue() {
+				let d = {};
+				['title', 'img', 'method', 'parameters'].forEach(v => d[v] = this.$store.state[v]);
+				return d;
+			},
 			remove() {
 				this.$emit('remove', this.k);
 			},
+			load(v) {
+				//重新设置数据，当method相同时候，重新setfields
+				this.$store.commit('fill', v);
+				if (v.method == this.method)
+					this.$store.commit('setFields');
+			}
 		},
 		watch: {
 			title(v) {
-				this.$emit('input', this.$store.state);
+				console.log('trigger title');
+				this.$emit('input', this.returnValue());
 			},
 			img() {
-				this.$emit('input', this.$store.state);
+				console.log('trigger img');
+				this.$emit('input', this.returnValue());
 			},
-			method() {
-				this.$emit('input', this.$store.state);
+			method(v) {
+				console.log('trigger method');
+				this.$emit('input', this.returnValue());
 			},
 			parameters() {
-				this.$emit('input', this.$store.state);
+				console.log('trigger parameters');
+				this.$emit('input', this.returnValue());
+			},
+			fields() {
+				//fields值改变时候，setFields
+				this.$store.commit('setFields');
 			}
 		}
 	};

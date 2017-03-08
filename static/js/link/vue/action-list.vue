@@ -10,41 +10,40 @@
 	export default {
 		props: ['value', 'name'],
 		data() {
-			let json = [];
-			try {
-				json = typeof this.value == 'string' ? JSON.parse(this.value) : value;
-			} catch(e) {
-				json = [];
-			}
 			return {
-				list: json instanceof Array ? json : []
+				list: this.parseValue(this.value)
 			}
 		},
 		computed: {
 			json() {
-				return JSON.stringify(this.list, null, 4);
+				return JSON.stringify(this.list/*, null, 4*/);
 			},
 		},
 		methods: {
-			create() {
-				this.list.push({});
-			},
-			remove(k) {
-				this.list.splice(k, 1);
-				//this.$delete(this.list, k);
-			},
-			reload(v) {
+			parseValue(v) {
 				let json = v;
 				try {
 					json = typeof v == 'string' ? JSON.parse(v) : v;
 				} catch(e) {
 					json = [];
 				}
-				//this.list.splice(0, this.list.length);
-				this.$set(this, 'list', json instanceof Array ? json : []);
+				return JSON.parse(JSON.stringify(json instanceof Array ? json : []));
+			},
+			create() {
+				this.list.push({});
+			},
+			remove(k) {
+				this.list.splice(k, 1);
 			}
 		},
 		watch: {
+			value(v) {
+				this.$set(this, 'list', this.parseValue(v));
+				if(this.$refs.action instanceof Array)
+					this.$refs.action.forEach((v, k) =>{
+						v.load(this.list[k]);
+					});
+			}
 		}
 	};
 </script>
