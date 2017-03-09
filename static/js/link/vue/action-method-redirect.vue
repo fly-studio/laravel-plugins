@@ -1,11 +1,12 @@
 <template>
 <div>
-	<action-parameter v-for="(settings, key) in fields" :settings="settings" class="" v-model="$store.state.parameters[key]"></action-parameter>
+	<action-parameter v-for="(settings, key) in fields" :settings="settings" class="" v-model="value[key]"></action-parameter>
 </div>
 </template>
 
 <script>
 export default {
+	props: ['value'],
 	data() {
 		return {
 			fields: {
@@ -28,7 +29,8 @@ export default {
 		};
 	},
 	activated() {
-		this.$emit('input', this.fields);
+		console.log('change to redirect');
+		this.$emit('fieldsChanged', this.fields);
 	}
 }
 </script>

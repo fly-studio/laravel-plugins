@@ -2,8 +2,8 @@
 <div class="">
 	<div class="page-header">
 		<h3>
-			{{$store.state.title ? $store.state.title : '未命名'}}
-			<span class="pull-right action-remove" v-if="k != undefined">
+			{{title ? title : '未命名'}}
+			<span class="pull-right action-remove" v-if="$store.state.multiple">
 				<a href="javascript:" @click="remove()">&times;</a>
 			</span>
 		</h3>
@@ -12,14 +12,14 @@
 		<div class="form-group">
 			<label for="" class="col-sm-2 control-label">标题：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control" v-model="$store.state.title">
+				<input type="text" class="form-control" v-model="title">
 			</div>
 			<div class="clearfix"></div>
 		</div>
 		<div class="form-group">
 			<label for="" class="col-sm-2 control-label">图片：</label>
 			<div class="col-sm-10">
-				<image-upload v-model="$store.state.img"></image-upload>
+				<image-upload v-model="img"></image-upload>
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -28,7 +28,7 @@
 		<div class="form-group">
 			<label for="" class="col-sm-2">类型：</label>
 			<div class="col-sm-10">
-				<select class="form-control" v-model="$store.state.method">
+				<select class="form-control" v-model="method">
 					<option :value="key" v-for="(name, key) in methods">{{name}}</option>
 				</select>
 			</div>
@@ -40,7 +40,7 @@
 			</div>
 			<div class="clearfix"></div>
 			<keep-alive>
-				<component :is="'action-method-' + method" :parameters="parameters"></component>
+				<component :is="'action-method-' + method" v-model="parameters" @fieldsChanged="fieldsChanged"></component>
 			</keep-alive>
 		</div>
 	</div>
@@ -56,7 +56,7 @@
 
 <script>
 	const methods = {
-		'redirect': '跳转链接'
+		'redirect': '跳转链接',
 	};
 	for(let key in methods)
 		Vue.component(
@@ -65,56 +65,45 @@
 		);
 	export default {
 		props: ['value', 'k', 'name'],
-		beforeCreate() {
-			this.$store = new Vuex.Store({
-				state: {
-					title:  '',
-					img: '',
-					method: '',
-					parameters: {},
-					fields: {}
-				},
-				mutations: {
-					fill(state, attributes) {
-						attributes = JSON.parse(JSON.stringify(attributes)); 
-
-						console.log('fill ', attributes);
-						Vue.set(state, 'title', attributes.title || null );
-						Vue.set(state, 'img', attributes.img || null);
-						Vue.set(state, 'parameters', attributes.parameters || {});
-						Vue.set(state, 'method', attributes.method || 'redirect'); //第一个
-					},
-					setFields(state) {
-						let parameters = {};
-						let p = JSON.parse(JSON.stringify(state.parameters)); 
-						for(let k in state.fields)
-						{
-							parameters[k] = p && p[k] ? p[k] : 
-								(typeof state.fields[k] == 'string' ? null : 
-									(typeof state.fields[k].defaultValue != 'undefined' ? state.fields[k].defaultValue : null)
-								);
-						}
-						Vue.set(state, 'parameters', parameters);
-					},
-				}
-			});
-		},
 		data() {
 			return {
 			};
 		},
 		created() {
-			//初始化读取value的值
-			this.$store.commit('fill', this.parseValue(this.value));
 		},
 		computed: {
-			...Vuex.mapState([
-				'title',
-				'img',
-				'parameters',
-				'method',
-				'fields'
-			]),
+			title: {
+				set(v) {
+					this.value.title = v;
+				},
+				get() {
+					return this.value.title || '';
+				}
+			},
+			img: {
+				set(v) {
+					this.value.img = v;
+				},
+				get() {
+					return this.value.img;
+				}
+			},
+			method: {
+				set(v) {
+					this.value.method = v;
+				},
+				get() {
+					return this.value.method;
+				}
+			},
+			parameters: {
+				set(v) {
+					this.value.parameters = v;
+				},
+				get() {
+					return this.value.parameters;
+				}
+			},
 			json() {
 				return JSON.stringify( this.returnValue()/*, null, 4*/);
 			},
@@ -122,58 +111,22 @@
 				return methods;
 			}
 		},
-		methods : {
-			...Vuex.mapMutations([
-				'fill',
-			]),
-			parseValue(v) {
-				if (typeof v == 'string')
-				{
-					try	{
-						return JSON.parse(v);
-					} catch (e) {
-						return {};
-					}
-				} else if (typeof v == 'object')
-					return JSON.parse(JSON.stringify(v));
-				return {};
+		methods: {
+			fieldsChanged(v) {
+				console.log('change fields');
+				this.$store.commit('setFields', {k: this.k, fields: v});
 			},
 			returnValue() {
 				let d = {};
-				['title', 'img', 'method', 'parameters'].forEach(v => d[v] = this.$store.state[v]);
+				['title', 'img', 'method', 'parameters'].forEach(v => d[v] = this[v]);
 				return d;
 			},
 			remove() {
 				this.$emit('remove', this.k);
 			},
-			load(v) {
-				//重新设置数据，当method相同时候，重新setfields
-				this.$store.commit('fill', v);
-				if (v.method == this.method)
-					this.$store.commit('setFields');
-			}
 		},
 		watch: {
-			title(v) {
-				console.log('trigger title');
-				this.$emit('input', this.returnValue());
-			},
-			img() {
-				console.log('trigger img');
-				this.$emit('input', this.returnValue());
-			},
-			method(v) {
-				console.log('trigger method');
-				this.$emit('input', this.returnValue());
-			},
-			parameters() {
-				console.log('trigger parameters');
-				this.$emit('input', this.returnValue());
-			},
-			fields() {
-				//fields值改变时候，setFields
-				this.$store.commit('setFields');
-			}
+			
 		}
 	};
 </script>
