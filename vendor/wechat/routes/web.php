@@ -2,7 +2,7 @@
 
 $router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['auth', 'role:super']], function($router) {
 	
-	$router->addAdminRoutes([
+	$router->crud([
 		'wechat/account' => 'Wechat\\AccountController',
 	]);
 
@@ -11,7 +11,7 @@ $router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['au
 		$router->post('menu/publish-json','MenuController@publishJson');
 		$router->post('menu/publish-query','MenuController@publishQuery');
 		$router->post('menu/delete-all','MenuController@deleteAll');
-		$router->addAdminRoutes([
+		$router->crud([
 			'user' => 'UserController',
 			'depot' => 'DepotController',
 			'depot-news' => 'DepotNewsController',
@@ -22,3 +22,12 @@ $router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['au
 		]);
 	});
 });
+
+$ctrl = '\App\Http\Controllers\WechatController';
+$router->post('wechat/feedback/{aid}/{oid?}', $ctrl.'@feedback');
+$router->get('wechat', $ctrl.'@index');
+$router->get('wechat/news', $ctrl.'@news');
+$router->post('wechat/push', $ctrl.'@push');
+$router->get('wechat/auth', $ctrl.'@auth');
+$router->post('wechat/choose-query', $ctrl.'@chooseQuery');
+$router->get('wechat/modifing-account', $ctrl.'@modifingAccount');

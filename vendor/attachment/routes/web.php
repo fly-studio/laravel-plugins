@@ -1,6 +1,4 @@
 <?php
-use Illuminate\Http\Request;
-use Plugins\Attachment\App\Exceptions\AttachmentException;
 
 $router->group(['prefix' => 'attachment'], function($router) {
 	$ctrl = 'AttachmentController';
@@ -19,28 +17,5 @@ $router->group(['prefix' => 'attachment'], function($router) {
 	$router->post('ueditor', $ctrl.'@ueditorQuery');
 	$router->post('kindeditor', $ctrl.'@kindeditorQuery');
 	$router->post('fullavatar', $ctrl.'@fullavatarQuery');
-});
-
-$router->get('attachment', function(Request $request) {
-	if (!$request->offsetExists('id'))
-		throw (new AttachmentException('attachment::attachment.failure_notexists'))->setStatusCode(404);
-	$route = 'attachment';
-	$parameters = ['id' => $request->query('id')];
-	if ($request->offsetExists('m'))
-	{
-		$route .= '-watermark';
-		$parameters += [
-			'watermark' => $request->query('m'),
-		];
-	}
-	if ($request->offsetExists('width') || $request->offsetExists('height'))
-	{
-		$route .= '-resize';
-		$parameters += [
-			'width' => intval($request->query('width')),
-			'height' => intval($request->query('height')),
-		];
-	}
-	$url = url()->route($route, $parameters);
-	return redirect($url);
+	$router->get('/', $ctrl.'@index');
 });

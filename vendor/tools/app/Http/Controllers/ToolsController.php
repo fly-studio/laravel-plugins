@@ -1,9 +1,10 @@
 <?php
 namespace Plugins\Tools\App\Http\Controllers;
 
-use Addons\Core\Controllers\Controller;
-use Illuminate\Http\Request;
 use Cache;
+use Illuminate\Http\Request;
+use Addons\Core\Controllers\Controller;
+
 class ToolsController extends Controller {
 
 	protected $addons = false;
@@ -38,11 +39,9 @@ class ToolsController extends Controller {
 
 		if (file_exists($configPath))
 			@unlink($configPath);
-		
 
 		if (file_exists($servicesPath))
 			@unlink($servicesPath);
-		
 
 		return $this->success(array('title' => '清理成功', 'content' => '缓存清理成功'), FALSE);
 	}

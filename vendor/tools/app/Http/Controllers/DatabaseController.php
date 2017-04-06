@@ -1,12 +1,13 @@
 <?php
 namespace Plugins\Tools\App\Http\Controllers;
 
+use Schema, DB;
+use PHPExcel, PHPExcel_Style_Border, PHPExcel_Style_Fill, PHPExcel_Style_Alignment;
+use Addons\Core\File\Mimes;
+use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
 use Addons\Core\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
-use Schema, DB;
-use Addons\Core\File\Mimes;
-use PHPExcel, PHPExcel_Style_Border, PHPExcel_Style_Fill, PHPExcel_Style_Alignment;
+
 class DatabaseController extends Controller {
 	use ValidatesRequests;
 

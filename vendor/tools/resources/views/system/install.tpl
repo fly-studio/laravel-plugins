@@ -32,7 +32,7 @@ $().ready(function(){
 	<h1 class="page-header">第一步：连接静态文件夹</h1>
 	<div>
 		<h3>Windows 7 / Linux</h3>
-			<a href="<{'tools/create_static_folder_query'|url}>" method="get" class="" target="_blank">点击设置文件夹</a>
+			<a href="<{'tools/create-static-folder-query'|url}>" method="get" class="" target="_blank">点击设置文件夹</a>
 		<h3>Windows 8+ 必须启用Administrator权限，方可mklink</h3>
 		1. <kbd>Win + X</kbd> - 命令提示符(管理员)(A)
 		<p>

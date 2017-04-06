@@ -2,30 +2,31 @@
 namespace Plugins\Wechat\App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-//use Addons\Core\Controllers\Controller;
 use Illuminate\Routing\Controller;
+use Addons\Core\Http\OutputResponse;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Database\Eloquent\Collection;
 
 use Plugins\Wechat\App\Tools\API;
-use Plugins\Wechat\App\Tools\Account as WechatAccountTool;
-use Plugins\Wechat\App\Tools\User as WechatUserTool;
+use Plugins\Wechat\App\Tools\Send;
 use Plugins\Wechat\App\Tools\Pay as WechatPayTool;
-use Plugins\Wechat\App\WechatDepotNews;
-use Plugins\Wechat\App\WechatAccount;
+use Plugins\Wechat\App\Tools\User as WechatUserTool;
+use Plugins\Wechat\App\Tools\Account as WechatAccountTool;
+
+use Plugins\Wechat\App\WechatLog;
+use Plugins\Wechat\App\WechatBill;
+use Plugins\Wechat\App\WechatMenu;
 use Plugins\Wechat\App\WechatUser;
 use Plugins\Wechat\App\WechatReply;
-use Plugins\Wechat\App\WechatMenu;
+use Plugins\Wechat\App\WechatQrcode;
 use Plugins\Wechat\App\WechatMessage;
+use Plugins\Wechat\App\WechatAccount;
+use Plugins\Wechat\App\WechatDepotNews;
 use Plugins\Wechat\App\WechatMessageText;
 use Plugins\Wechat\App\WechatMessageMedia;
 use Plugins\Wechat\App\WechatMessageLink;
 use Plugins\Wechat\App\WechatMessageLocation;
-use Plugins\Wechat\App\WechatQrcode;
-use Plugins\Wechat\App\WechatLog;
-use Plugins\Wechat\App\WechatBill;
-use Plugins\Wechat\App\Tools\Send;
+
 abstract class WechatController extends Controller {
 	//use DispatchesJobs;
 
@@ -168,7 +169,7 @@ abstract class WechatController extends Controller {
 	{
 		$data = WechatAccount::find($account->getAccountID());
 		$data = array_diff_key($data->toArray(), array_flip(['appsecret', 'token', 'encodingaeskey', 'mchkey']));
-		return (new \Addons\Core\Controllers\Controller(FALSE))->success('', FALSE, $data);
+		return (new OutputResponse)->setRequest($request)->setResult('success');
 	}
 
 	public function news(Request $request, $id)

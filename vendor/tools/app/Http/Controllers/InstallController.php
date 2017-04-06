@@ -1,9 +1,9 @@
 <?php
 namespace Plugins\Tools\App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
 use Addons\Core\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
 
 class InstallController extends Controller {
 	use ValidatesRequests;

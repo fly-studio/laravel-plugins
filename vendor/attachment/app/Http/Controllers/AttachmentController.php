@@ -22,6 +22,31 @@ class AttachmentController extends Controller {
 		$this->middleware('flash-session');
 	}
 
+	public function index(Request $request)
+	{
+		if (!$request->offsetExists('id'))
+			throw (new AttachmentException('attachment::attachment.failure_notexists'))->setStatusCode(404);
+		$route = 'attachment';
+		$parameters = ['id' => $request->query('id')];
+		if ($request->offsetExists('m'))
+		{
+			$route .= '-watermark';
+			$parameters += [
+				'watermark' => $request->query('m'),
+			];
+		}
+		if ($request->offsetExists('width') || $request->offsetExists('height'))
+		{
+			$route .= '-resize';
+			$parameters += [
+				'width' => intval($request->query('width')),
+				'height' => intval($request->query('height')),
+			];
+		}
+		$url = url()->route($route, $parameters);
+		return redirect($url);
+	}
+
 	private function factory($id)
 	{
 		$attachment = Attachment::mix($id);

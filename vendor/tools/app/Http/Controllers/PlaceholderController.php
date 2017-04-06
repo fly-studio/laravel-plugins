@@ -2,7 +2,7 @@
 namespace Plugins\Tools\App\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-//use Illuminate\Http\Response;
+
 class PlaceholderController extends Controller {
 
 	/**

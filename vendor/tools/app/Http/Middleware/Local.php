@@ -2,7 +2,8 @@
 namespace Plugins\Tools\App\Http\Middleware;
 
 use Closure;
-use Plugins\Tools\App;
+use Addons\Core\Http\OutputResponse;
+
 class Local
 {
 
@@ -26,9 +27,7 @@ class Local
 	public function handle($request, Closure $next)
 	{
 		if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1')
-		{
-			return (new \Addons\Core\Controllers\Controller())->failure('tools::tools.failure_local', false, $request->all(), TRUE);
-		}
+			return (new OutputResponse)->setRequest($request)->setResult('failure')->setMessage('tools::tools.failure_local')->setStatusCode(403);
 
 		return $next($request);
 	}

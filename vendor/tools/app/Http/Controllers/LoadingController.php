@@ -1,10 +1,11 @@
 <?php
 namespace Plugins\Tools\App\Http\Controllers;
 
-use Addons\Core\Controllers\Controller;
 use Illuminate\Http\Request;
+use Addons\Core\Controllers\Controller;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Addons\Core\Validation\ValidatesRequests;
+
 class LoadingController extends Controller {
 	protected $addons = false;
 

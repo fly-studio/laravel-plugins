@@ -3,6 +3,7 @@ namespace Plugins\Tools\App;
 
 use Addons\Core\Models\Tree;
 use Plugins\Tools\App\ManualHistory;
+
 class Manual extends Tree {
 
 	function histories()

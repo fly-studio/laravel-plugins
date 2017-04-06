@@ -56,10 +56,10 @@ $().ready(function(){
 		<h1>工具箱</h1>
 	</div>
 	<ul id="tools">
-		<li><a href="<{'tools/clear_cache_query'|url}>" method="get" confirm="您确定清空系统缓存吗？"><i class="glyphicon glyphicon-floppy-remove"> </i> 清空系统缓存</a></li>
+		<li><a href="<{'tools/clear-cache-query'|url}>" method="get" confirm="您确定清空系统缓存吗？"><i class="glyphicon glyphicon-floppy-remove"> </i> 清空系统缓存</a></li>
 		<li><a href="https://www.load-page.com/base/manual/" class="" target="_blank"><i class="glyphicon glyphicon-save"> </i> 获取本框架</a></li>
-		<li><a href="<{'tools/create_static_folder_query'|url}>" method="get" class="" target="_blank"><i class="glyphicon glyphicon-resize-horizontal"> </i> 重建素材文件夹</a> <small>虚拟文件夹：APPPATH/static/common/ → /static/</small></li>
-		<li class="hide" style="display:none;"><a href="<{'tools/recover_password_query'|url}>" method="get" confirm="您确定将密码重置吗？"><i class="glyphicon glyphicon-retweet"></i> 还原管理员密码</a></li>
+		<li><a href="<{'tools/create-static-folder-query'|url}>" method="get" class="" target="_blank"><i class="glyphicon glyphicon-resize-horizontal"> </i> 重建素材文件夹</a> <small>虚拟文件夹：APPPATH/static/common/ → /static/</small></li>
+		<li class="hide" style="display:none;"><a href="<{'tools/recover-password-query'|url}>" method="get" confirm="您确定将密码重置吗？"><i class="glyphicon glyphicon-retweet"></i> 还原管理员密码</a></li>
 	</ul>
 	<p></p>
 	<p></p>

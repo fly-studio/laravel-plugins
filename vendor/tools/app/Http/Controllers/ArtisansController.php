@@ -1,12 +1,13 @@
 <?php
 namespace Plugins\Tools\App\Http\Controllers;
 
-use Addons\Core\Controllers\Controller;
-use Illuminate\Http\Request;
+use DB;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Addons\Core\Controllers\Controller;
 use Addons\Core\Validation\ValidatesRequests;
 use Symfony\Component\Console\Input\StringInput;
-use DB;
+
 class ArtisansController extends Controller {
 	use ValidatesRequests;
 	protected $addons = false;

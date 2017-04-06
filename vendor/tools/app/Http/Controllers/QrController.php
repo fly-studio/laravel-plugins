@@ -1,11 +1,11 @@
 <?php
 namespace Plugins\Tools\App\Http\Controllers;
 
-use Illuminate\Routing\Controller;
-//use Illuminate\Http\Response;
+use Image;
 use PHPQRCode\QRcode;
 use PHPQRCode\Constants;
-use Image;
+use Illuminate\Routing\Controller;
+
 class QrController extends Controller {
 
 	/**

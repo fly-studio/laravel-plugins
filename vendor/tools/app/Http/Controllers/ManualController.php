@@ -1,14 +1,17 @@
 <?php
 namespace Plugins\Tools\App\Http\Controllers;
 
-use Addons\Core\Controllers\Controller;
 use Illuminate\Http\Request;
-use Plugins\Tools\App\Manual;
+use Addons\Core\Controllers\Controller;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Addons\Core\Validation\ValidatesRequests;
+
+use Plugins\Tools\App\Manual;
+
 class ManualController extends Controller
 {
 	use DispatchesJobs, ValidatesRequests;
+
 	public function index()
 	{
 		$this->_menu = (new Manual)->getNode(0)->getChildren();
