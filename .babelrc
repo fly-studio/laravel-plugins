@@ -2,5 +2,14 @@
 	"presets": [
 		"latest",
 		"stage-0"
+	],
+	"plugins": [
+		[
+			"transform-runtime",
+			{
+				"polyfill": true,
+				"regenerator": true
+			}
+		]
 	]
 }
