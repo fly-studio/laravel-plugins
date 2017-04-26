@@ -121,6 +121,6 @@ class PermissionController extends Controller
 		DB::transaction(function() use ($ids) {
 			Permission::destroy($ids);
 		});
-		return $this->success('', count($id) > 5, compact('id'));
+		return $this->success(null, count($id) > 5, compact('id'));
 	}
 }

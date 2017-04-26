@@ -91,6 +91,6 @@ class RoleController extends Controller
 		foreach ($originalRole->users()->get(['id']) as $user)
 			$user->roles()->syncWithoutDetaching([$data['role_id']]);
 		$originalRole->delete(); // 外键级联删除
-		return $this->success('', TRUE, compact('id'));
+		return $this->success(null, true, compact('id'));
 	}
 }

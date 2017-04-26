@@ -105,6 +105,6 @@ class AccountController extends Controller
 		DB::transaction(function() use ($ids) {
 			WechatAccount::destroy($ids);
 		});
-		return $this->success('', count($id) > 5, compact('id'));
+		return $this->success(null, true, ['id' => $ids]);
 	}
 }

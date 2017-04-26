@@ -111,6 +111,6 @@ class ReplyController extends Controller
 		DB::transaction(function() use ($ids) {
 			WechatReply::destroy($ids);
 		});
-		return $this->success('', count($id) > 5, compact('id'));
+		return $this->success(null, true, ['id' => $ids]);
 	}
 }
