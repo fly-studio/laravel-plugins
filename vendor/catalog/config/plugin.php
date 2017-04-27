@@ -6,7 +6,7 @@ return [
 		'migrate' => true, 
 		'translator' => true,
 		'router' => true,
-		'validation' => true,
+		'censor' => true,
 		'config' => false,
 	],
 ];

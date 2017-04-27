@@ -3,10 +3,10 @@ return [
 	'enable' => true,
 	'register' => [
 		'view' => false,
-		'migrate' => true, 
+		'migrate' => true,
+		'censor' => false,
 		'translator' => true,
 		'router' => true,
-		'validation' => false,
 		'config' => true,
 	],
 	'config' => [

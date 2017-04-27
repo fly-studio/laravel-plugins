@@ -68,7 +68,7 @@ class UserController extends Controller
 	{
 		$keys = 'openid,nickname,gender,avatar_aid,country,province,city,language,unionid,remark,is_subscribed,subscribed_at,uid';
 		$this->_data = [];
-		$this->_validates = $this->getScriptValidate('wechat-user.store', $keys);
+		$this->_validates = $this->getValidatorScript('wechat-user.store', $keys);
 		return $this->view('wechat::admin.wechat.user.create');
 	}
 
@@ -88,7 +88,7 @@ class UserController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'openid,nickname,gender,avatar_aid,country,province,city,language,unionid,remark,is_subscribed,subscribed_at,uid';
-		$this->_validates = $this->getScriptValidate('wechat-user.store', $keys);
+		$this->_validates = $this->getValidatorScript('wechat-user.store', $keys);
 		$this->_data = $user;
 		return $this->view('wechat::admin.wechat.user.edit');
 	}

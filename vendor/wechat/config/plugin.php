@@ -6,7 +6,7 @@ return [
 		'migrate' => true, 
 		'translator' => true,
 		'router' => true,
-		'validation' => true,
+		'censor' => true,
 	],
 	'routeMiddleware' => [
 		'wechat.account' => \Plugins\Wechat\App\Http\Middleware\WechatAccount::class,

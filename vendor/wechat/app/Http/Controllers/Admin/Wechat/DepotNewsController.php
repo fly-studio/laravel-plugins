@@ -61,7 +61,7 @@ class DepotNewsController extends Controller
 	{
 		$keys = 'title,author,description,content,cover_aid,cover_in_content,redirect,url';
 		$this->_data = [];
-		$this->_validates = $this->getScriptValidate('wechat-news.store', $keys);
+		$this->_validates = $this->getValidatorScript('wechat-news.store', $keys);
 		return $this->view('wechat::admin.wechat.news.create');
 	}
 
@@ -81,7 +81,7 @@ class DepotNewsController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'title,author,description,content,cover_aid,cover_in_content,redirect,url';
-		$this->_validates = $this->getScriptValidate('wechat-news.store', $keys);
+		$this->_validates = $this->getValidatorScript('wechat-news.store', $keys);
 		$this->_data = $news;
 		return $this->view('wechat::admin.wechat.news.edit');
 	}

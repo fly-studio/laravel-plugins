@@ -60,32 +60,19 @@ class PermissionController extends Controller
 
 	public function create()
 	{
-		$keys = 'name,display_name,description';
+		$keys = ['name', 'display_name', 'description'];
 		$this->_data = [];
-		$this->_validates = $this->getScriptValidate('permission.store', $keys);
+		$this->_validates = $this->getValidatorScript('system::permission.store', $keys);
 		return $this->view('system::admin.permission.create');
 	}
 
 	public function store(Request $request)
 	{
-		$keys = 'name,display_name,description';
-		$data = $this->autoValidate($request, 'permission.store', $keys);
-		if (strpos($data['name'], '*') !== FALSE) //添加多个
-		{
-			foreach([
-				'view' => '查看',
-				'create' => '新建',
-				'edit' => '编辑',
-				'destroy' => '删除',
-				'export' => '导出'
-			] as $k1 => $v1) {
-				Permission::create([
-					'name' => str_replace('*', $k1, $data['name']),
-					'display_name' => '允许'.$v1.$data['display_name'],
-					'description' => $data['description'],
-				]);
-			}
-		} else
+		$keys = ['name', 'display_name', 'description'];
+		$data = $this->autoValidate($request, 'system::permission.store', $keys);
+		if (strpos($data['name'], '*') !== FALSE) //添加RESTful权限
+			Permission::import([$data['name'] => $data['display_name']], str_replace('*', '{{key}}', $data['name']));
+		else
 			Permission::create($data);
 		return $this->success('', url('admin/permission'));
 	}
@@ -95,8 +82,8 @@ class PermissionController extends Controller
 		$permission = Permission::find($id);
 		if (empty($permission))
 			return $this->failure_notexists();
-		$keys = 'display_name,description';
-		$this->_validates = $this->getScriptValidate('permission.store', $keys);
+		$keys = ['display_name', 'description'];
+		$this->_validates = $this->getValidatorScript('system::permission.store', $keys);
 		$this->_data = $permission;
 		return $this->view('system::admin.permission.edit');
 	}
@@ -107,8 +94,8 @@ class PermissionController extends Controller
 		if (empty($permission))
 			return $this->failure_notexists();
 
-		$keys = 'display_name,description';
-		$data = $this->autoValidate($request, 'permission.store', $keys, $permission);
+		$keys = ['display_name', 'description'];
+		$data = $this->autoValidate($request, 'system::permission.store', $keys, $permission);
 		$permission->update($data);
 		return $this->success();
 	}

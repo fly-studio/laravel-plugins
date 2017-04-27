@@ -17,7 +17,7 @@ class LoadingController extends Controller {
 			$_folder = base_path($v);
 			if (!is_dir($_folder)) continue;
 			$_f = file_list($_folder, array(
-				base_path(config('app.static').'*'),
+				static_path('*'),
 			));
 			foreach($_f as $_v)
 				$files[] = str_replace(base_path(), '', $_v);

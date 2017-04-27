@@ -62,7 +62,7 @@ class ReplyController extends Controller
 	{
 		$keys = 'keywords,match_type,wdid,reply_count';
 		$this->_data = [];
-		$this->_validates = $this->getScriptValidate('wechat-reply.store', $keys);
+		$this->_validates = $this->getValidatorScript('wechat-reply.store', $keys);
 		return $this->view('wechat::admin.wechat.reply.create');
 	}
 
@@ -84,7 +84,7 @@ class ReplyController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'keywords,match_type,wdid,reply_count';
-		$this->_validates = $this->getScriptValidate('wechat-reply.store', $keys);
+		$this->_validates = $this->getValidatorScript('wechat-reply.store', $keys);
 		$this->_data = $reply;
 		return $this->view('wechat::admin.wechat.reply.edit');
 	}

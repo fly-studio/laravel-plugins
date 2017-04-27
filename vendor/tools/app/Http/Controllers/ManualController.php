@@ -20,10 +20,10 @@ class ManualController extends Controller
 
 	public function create(Request $request)
 	{
-		$keys = 'title,content,pid';
+		$keys = ['title', 'content', 'pid'];
 		$this->_data = [];
 		$this->_tree = (new Manual)->getNode(0)->getTree(['id','pid', 'title', 'level'], false);
-		$this->_validates = $this->getScriptValidate('manual.store', $keys);
+		$this->_validates = $this->getValidatorScript('tools::manual.store', $keys);
 		return $this->view('tools::manual.create');
 	}
 
@@ -41,8 +41,8 @@ class ManualController extends Controller
 
 	public function store(Request $request)
 	{
-		$keys = 'title,content,pid';
-		$data = $this->autoValidate($request, 'manual.store', $keys);
+		$keys = ['title', 'content', 'pid'];
+		$data = $this->autoValidate($request, 'tools::manual.store', $keys);
 
 		$manual = Manual::create($data);
 		return $this->success('', url('manual/' . $manual->getKey()));
@@ -50,18 +50,18 @@ class ManualController extends Controller
 
 	public function edit(Request $request, $id)
 	{
-		$keys = 'title,content,pid';
+		$keys = ['title', 'content', 'pid'];
 		$this->_data = Manual::findOrFail($id);
 		$this->_tree = (new Manual)->getNode(0)->getTree(['id','pid', 'title', 'level'], false);
-		$this->_validates = $this->getScriptValidate('manual.store', $keys);
+		$this->_validates = $this->getValidatorScript('tools::manual.store', $keys);
 		return $this->view('tools::manual.edit');
 	}
 
 	public function update(Request $request, $id)
 	{
 		$manual = Manual::findOrFail($id);
-		$keys = 'title,content,pid';
-		$data = $this->autoValidate($request, 'manual.store', $keys);
+		$keys = ['title', 'content', 'pid'];
+		$data = $this->autoValidate($request, 'tools::manual.store', $keys);
 
 		$manual->update($data);
 		return $this->success('', url('manual/' . $manual->getKey())); 

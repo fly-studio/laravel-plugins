@@ -6,7 +6,7 @@ return [
 		'migrate' => false, 
 		'translator' => true,
 		'router' => true,
-		'validation' => true,
+		'censor' => true,
 	],
 	'injectViews' => [
 		'admin/sidebar.inc.tpl' => 9999,

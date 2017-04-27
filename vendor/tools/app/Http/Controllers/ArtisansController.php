@@ -43,8 +43,8 @@ class ArtisansController extends Controller {
 
 	public function sqlQuery(Request $request)
 	{
-		$keys = 'content';
-		$data = $this->autoValidate($request, 'artisans.store', $keys);
+		$keys = ['content'];
+		$data = $this->autoValidate($request, 'tools::artisans.store', $keys);
 		try {
 			set_time_limit(120);
 			DB::transaction(function () use ($data){
@@ -59,8 +59,8 @@ class ArtisansController extends Controller {
 
 	public function schemaQuery(Request $request)
 	{
-		$keys = 'content';
-		$data = $this->autoValidate($request, 'artisans.store', $keys);
+		$keys = ['content'];
+		$data = $this->autoValidate($request, 'tools::artisans.store', $keys);
 
 		try {
 			set_time_limit(120);

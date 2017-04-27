@@ -60,7 +60,7 @@ class AccountController extends Controller
 	{
 		$keys = 'name,description,wechat_type,account,appid,appsecret,token,encodingaeskey,qr_aid,mchid,mchkey,sub_mch_id';
 		$this->_data = [];
-		$this->_validates = $this->getScriptValidate('wechat-account.store', $keys);
+		$this->_validates = $this->getValidatorScript('wechat-account.store', $keys);
 		return $this->view('wechat::admin.wechat.account.create');
 	}
 
@@ -80,7 +80,7 @@ class AccountController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'name,description,wechat_type,account,appid,appsecret,token,encodingaeskey,qr_aid,mchid,mchkey,sub_mch_id';
-		$this->_validates = $this->getScriptValidate('wechat-account.store', $keys);
+		$this->_validates = $this->getValidatorScript('wechat-account.store', $keys);
 		$this->_data = $account;
 		return $this->view('wechat::admin.wechat.account.edit');
 	}
