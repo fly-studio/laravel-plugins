@@ -5,6 +5,10 @@ return [
 		'title' => '附件不存在',
 		'content' => '该附件不存在，或者已被删除！',
 	],
+	'failure_invalid_id' => [
+		'title' => '参数错误',
+		'content' => '附件的ID错误，无此附件名。',
+	],
 	'failure_file_notexists' => [
 		'title' => '文件不存在',
 		'content' => '该文件不存在，可能上传不完整、或者已被删除！',

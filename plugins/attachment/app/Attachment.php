@@ -3,19 +3,21 @@ namespace Plugins\Attachment\App;
 
 use DB, Cache;
 use App\Model;
-use Plugins\Attachment\App\AttachmentFile;
-use Plugins\Attachment\App\AttachmentChunk;
+use Illuminate\Support\Str;
 use Plugins\Attachment\App\Tools\Utils\Path;
 use Plugins\Attachment\App\Tools\Utils\Type;
 use Plugins\Attachment\App\Tools\Utils\Mime;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 
-class Attachment extends Model{
+use Plugins\Attachment\App\AttachmentFile;
+use Plugins\Attachment\App\AttachmentChunk;
+
+class Attachment extends Model {
 	
 	protected $guarded = ['id'];
 	protected $hidden = ['full_path', 'real_path', 'relative_path', 'afid', 'basename', 'path', 'cdn_at', 'chunk_count', 'created_at', 'deleted_at', 'updated_at', 'uuid', 'extra'];
 	protected $casts = [
-		'extra' => 'array'
+		'extra' => 'array',
 	];
 	protected $appends = [
 		'url'
@@ -82,7 +84,7 @@ class Attachment extends Model{
 	 */
 	public function getUrlAttribute()
 	{
-		return url()->route('attachment', ['id' => $this->id, 'filename' => $this->original_name]);
+		return url()->route('attachment', ['id' => static::encode($this->id), 'filename' => $this->original_name]);
 	}
 
 	/**
@@ -97,6 +99,21 @@ class Attachment extends Model{
 			return false;
 
 		return url(str_replace(base_path(), '', $path));
+	}
+
+	public static function encode($id)
+	{
+		return base64_urlencode(pack('Z5V', 'v1.0', $id));
+	}
+
+	public static function decode($id)
+	{
+		if (!preg_match('@^[a-z0-9\-_]+$@i', $id) || !Str::startsWith($id, 'dj')) //safe base64 / starts at v
+			return false;
+		$result = @unpack('Z5version/Vid', base64_urldecode($id));
+		if (empty($result) || count($result) != 2 || !Str::startsWith($result['version'], 'v'))
+			return false;
+		return $result['id'];
 	}
 
 	public function file()

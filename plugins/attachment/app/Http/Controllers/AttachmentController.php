@@ -47,8 +47,14 @@ class AttachmentController extends Controller {
 		return redirect($url);
 	}
 
-	private function factory($id)
+	private function factory($id, $strict = true)
 	{
+		$_id = Attachment::decode($id);
+		if ($_id === false && $strict)
+			throw (new AttachmentException('attachment::attachment.failure_invalid_id'))->setStatusCode(404);
+		else if ($_id !== false)
+			$id = $_id;
+
 		$attachment = Attachment::mix($id);
 		if (empty($attachment))
 			throw (new AttachmentException('attachment::attachment.failure_notexists'))->setStatusCode(404);
@@ -82,7 +88,7 @@ class AttachmentController extends Controller {
 
 	public function info(Request $request, $id)
 	{
-		$attachment = $this->factory($id);
+		$attachment = $this->factory($id, false);
 
 		return $this->api($attachment->toArray());
 	}
