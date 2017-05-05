@@ -23,10 +23,17 @@ class RoleController extends Controller
 		$role = new Role;
 		$roles = $role->newQuery()->with('perms')->withCount(['users', 'children'])->where($role->getKeyName(), '!=', 0)->orderBy($role->getKeyName())->get();
 
-
+		$perms = [];
+		$_perms = Permission::orderBy('id', 'asc')->get();
+		foreach ($_perms as $value) {
+			list($name, ) = explode('.', $value['name']);
+			$perms[$name][] = $value;
+		}
 		//view's variant
-		$this->_table_data = $roles;
-		$this->_perms_data = Permission::all();
+		$this->_table_data = $roles->each(function($v){
+			$v->setRelation('perms', $v->perms->keyBy('id'));
+		});
+		$this->_perms_data = $perms;
 		return $this->view('system::admin.role.list');
 	}
 
