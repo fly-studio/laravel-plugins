@@ -108,7 +108,7 @@ class Attachment extends Model {
 
 	public static function decode($id)
 	{
-		if (!preg_match('@^[a-z0-9\-_]+$@i', $id) || !Str::startsWith($id, 'dj')) //safe base64 / starts at v
+		if (empty($id) || !preg_match('@^[a-z0-9\-_]+$@i', $id) || !Str::startsWith($id, 'dj')) //safe base64 / starts at v
 			return false;
 		$result = @unpack('Z5version/Vid', base64_urldecode($id));
 		if (empty($result) || count($result) != 2 || !Str::startsWith($result['version'], 'v'))

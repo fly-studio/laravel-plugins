@@ -1,15 +1,19 @@
 <?php
 
 $router->group(['prefix' => 'attachment'], function($router) {
-	$ctrl = 'AttachmentController';$pattern = '[a-zA-z0-9_\-]+';
-	$router->get('download/{id}', $ctrl.'@download')->where('id', $pattern);
-	$router->get('preview/{id}', $ctrl.'@preview')->where('id', $pattern);
-	$router->get('phone/{id}', $ctrl.'@phone')->where('id', $pattern);
+	$ctrl = 'AttachmentController';
+	$idPattern = '[a-zA-z0-9_\-]+';
+	$filePatern = '[^\"\#\%\*\:\<\>\?\|\/\\\\]+';
+	$intPattern = '[0-9]+';
+	$extPattern = '\.(jpg|jpeg|png|gif|bmp|webp|svg)';
+	$router->get('download/{id}{ext?}', $ctrl.'@download')->where(['id' => $idPattern, 'ext' => '\.'.$filePatern]);
+	$router->get('preview/{id}{ext?}', $ctrl.'@preview')->where(['id' => $idPattern, 'ext' => $extPattern])->name('attachment-resize');
+	$router->get('phone/{id}{ext?}', $ctrl.'@phone')->where(['id' => $idPattern, 'ext' => $extPattern]);
 	$router->get('ueditor', $ctrl.'@ueditorQuery');
-	$router->get('{id}/{width}x{height}', $ctrl.'@resize')->where(['width' => '[0-9]+', 'height' => '[0-9]+', 'id' => $pattern])->name('attachment-resize');
-	$router->get('{id}~{watermark}', $ctrl.'@watermark')->where(['watermark' => $pattern, 'id' => $pattern])->name('attachment-watermark');
-	$router->get('{id}~{watermark}/{width}x{height}', $ctrl.'@watermark')->where(['width' => '[0-9]+', 'height' => '[0-9]+', 'watermark' => $pattern, 'id' => $pattern])->name('attachment-watermark-resize');
-	$router->get('{id}/{filename?}', $ctrl.'@show')->where(['filename' => '.+', 'id' => $pattern])->name('attachment');
+	$router->get('{id}/{width}x{height}{ext?}', $ctrl.'@resize')->where(['width' => $intPattern, 'height' => $intPattern, 'id' => $idPattern, 'ext' => $extPattern])->name('attachment-resize');
+	$router->get('{id}~{watermark}{ext?}', $ctrl.'@watermark')->where(['watermark' => $idPattern, 'id' => $idPattern, 'ext' => $extPattern])->name('attachment-watermark');
+	$router->get('{id}~{watermark}/{width}x{height}{ext?}', $ctrl.'@watermark')->where(['width' => $intPattern, 'height' => $intPattern, 'watermark' => $idPattern, 'id' => $idPattern, 'ext' => $extPattern])->name('attachment-watermark-resize');
+	$router->get('{id}/{filename?}', $ctrl.'@show')->where(['filename' => '.+', 'id' => $idPattern])->name('attachment');
 	$router->put('hash', $ctrl.'@hashQuery');
 	$router->post('uploader', $ctrl.'@uploaderQuery');
 	$router->post('dataurl', $ctrl.'@dataurlQuery');

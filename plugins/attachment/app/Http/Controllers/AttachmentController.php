@@ -68,6 +68,14 @@ class AttachmentController extends Controller {
 
 	public function show(Request $request, $id, $filename = null)
 	{
+		/*
+		//parse route error, is it required?
+		if (in_array($id, ['download', 'preview', 'phone']))
+		{
+			list($_id) = explode('.', $filename);
+			return $this->$id($request, $_id);
+		}*/
+
 		$attachment = $this->factory($id);
 		if ($attachment->file_type == 'image')
 		{
