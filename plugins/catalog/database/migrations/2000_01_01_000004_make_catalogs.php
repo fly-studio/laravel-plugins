@@ -2,7 +2,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CatalogSeeds extends Migration
+class MakeCatalogs extends Migration
 {
 	/**
 	 * Run the migrations.

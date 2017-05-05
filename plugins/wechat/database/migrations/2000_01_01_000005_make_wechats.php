@@ -2,7 +2,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class WechatSeeds extends Migration
+class MakeWechats extends Migration
 {
 	/**
 	 * Run the migrations.

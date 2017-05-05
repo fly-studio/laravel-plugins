@@ -69,14 +69,14 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 						<p><i><{$item->description}></i></p>
 						<p><b>组ID：</b><{$item->getKey()}></p>
 						<p><b>用户：</b><a href="<{'admin/member'|url}>?f[role_id][in][]=<{$item->getKey()}>"><{$item->users_count}> 个</a></p>
-						<{if empty($item->pid) || $item->children_count > 0}>
+						<{if $item->children_count > 0}>
 						<div class="alert alert-danger">
-							<ul>
-								<li>不建议给此用户组设置权限，因为它「拥有子用户组」或是「根用户组」</li>
+							<ol>
+								<li>不建议给此用户组设置权限，因为它拥有「子组」</li>
 								<li>不建议将用户放入此用户组</li>
-								<li>用户只会享有自己组的权限，不会享有父级的权限</li>
-								<li>拥有多个用户组，权限叠加</li>
-							</ul>
+								<li>注意：用户<b>只会</b>享有所属组的权限，不会享有「父组」的权限</li>
+								<li>如果该用户设置多个用户组，则权限叠加</li>
+							</ol>
 						</div>
 						<{/if}>
 						<h4 class="sub-header">权限</h4>
