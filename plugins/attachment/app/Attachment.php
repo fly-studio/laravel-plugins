@@ -23,6 +23,8 @@ class Attachment extends Model {
 		'url'
 	];
 
+	private static $cipher;
+
 	/**
 	 * 得到附件的文件类型
 	 * @example image, office, video, text
@@ -101,17 +103,28 @@ class Attachment extends Model {
 		return url(str_replace(base_path(), '', $path));
 	}
 
+	public static function getCipher()
+	{
+		if (empty(static::$cipher))
+		{
+			static::$cipher = new \phpseclib\Crypt\DES();
+			static::$cipher->setPassword(config('app.key'));
+			//static::$cipher->setIV(crypt_random_string(static::$cipher->getBlockLength() >> 3));
+		}
+		return static::$cipher;
+	}
+
 	public static function encode($id)
 	{
-		return base64_urlencode(pack('Z5V', 'v1.0', $id));
+		return 'gF'.base64_urlencode(static::getCipher()->encrypt(pack('V', $id)));
 	}
 
 	public static function decode($id)
 	{
-		if (empty($id) || !preg_match('@^[a-z0-9\-_]+$@i', $id) || !Str::startsWith($id, 'dj')) //safe base64 / starts at v
+		if (empty($id) || !preg_match('@^gF[a-z0-9\-_]+$@i', $id) ) //starts at gF
 			return false;
-		$result = @unpack('Z5version/Vid', base64_urldecode($id));
-		if (empty($result) || count($result) != 2 || !Str::startsWith($result['version'], 'v'))
+		$result = @unpack('Vid', static::getCipher()->decrypt(base64_urldecode(substr($id, 2))));
+		if (!isset($result['id']))
 			return false;
 		return $result['id'];
 	}
