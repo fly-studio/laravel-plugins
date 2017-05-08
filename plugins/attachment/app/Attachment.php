@@ -108,7 +108,7 @@ class Attachment extends Model {
 		if (empty(static::$cipher))
 		{
 			static::$cipher = new \phpseclib\Crypt\DES();
-			static::$cipher->setPassword(config('app.key'));
+			static::$cipher->setPassword(config('attachment.key'));
 			//static::$cipher->setIV(crypt_random_string(static::$cipher->getBlockLength() >> 3));
 		}
 		return static::$cipher;
