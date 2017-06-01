@@ -3,7 +3,7 @@ namespace Plugins\Wechat\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Addons\Core\Http\OutputResponse;
+use Addons\Core\Http\OutputResponseFactory;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -169,7 +169,7 @@ abstract class WechatController extends Controller {
 	{
 		$data = WechatAccount::find($account->getAccountID());
 		$data = array_diff_key($data->toArray(), array_flip(['appsecret', 'token', 'encodingaeskey', 'mchkey']));
-		return (new OutputResponse)->setRequest($request)->setResult('success');
+		return app(OutputResponseFactory::class)->success()->setRequest($request);
 	}
 
 	public function news(Request $request, $id)

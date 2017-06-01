@@ -3,8 +3,8 @@ namespace Plugins\Attachment\App\Http\Controllers;
 
 use Agent, Auth, Mimes;
 use Illuminate\Http\Request;
-use Addons\Core\Http\OutputResponse;
 use Addons\Core\Controllers\Controller;
+use Addons\Core\Http\Response\TextResponse;
 use Plugins\Attachment\App\Tools\InputManager;
 use Plugins\Attachment\App\Tools\OutputManager;
 use Plugins\Attachment\App\Tools\SyncManager;
@@ -190,7 +190,7 @@ class AttachmentController extends Controller {
 			$data = ['success' => 0, 'message' => $e->getMessage()];
 		}
 		
-		return (new OutputResponse)->setData($data, true);
+		return (new TextResponse)->setData($data, true);
 	}
 
 	public function kindeditorQuery(Request $request)
@@ -205,7 +205,7 @@ class AttachmentController extends Controller {
 		} catch (\Exception $e) {
 			$data = ['error' => 1, 'message' => $e->getMessage()];
 		}
-		return (new OutputResponse)->setData($data, true);
+		return (new TextResponse)->setData($data, true);
 	}
 
 	public function ueditorQuery(Request $request, $start = 0, $size = null)
@@ -349,7 +349,7 @@ class AttachmentController extends Controller {
 			default:
 				break;
 		}
-		return (new OutputResponse)->setData($data, true);
+		return (new TextResponse)->setData($data, true);
 	}
 
 	public function fullavatarQuery(Request $request)
@@ -387,7 +387,7 @@ class AttachmentController extends Controller {
 			}
 		}
 
-		return (new OutputResponse)->setData($result, true);
+		return (new TextResponse)->setData($result, true);
 	}
 
 	public function dataurlQuery(Request $request)

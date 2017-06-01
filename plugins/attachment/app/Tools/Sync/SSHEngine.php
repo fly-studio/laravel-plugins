@@ -1,7 +1,7 @@
 <?php
 namespace Plugins\Attachment\App\Tools\Sync;
 
-use Addons\Core\Tools\SSHClient;
+use Addons\Func\Tools\SSHClient;
 use Plugins\Attachment\App\Tools\Utils\Path;
 use Plugins\Attachment\App\Contracts\Tools\Sync;
 use Plugins\Attachment\App\Tools\AttachmentException;
