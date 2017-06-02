@@ -62,14 +62,14 @@ class PermissionController extends Controller
 	{
 		$keys = ['name', 'display_name', 'description'];
 		$this->_data = [];
-		$this->_validates = $this->getValidatorScript('system::permission.store', $keys);
+		$this->_validates = $this->censorScripts('system::permission.store', $keys);
 		return $this->view('system::admin.permission.create');
 	}
 
 	public function store(Request $request)
 	{
 		$keys = ['name', 'display_name', 'description'];
-		$data = $this->autoValidate($request, 'system::permission.store', $keys);
+		$data = $this->censor($request, 'system::permission.store', $keys);
 		if (strpos($data['name'], '*') !== FALSE) //添加RESTful权限
 			Permission::import([$data['name'] => $data['display_name']], str_replace('*', '{{key}}', $data['name']));
 		else
@@ -83,7 +83,7 @@ class PermissionController extends Controller
 		if (empty($permission))
 			return $this->failure_notexists();
 		$keys = ['display_name', 'description'];
-		$this->_validates = $this->getValidatorScript('system::permission.store', $keys);
+		$this->_validates = $this->censorScripts('system::permission.store', $keys);
 		$this->_data = $permission;
 		return $this->view('system::admin.permission.edit');
 	}
@@ -95,7 +95,7 @@ class PermissionController extends Controller
 			return $this->failure_notexists();
 
 		$keys = ['display_name', 'description'];
-		$data = $this->autoValidate($request, 'system::permission.store', $keys, $permission);
+		$data = $this->censor($request, 'system::permission.store', $keys, $permission);
 		$permission->update($data);
 		return $this->success();
 	}

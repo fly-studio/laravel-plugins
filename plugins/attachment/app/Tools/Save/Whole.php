@@ -2,11 +2,11 @@
 
 namespace Plugins\Attachment\App\Tools\Save;
 
+use Illuminate\Database\Eloquent\Model;
 use Plugins\Attachment\App\Contracts\Tools\Save;
 use Plugins\Attachment\App\Exceptions\AttachmentException;
 
 use Plugins\Attachment\App\Attachment;
-use Illuminate\Database\Eloquent\Model;
 
 class Whole extends Save {
 

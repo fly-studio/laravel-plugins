@@ -58,7 +58,7 @@ class RoleController extends Controller
 	public function store(Request $request)
 	{
 		$keys = ['name', 'display_name', 'description', 'url', 'pid'];
-		$data = $this->autoValidate($request, 'system::role.store', $keys);
+		$data = $this->censor($request, 'system::role.store', $keys);
 
 		Role::create($data);
 		return $this->success('', url('admin/role'));
@@ -69,7 +69,7 @@ class RoleController extends Controller
 		if ($id == -1) //保存所有权限
 		{
 			$keys = ['perms'];
-			$data = $this->autoValidate($request, 'system::role.store', $keys);
+			$data = $this->censor($request, 'system::role.store', $keys);
 
 			foreach(Role::all() as $role)
 				$role->perms()->sync(isset($data['perms'][$role->getKey()]) ? $data['perms'][$role->getKey()] : [] );
@@ -81,7 +81,7 @@ class RoleController extends Controller
 				return $this->failure_notexists();
 
 			$keys = ['display_name', 'description', 'url'];
-			$data = $this->autoValidate($request, 'system::role.store', $keys);
+			$data = $this->censor($request, 'system::role.store', $keys);
 			$role->update($data);
 		}
 		
@@ -92,7 +92,7 @@ class RoleController extends Controller
 	{
 
 		$keys = ['role_id', 'original_role_id'];
-		$data = $this->autoValidate($request, 'system::role.destroy', $keys);
+		$data = $this->censor($request, 'system::role.destroy', $keys);
 
 		$originalRole = Role::find($data['original_role_id']);
 		foreach ($originalRole->users()->get(['id']) as $user)

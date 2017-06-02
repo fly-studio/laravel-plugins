@@ -11,7 +11,7 @@ class PasswordController extends Controller
 	public function index(Request $request)
 	{
 		$keys = ['password'];
-		$this->_validates = $this->getValidatorScript('member.store', $keys);
+		$this->_validates = $this->censorScripts('member.store', $keys);
 		$this->_data = $this->user;
 		return $this->view('system::admin.profile.password');
 	}
@@ -19,7 +19,7 @@ class PasswordController extends Controller
 	public function update(Request $request, $id)
 	{
 		$keys = ['password'];
-		$data = $this->autoValidate($request, 'member.store', $keys);
+		$data = $this->censor($request, 'member.store', $keys);
 		$data['password'] = bcrypt($data['password']);
 		$this->user->update($data);
 		Auth::logout();

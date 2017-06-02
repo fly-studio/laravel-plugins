@@ -61,14 +61,14 @@ class DepotNewsController extends Controller
 	{
 		$keys = 'title,author,description,content,cover_aid,cover_in_content,redirect,url';
 		$this->_data = [];
-		$this->_validates = $this->getValidatorScript('wechat-news.store', $keys);
+		$this->_validates = $this->censorScripts('wechat-news.store', $keys);
 		return $this->view('wechat::admin.wechat.news.create');
 	}
 
 	public function store(Request $request, Account $account)
 	{
 		$keys = 'title,author,description,content,cover_aid,cover_in_content,redirect,url';
-		$data = $this->autoValidate($request, 'wechat-news.store', $keys);
+		$data = $this->censor($request, 'wechat-news.store', $keys);
 
 		$news = WechatDepotNews::create($data + ['waid' => $account->getAccountID()]);
 		return $this->success('', url('admin/wechat/depot-news'), $news->toArray());
@@ -81,7 +81,7 @@ class DepotNewsController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'title,author,description,content,cover_aid,cover_in_content,redirect,url';
-		$this->_validates = $this->getValidatorScript('wechat-news.store', $keys);
+		$this->_validates = $this->censorScripts('wechat-news.store', $keys);
 		$this->_data = $news;
 		return $this->view('wechat::admin.wechat.news.edit');
 	}
@@ -93,7 +93,7 @@ class DepotNewsController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'title,author,description,content,cover_aid,cover_in_content,redirect,url';
-		$data = $this->autoValidate($request, 'wechat-news.store', $keys);
+		$data = $this->censor($request, 'wechat-news.store', $keys);
 		$data['cover_in_content'] = isset($data['cover_in_content']) ? boolval($data['cover_in_content']): false;
 
 		$news->update($data);

@@ -59,7 +59,7 @@ class CatalogController extends Controller
 	public function orderQuery(Request $request)
 	{
 		$keys = ['orders'];
-		$data = $this->autoValidate($request, 'catalog::catalog.store', $keys);
+		$data = $this->censor($request, 'catalog::catalog.store', $keys);
 
 		DB::transaction(function() use ($data) {
 			foreach($data['orders'] as $id => $order)
@@ -71,7 +71,7 @@ class CatalogController extends Controller
 	public function store(Request $request)
 	{
 		$keys = ['name', 'title', 'pid', 'extra'];
-		$data = $this->autoValidate($request, 'catalog::catalog.store', $keys);
+		$data = $this->censor($request, 'catalog::catalog.store', $keys);
 		if (!empty(Catalog::findByNamePid($data['name'], $data['pid'])))
 			return $this->failure('catalog::catalog.name_exists', false, $data);
 
@@ -88,7 +88,7 @@ class CatalogController extends Controller
 			return $this->failure_notexists();
 
 		$keys = ['title', 'extra'];
-		$data = $this->autoValidate($request, 'catalog::catalog.store', $keys, $catalog);
+		$data = $this->censor($request, 'catalog::catalog.store', $keys, $catalog);
 
 		DB::transaction(function() use ($data, $catalog) {
 			$catalog->update($data);
@@ -99,7 +99,7 @@ class CatalogController extends Controller
 	public function move(Request $request)
 	{
 		$keys = 'original_id,target_id,move_type';
-		$data = $this->autoValidate($request, 'catalog.move', $keys);
+		$data = $this->censor($request, 'catalog.move', $keys);
 
 		$c0 = Catalog::find($data['target_id']);
 		if (empty($c0))

@@ -58,7 +58,7 @@ class MenuController extends Controller
 			return $this->failure('wechat.failure_menu_overflow');
 
 		$keys = 'title,pid,type,event,url,wdid';
-		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
+		$data = $this->censor($request, 'wechat-menu.store', $keys);
 
 		$menu = WechatMenu::create($data + ['waid' => $account->getAccountID(), 'order' => intval($menus->max('order')) + 1]);
 		$menu->event_key = 'key-' . $menu->getKey();$menu->save();
@@ -72,7 +72,7 @@ class MenuController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'title,type,event,url,wdid';
-		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
+		$data = $this->censor($request, 'wechat-menu.store', $keys);
 
 		$menu->update($data);
 		return $this->success('', FALSE, $menu->toArray());
@@ -145,7 +145,7 @@ class MenuController extends Controller
 	public function publishJson(Request $request, Account $account)
 	{
 		$keys = 'content';
-		$data = $this->autoValidate($request, 'wechat-menu.store', $keys);
+		$data = $this->censor($request, 'wechat-menu.store', $keys);
 
 		$json = json_decode($data['content'], true);
 		if (empty($json) || empty($json['button']))

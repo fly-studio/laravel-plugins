@@ -18,7 +18,7 @@ class ProfileController extends Controller
 	{
 		$keys = ['nickname', 'realname', 'gender', 'email', 'phone', 'idcard', 'avatar_aid'];
 		$this->_data = Auth::user();
-		$this->_validates = $this->getValidatorScript('member.store', $keys);
+		$this->_validates = $this->censorScripts('member.store', $keys);
 		return $this->view('system::admin.profile.profile');
 	}
 
@@ -26,7 +26,7 @@ class ProfileController extends Controller
 	{
 		$user = Auth::user();
 		$keys = ['nickname', 'realname', 'gender', 'email', 'phone', 'idcard', 'avatar_aid'];
-		$data = $this->autoValidate($request, 'member.store', $keys, $user);
+		$data = $this->censor($request, 'member.store', $keys, $user);
 		$user->update($data);
 		return $this->success();
 	}

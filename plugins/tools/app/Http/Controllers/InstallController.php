@@ -21,7 +21,7 @@ class InstallController extends Controller {
 	public function saveQuery(Request $request)
 	{
 		$keys = ['SESSION_PATH', 'APP_URL', 'DB_HOST', 'DB_PORT', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD'];
-		$data = $this->autoValidate($request, 'tools::install.store', $keys);
+		$data = $this->censor($request, 'tools::install.store', $keys);
 
 		$data['APP_KEY'] = 'base64:'.base64_encode(random_bytes(config('app.cipher') == 'AES-128-CBC' ? 16 : 32));
 

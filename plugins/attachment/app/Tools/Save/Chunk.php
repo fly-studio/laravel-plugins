@@ -4,12 +4,12 @@ namespace Plugins\Attachment\App\Tools\Save;
 
 use DB;
 use Plugins\Attachment\App\Tools\File;
+use Illuminate\Database\Eloquent\Model;
 use Plugins\Attachment\App\Tools\Utils\Path;
 use Plugins\Attachment\App\Contracts\Tools\Save;
 use Plugins\Attachment\App\Exceptions\AttachmentException;
 
 use Plugins\Attachment\App\Attachment;
-use Illuminate\Database\Eloquent\Model;
 use Plugins\Attachment\App\AttachmentChunk;
 
 class Chunk extends Save {
