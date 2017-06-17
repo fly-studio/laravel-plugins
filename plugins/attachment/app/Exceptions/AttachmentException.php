@@ -13,7 +13,7 @@ class AttachmentException extends OutputResponseException
 		$_config = config('attachment');
 		$transData += ['maxsize' => format_bytes($_config['maxsize']), 'ext' => implode(',', $_config['ext'])];
 
-		if (strpos($message, '::') === false && strpos($message, '.') === false)
+		if (strpos($message_name, '::') === false && strpos($message_name, '.') === false)
 		{
 			$message = 'attachment.'.$message_name.'.content';
 			if (Lang::has($message))

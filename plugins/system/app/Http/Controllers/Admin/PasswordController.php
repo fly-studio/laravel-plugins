@@ -12,7 +12,7 @@ class PasswordController extends Controller
 	{
 		$keys = ['password'];
 		$this->_validates = $this->censorScripts('member.store', $keys);
-		$this->_data = $this->user;
+		$this->_data = Auth::user();
 		return $this->view('system::admin.profile.password');
 	}
 
@@ -21,7 +21,7 @@ class PasswordController extends Controller
 		$keys = ['password'];
 		$data = $this->censor($request, 'member.store', $keys);
 		$data['password'] = bcrypt($data['password']);
-		$this->user->update($data);
+		Auth::user()->update($data);
 		Auth::logout();
 		return $this->success('', 'auth');
 	}
