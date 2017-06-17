@@ -116,7 +116,7 @@ class Attachment extends Model {
 
 	public static function encode($id)
 	{
-		return 'gF'.base64_urlencode(static::getCipher()->encrypt(pack('V', $id)));
+		return empty($id) ? '0' : 'gF'.base64_urlencode(static::getCipher()->encrypt(pack('V', $id)));
 	}
 
 	public static function decode($id)
