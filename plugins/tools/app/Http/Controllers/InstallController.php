@@ -3,7 +3,7 @@ namespace Plugins\Tools\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
-use Addons\Core\Validation\ValidatesRequests;
+use Addons\Censor\Validation\ValidatesRequests;
 
 class InstallController extends Controller {
 	use ValidatesRequests;

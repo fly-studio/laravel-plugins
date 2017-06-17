@@ -5,7 +5,7 @@ use DB;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
-use Addons\Core\Validation\ValidatesRequests;
+use Addons\Censor\Validation\ValidatesRequests;
 use Symfony\Component\Console\Input\StringInput;
 
 class ArtisansController extends Controller {

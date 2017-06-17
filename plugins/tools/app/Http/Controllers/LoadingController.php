@@ -4,7 +4,7 @@ namespace Plugins\Tools\App\Http\Controllers;
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Addons\Core\Validation\ValidatesRequests;
+use Addons\Censor\Validation\ValidatesRequests;
 
 class LoadingController extends Controller {
 	protected $addons = false;

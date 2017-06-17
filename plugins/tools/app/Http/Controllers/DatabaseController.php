@@ -6,7 +6,7 @@ use PHPExcel, PHPExcel_Style_Border, PHPExcel_Style_Fill, PHPExcel_Style_Alignme
 use Addons\Core\File\Mimes;
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
-use Addons\Core\Validation\ValidatesRequests;
+use Addons\Censor\Validation\ValidatesRequests;
 
 class DatabaseController extends Controller {
 	use ValidatesRequests;
