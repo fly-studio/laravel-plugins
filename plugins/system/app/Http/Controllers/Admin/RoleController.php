@@ -4,7 +4,7 @@ namespace Plugins\System\App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
-use Addons\Core\Controllers\ApiTrait;
+use Addons\Core\ApiTrait;
 
 use App\Role;
 use App\Permission;

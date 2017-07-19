@@ -13,7 +13,7 @@ use Plugins\Wechat\App\WechatDepot;
 use Plugins\Wechat\App\WechatUser;
 use Plugins\Wechat\App\Tools\Send;
 use Plugins\Wechat\App\Tools\Account;
-use Addons\Core\Controllers\ApiTrait;
+use Addons\Core\ApiTrait;
 
 class MessageController extends Controller
 {

@@ -7,7 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Permission;
-use Addons\Core\Controllers\ApiTrait;
+use Addons\Core\ApiTrait;
 
 class PermissionController extends Controller
 {

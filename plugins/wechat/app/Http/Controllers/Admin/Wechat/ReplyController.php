@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Plugins\Wechat\App\WechatAccount;
 use Plugins\Wechat\App\WechatReply;
 use Plugins\Wechat\App\Tools\Account;
-use Addons\Core\Controllers\ApiTrait;
+use Addons\Core\ApiTrait;
 
 class ReplyController extends Controller
 {

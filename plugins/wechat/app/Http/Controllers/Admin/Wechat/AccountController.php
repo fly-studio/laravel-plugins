@@ -7,7 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Plugins\Wechat\App\WechatAccount;
-use Addons\Core\Controllers\ApiTrait;
+use Addons\Core\ApiTrait;
 
 class AccountController extends Controller
 {

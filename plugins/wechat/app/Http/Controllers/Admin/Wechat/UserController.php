@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Plugins\Wechat\App\WechatUser;
 use Plugins\Wechat\App\Tools\Account;
-use Addons\Core\Controllers\ApiTrait;
+use Addons\Core\ApiTrait;
 
 class UserController extends Controller
 {

@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Auth;
 use App\User;
-use Addons\Core\Controllers\ApiTrait;
+use Addons\Core\ApiTrait;
 
 class ProfileController extends Controller
 {
