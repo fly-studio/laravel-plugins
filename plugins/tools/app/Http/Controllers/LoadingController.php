@@ -7,7 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Addons\Censor\Validation\ValidatesRequests;
 
 class LoadingController extends Controller {
-	protected $addons = false;
+	protected $disableUser = true;
 
 	public function index($folders = [], $style = '', $url = '', $tips = '')
 	{

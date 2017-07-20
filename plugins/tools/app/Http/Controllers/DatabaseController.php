@@ -11,7 +11,7 @@ use Addons\Censor\Validation\ValidatesRequests;
 class DatabaseController extends Controller {
 	use ValidatesRequests;
 
-	protected $addons = false;
+	protected $disableUser = true;
 
 	public function export()
 	{

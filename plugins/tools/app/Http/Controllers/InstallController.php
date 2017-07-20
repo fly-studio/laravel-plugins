@@ -8,7 +8,7 @@ use Addons\Censor\Validation\ValidatesRequests;
 class InstallController extends Controller {
 	use ValidatesRequests;
 
-	protected $addons = false;
+	protected $disableUser = true;
 
 	public function index()
 	{

@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\StringInput;
 
 class ArtisansController extends Controller {
 	use ValidatesRequests;
-	protected $addons = false;
+	protected $disableUser = true;
 
 	public function index()
 	{
@@ -28,7 +28,8 @@ class ArtisansController extends Controller {
 		{
 			set_time_limit(120);
 			$kernel = app('Addons\\Core\\Console\\Kernel');
-			$commands = app('App\\Console\\Kernel')->commands;$kernel->setCommands($commands);
+			$commands = get_property(app('App\\Console\\Kernel'), 'commands');
+			$kernel->setCommands($commands);
 			try {
 				$out = $kernel->run($command);
 			} catch (Exception $e) {

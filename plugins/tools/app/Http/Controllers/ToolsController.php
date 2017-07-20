@@ -7,7 +7,7 @@ use Addons\Core\Controllers\Controller;
 
 class ToolsController extends Controller {
 
-	protected $addons = false;
+	protected $disableUser = true;
 	
 	public function index()
 	{
