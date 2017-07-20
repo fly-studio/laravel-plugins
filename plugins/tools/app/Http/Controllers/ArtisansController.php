@@ -27,6 +27,7 @@ class ArtisansController extends Controller {
 		if (Str::startsWith($command, 'php artisan'))
 		{
 			set_time_limit(120);
+			//在网页上执行，下面的方法会导致 plugins 中的commands、console、migrations都无法加载，待修改为cli执行
 			$kernel = app('Addons\\Core\\Console\\Kernel');
 			$commands = get_property(app('App\\Console\\Kernel'), 'commands');
 			$kernel->setCommands($commands);
