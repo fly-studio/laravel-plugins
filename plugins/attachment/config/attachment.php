@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'key' => 'a random bytes', //上线时需要设置，但是上线之后修改会导致所有附件的对外ID，也就是URL全被改变
+	'key' => 'a random bytes', //上线时需要设置，如果对外上线之后再修改，会导致所有附件的对外ID，也就是URL全被改变，后果非常严重
 	'remote' => [
 		'driver' => 'null', // string: null, SSH
 
