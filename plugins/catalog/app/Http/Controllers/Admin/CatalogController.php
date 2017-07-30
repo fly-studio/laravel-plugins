@@ -41,6 +41,17 @@ class CatalogController extends Controller
 		return $this->api($data);
 	}
 
+	public function tree(Request $request, $parentName)
+	{
+		$catalog = Catalog::getCatalogsByName($parentName);
+		if (empty($catalog))
+			return $this->failure_notexists();
+		$root = Catalog::find($catalog['id']);
+		$data = $root->getDescendant()->prepend($root)->keyBy('id');
+		//dd();
+		return $this->api(['data' => $root->_data_to_tree($data->toArray(), $catalog['id'], false)]);
+	}
+
 	public function show(Request $request, $id)
 	{
 		$root = Catalog::find($id);
