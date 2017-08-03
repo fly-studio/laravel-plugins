@@ -116,7 +116,7 @@ class CatalogRepository extends Repository {
 		$descendant = $this->findDescendant($id);
 		if (empty($descendant))
 			return false;
-		return $root->_data_to_tree($descendant->keyBy('id')->toArray(), $id, false);
+		return Catalog::datasetToTree($descendant->keyBy('id')->toArray(), $id, false);
 	}
 
 	public function data(Request $request)
@@ -130,7 +130,7 @@ class CatalogRepository extends Repository {
 			{
 				$items = $page->getCollection()->keyBy($catalog->getKeyName())->toArray();
 				unset($items[0]);
-				$page->setCollection(new Collection($catalog->_data_to_tree($items, 0, false)));
+				$page->setCollection(new Collection(Catalog::datasetToTree($items, 0, false)));
 			}
 		});
 		$data['recordsTotal'] = $total; //不带 f q 条件的总数
