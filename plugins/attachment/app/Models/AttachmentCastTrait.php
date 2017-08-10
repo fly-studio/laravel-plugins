@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Attachment\App;
+namespace Plugins\Attachment\App\Models;
 
 use Plugins\Attachment\App\Attachment;
 

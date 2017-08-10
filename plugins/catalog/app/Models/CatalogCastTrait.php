@@ -1,12 +1,12 @@
 <?php
-namespace Plugins\Catalog\App;
+namespace Plugins\Catalog\App\Models;
 
 use App\Catalog as AppCatalog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 trait CatalogCastTrait {
-	
+
 	public function asCatalog($value) {
 		$data = AppCatalog::getCatalogsById($value);
 		unset($data['children']);
