@@ -2,21 +2,24 @@
 namespace Plugins\Catalog\App\Http\Controllers\Admin;
 
 use DB;
-use App\Catalog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
-use Addons\Core\ApiTrait;
+
+use App\Catalog;
+use App\Repositories\CatalogRepository;
 
 class CatalogController extends Controller
 {
-	use ApiTrait;
 	public $permissions = ['catalog'];
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+
+	protected $repo;
+
+	public function __construct(CatalogRepository $repo)
+	{
+		$this->repo = $repo;
+	}
+
 	public function index(Request $request)
 	{
 		return redirect('admin/catalog/0');
@@ -24,46 +27,32 @@ class CatalogController extends Controller
 
 	public function data(Request $request)
 	{
-		$catalog = new Catalog;
-		$builder = $catalog->newQuery();
-
-		$total = $this->_getCount($request, $builder, FALSE);
-		$data = $this->_getData($request, $builder, function($page) use($request, $catalog) {
-			if ($request->input('tree') == 'true')
-			{
-				$items = $page->getCollection()->keyBy($catalog->getKeyName())->toArray();
-				unset($items[0]);
-				$page->setCollection(new Collection($catalog->_data_to_tree($items, 0, false)));
-			}
-		});
-		$data['recordsTotal'] = $total; //不带 f q 条件的总数
-		$data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
+		$data = $this->repo->data($request);
 		return $this->api($data);
 	}
 
 	public function tree(Request $request, $parentName)
 	{
-		$catalog = Catalog::getCatalogsByName($parentName);
+		$catalog = $this->repo->getCatalogsByName($parentName);
 		if (empty($catalog))
 			return $this->failure_notexists();
-		$root = Catalog::find($catalog['id']);
-		$data = $root->getDescendant()->prepend($root)->keyBy('id');
-		//dd();
-		return $this->api(['data' => $root->_data_to_tree($data->toArray(), $catalog['id'], false)]);
+
+		$data = $this->repo->tree($catalog['id']);
+		return $this->api(['data' => $data]);
 	}
 
 	public function show(Request $request, $id)
 	{
-		$root = Catalog::find($id);
+		$root = $this->repo->findWithParents($id);
 		if (empty($root))
 			return $this->failure_notexists();
-		$root->parents = $root->getParents();
-		if ($request->offsetExists('of'))
-			return $this->api($root->load(['parent'])->toArray());
 
-		$this->_topNodes = Catalog::find('0')->children->where('name', '>', '')->where('title', '>', '');
+		if ($request->offsetExists('of'))
+			return $this->api($root);
+
+		$this->_topNodes = $this->repo->findTops(0);
 		$this->_root = $root;
-		$this->_table_data = empty($id) ? null : $root->getDescendant()->prepend($root);
+		$this->_table_data = empty($id) ? null : $this->repo->findDescendant($root);
 		return $this->view('catalog::admin.catalog.list');
 	}
 
@@ -72,10 +61,7 @@ class CatalogController extends Controller
 		$keys = ['orders'];
 		$data = $this->censor($request, 'catalog::catalog.store', $keys);
 
-		DB::transaction(function() use ($data) {
-			foreach($data['orders'] as $id => $order)
-				Catalog::where('id', $id)->update(['order_index' => intval($order)]);
-		});
+		$this->repo->order($data['orders']);
 		return $this->success('', false);
 	}
 
@@ -83,46 +69,35 @@ class CatalogController extends Controller
 	{
 		$keys = ['name', 'title', 'pid', 'extra'];
 		$data = $this->censor($request, 'catalog::catalog.store', $keys);
-		if (!empty(Catalog::findByNamePid($data['name'], $data['pid'])))
+
+		if (!empty($this->repo->findByNamePid($data['name'], $data['pid'])))
 			return $this->failure('catalog::catalog.name_exists', false, $data);
 
-		DB::transaction(function() use ($data) {
-			Catalog::create($data);
-		});
+		$this->repo->store($data);
 		return $this->success();
 	}
 
 	public function update(Request $request, $id)
 	{
-		$catalog = Catalog::find($id);
+		$catalog = $this->repo->find($id);
 		if (empty($catalog))
 			return $this->failure_notexists();
 
 		$keys = ['title', 'extra'];
 		$data = $this->censor($request, 'catalog::catalog.store', $keys, $catalog);
 
-		DB::transaction(function() use ($data, $catalog) {
-			$catalog->update($data);
-		});
+		$this->repo->update($catalog, $data);
+
 		return $this->success();
 	}
 
 	public function move(Request $request)
 	{
 		$keys = 'original_id,target_id,move_type';
-		$data = $this->censor($request, 'catalog.move', $keys);
+		$data = $this->censor($request, 'catalog::catalog.move', $keys);
 
-		$c0 = Catalog::find($data['target_id']);
-		if (empty($c0))
+		if ($this->repo->move($data['target_id'], $data['original_id'], $data['move_type']) === false)
 			return $this->failure_notexists();
-
-		$c1 = Catalog::find($data['original_id']);
-		if (empty($c1))
-			return $this->failure_notexists();
-
-		DB::transaction(function() use ($c0, $c1, $data) {
-			$c1->move($c0->getKey(), $data['move_type']);
-		});
 
 		return $this->success('catalog::catalog.move_success', false, $data);
 	}
@@ -131,10 +106,8 @@ class CatalogController extends Controller
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
 		$ids = array_wrap($id);
-		
-		DB::transaction(function() use ($ids) {
-			Catalog::destroy($ids);
-		});
+
+		$this->repo->destroy($ids);
 		return $this->success();
 	}
 }

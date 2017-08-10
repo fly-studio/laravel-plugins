@@ -46,7 +46,7 @@ class RoleController extends Controller
 			if ($request->input('tree') == 'true')
 			{
 				$items = $page->getCollection()->keyBy($role->getKeyName())->toArray();
-				$page->setCollection(new Collection($role->_data_to_tree($items, 0, false)));
+				$page->setCollection(new Collection(Role::datasetToTree($items, 0, false)));
 			}
 		});
 
@@ -84,7 +84,7 @@ class RoleController extends Controller
 			$data = $this->censor($request, 'system::role.store', $keys);
 			$role->update($data);
 		}
-		
+
 		return $this->success();
 	}
 
