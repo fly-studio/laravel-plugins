@@ -28,7 +28,7 @@ class Chunk extends Save {
 		//此处如果使用先select再insert，容易出现uuid重复冲突，如果在select中启用for update，则会DeadLock
 		//在本地调试时，分块文件会同时上传（差异时间可忽略），导致同时进行的select为空，却重复在插入，即使使用文件锁，for update都不行。只能使用SyncMutex解决问题，但是需要安装sync插件
 		//最终选择了insert into  on duplicate key update 这种方式来解决
-		$attachment = (new Attachment)->insertUpdate([
+		$attachment = Attachment::insertUpdate([
 			'uuid' => $chunks['uuid'],
 			'chunk_count' => $chunks['count'],
 			'afid' => 0,

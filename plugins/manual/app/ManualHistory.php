@@ -1,8 +1,8 @@
 <?php
-namespace Plugins\Tools\App;
+namespace Plugins\Manual\App;
 
 use App\Model;
-use Plugins\Tools\App\ManualHistory;
+use Plugins\Manual\App\ManualHistory;
 
 class ManualHistory extends Model {
 

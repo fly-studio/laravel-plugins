@@ -1,9 +1,10 @@
 <?php
+
 namespace Plugins\Catalog\App\Models;
 
 use App\Catalog as AppCatalog;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 trait CatalogCastTrait {
 

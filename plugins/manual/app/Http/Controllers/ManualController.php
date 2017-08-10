@@ -1,12 +1,13 @@
 <?php
-namespace Plugins\Tools\App\Http\Controllers;
+
+namespace Plugins\Manual\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Addons\Censor\Validation\ValidatesRequests;
 
-use Plugins\Tools\App\Manual;
+use Plugins\Manual\App\Manual;
 
 class ManualController extends Controller
 {
@@ -15,7 +16,7 @@ class ManualController extends Controller
 	public function index()
 	{
 		$this->_menu = (new Manual)->getNode(0)->getChildren();
-		return $this->view('tools::manual.index');
+		return $this->view('manual::manual.index');
 	}
 
 	public function create(Request $request)
@@ -23,8 +24,8 @@ class ManualController extends Controller
 		$keys = ['title', 'content', 'pid'];
 		$this->_data = [];
 		$this->_tree = (new Manual)->getNode(0)->getTree(['id','pid', 'title', 'level'], false);
-		$this->_validates = $this->censorScripts('tools::manual.store', $keys);
-		return $this->view('tools::manual.create');
+		$this->_validates = $this->censorScripts('manual::manual.store', $keys);
+		return $this->view('manual::manual.create');
 	}
 
 	public function show(Request $request, $id)
@@ -36,13 +37,13 @@ class ManualController extends Controller
 		$this->_parents = $this->_data->getParents(['id','pid','title']);
 		$this->_root = $this->_data->getRoot(['id','pid','title']);
 		$this->_tree = $this->_root->getTree(['id','pid','title'], false);
-		return $this->view('tools::manual.show');
+		return $this->view('manual::manual.show');
 	}
 
 	public function store(Request $request)
 	{
 		$keys = ['title', 'content', 'pid'];
-		$data = $this->censor($request, 'tools::manual.store', $keys);
+		$data = $this->censor($request, 'manual::manual.store', $keys);
 
 		$manual = Manual::create($data);
 		return $this->success('', url('manual/' . $manual->getKey()));
@@ -53,19 +54,19 @@ class ManualController extends Controller
 		$keys = ['title', 'content', 'pid'];
 		$this->_data = Manual::findOrFail($id);
 		$this->_tree = (new Manual)->getNode(0)->getTree(['id','pid', 'title', 'level'], false);
-		$this->_validates = $this->censorScripts('tools::manual.store', $keys);
-		return $this->view('tools::manual.edit');
+		$this->_validates = $this->censorScripts('manual::manual.store', $keys);
+		return $this->view('manual::manual.edit');
 	}
 
 	public function update(Request $request, $id)
 	{
 		$manual = Manual::findOrFail($id);
 		$keys = ['title', 'content', 'pid'];
-		$data = $this->censor($request, 'tools::manual.store', $keys);
+		$data = $this->censor($request, 'manual::manual.store', $keys);
 
 		$manual->update($data);
-		return $this->success('', url('manual/' . $manual->getKey())); 
+		return $this->success('', url('manual/' . $manual->getKey()));
 	}
 
-	
+
 }

@@ -1,10 +1,12 @@
 <?php
+
 namespace Plugins\Catalog\App;
 
 use Addons\Core\Models\Tree;
 use Addons\Core\Models\TreeCacheTrait;
 
 class Catalog extends Tree {
+
 	use TreeCacheTrait;
 
 	//不能批量赋值
@@ -22,14 +24,14 @@ class Catalog extends Tree {
 	{
 		empty(static::$cacheTree) && static::getAll('name');
 		$name = str_replace(['.', '.children.children', '.children.children'], ['.children.', '.children', '.children'], $name);
-		return is_null($name) ? static::$cacheTree['name'] : 
+		return is_null($name) ? static::$cacheTree['name'] :
 			(empty($name) || in_array($name, ['none', 'null']) ? static::find(0)->toArray() : array_get(static::$cacheTree['name'], $name));
 	}
 
 	public static function getCatalogsById($id = NULL)
 	{
 		empty(static::$cacheTree) && static::getAll();
-		return is_null($id) ? static::$cacheTree['id'][ 0 ][ 'children' ] : 
+		return is_null($id) ? static::$cacheTree['id'][ 0 ][ 'children' ] :
 			(empty($id) ? static::find(0)->toArray() : array_get(static::$cacheTree['id'], $id));
 	}
 

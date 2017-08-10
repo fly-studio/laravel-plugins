@@ -1,6 +1,5 @@
 <?php
 
-$router->resource('manual', 'ManualController');
 $router->actions([
 	'tools' => ['index', 'clear-cache-query', 'create-static-folder-query', 'recover-password-query'],
 	'placeholder' => ['index'],

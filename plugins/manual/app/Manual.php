@@ -1,8 +1,8 @@
 <?php
-namespace Plugins\Tools\App;
+namespace Plugins\Manual\App;
 
 use Addons\Core\Models\Tree;
-use Plugins\Tools\App\ManualHistory;
+use Plugins\Manual\App\ManualHistory;
 
 class Manual extends Tree {
 
