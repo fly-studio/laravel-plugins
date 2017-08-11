@@ -3,7 +3,7 @@ return [
 	'enable' => true,
 	'register' => [
 		'view' => true,
-		'migrate' => true, 
+		'migrate' => false, 
 		'translator' => true,
 		'router' => true,
 		'censor' => true,
