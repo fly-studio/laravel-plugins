@@ -60,14 +60,14 @@ class AccountController extends Controller
 	{
 		$keys = 'name,description,wechat_type,account,appid,appsecret,token,encodingaeskey,qr_aid,mchid,mchkey,sub_mch_id';
 		$this->_data = [];
-		$this->_validates = $this->censorScripts('wechat-account.store', $keys);
+		$this->_validates = $this->censorScripts('wechat::wechat-account.store', $keys);
 		return $this->view('wechat::admin.wechat.account.create');
 	}
 
 	public function store(Request $request)
 	{
 		$keys = 'name,description,wechat_type,account,appid,appsecret,token,encodingaeskey,qr_aid,mchid,mchkey,sub_mch_id';
-		$data = $this->censor($request, 'wechat-account.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-account.store', $keys);
 
 		WechatAccount::create($data);
 		return $this->success('', url('admin/wechat/account'));
@@ -80,7 +80,7 @@ class AccountController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'name,description,wechat_type,account,appid,appsecret,token,encodingaeskey,qr_aid,mchid,mchkey,sub_mch_id';
-		$this->_validates = $this->censorScripts('wechat-account.store', $keys);
+		$this->_validates = $this->censorScripts('wechat::wechat-account.store', $keys);
 		$this->_data = $account;
 		return $this->view('wechat::admin.wechat.account.edit');
 	}
@@ -92,7 +92,7 @@ class AccountController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'name,description,wechat_type,account,appid,appsecret,token,encodingaeskey,qr_aid,mchid,mchkey,sub_mch_id';
-		$data = $this->censor($request, 'wechat-account.store', $keys, $account);
+		$data = $this->censor($request, 'wechat::wechat-account.store', $keys, $account);
 		$account->update($data);
 		return $this->success();
 	}
@@ -101,7 +101,7 @@ class AccountController extends Controller
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
 		$ids = array_wrap($id);
-		
+
 		DB::transaction(function() use ($ids) {
 			WechatAccount::destroy($ids);
 		});

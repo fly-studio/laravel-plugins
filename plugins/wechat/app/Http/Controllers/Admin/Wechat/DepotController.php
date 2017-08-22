@@ -48,7 +48,7 @@ class DepotController extends Controller
 	public function store(Request $request, Account $account)
 	{
 		$keys = 'type';
-		$data = $this->censor($request, 'wechat-depot.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-depot.store', $keys);
 
 		$depot = WechatDepot::create($data + ['waid' => $account->getAccountID()]);
 
@@ -75,7 +75,7 @@ class DepotController extends Controller
 	private function storeNews(Request $request, WechatDepot &$depot, $type)
 	{
 		$keys = 'wdnid';
-		$data = $this->censor($request, 'wechat-depot.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-depot.store', $keys);
 		$depot->news()->detach();
 		$depot->news()->sync($data['wdnid']);
 		//$depot->news; //read relation
@@ -101,7 +101,7 @@ class DepotController extends Controller
 				$keys = 'title,size,aid';
 				break;
 		}
-		$data = $this->censor($request, 'wechat-depot.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-depot.store', $keys);
 		$create ? $depot->$type()->create($data) :  $depot->$type()->update($data);
 		//$depot->$type;//read relation
 	}
@@ -110,7 +110,7 @@ class DepotController extends Controller
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
 		$ids = array_wrap($id);
-		
+
 		DB::transaction(function() use ($ids) {
 			WechatDepot::destroy($ids);
 		});

@@ -68,14 +68,14 @@ class UserController extends Controller
 	{
 		$keys = 'openid,nickname,gender,avatar_aid,country,province,city,language,unionid,remark,is_subscribed,subscribed_at,uid';
 		$this->_data = [];
-		$this->_validates = $this->censorScripts('wechat-user.store', $keys);
+		$this->_validates = $this->censorScripts('wechat::wechat-user.store', $keys);
 		return $this->view('wechat::admin.wechat.user.create');
 	}
 
 	public function store(Request $request, Account $account)
 	{
 		$keys = 'openid,nickname,gender,avatar_aid,country,province,city,language,unionid,remark,is_subscribed,subscribed_at,uid';
-		$data = $this->censor($request, 'wechat-user.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-user.store', $keys);
 
 		WechatUser::create($data + ['waid' => $account->getAccountID()]);
 		return $this->success('', url('admin/wechat/user'));
@@ -88,7 +88,7 @@ class UserController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'openid,nickname,gender,avatar_aid,country,province,city,language,unionid,remark,is_subscribed,subscribed_at,uid';
-		$this->_validates = $this->censorScripts('wechat-user.store', $keys);
+		$this->_validates = $this->censorScripts('wechat::wechat-user.store', $keys);
 		$this->_data = $user;
 		return $this->view('wechat::admin.wechat.user.edit');
 	}
@@ -100,7 +100,7 @@ class UserController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'openid,nickname,gender,avatar_aid,country,province,city,language,unionid,remark,is_subscribed,subscribed_at,uid';
-		$data = $this->censor($request, 'wechat-user.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-user.store', $keys);
 		$user->update($data);
 		return $this->success();
 	}
@@ -109,7 +109,7 @@ class UserController extends Controller
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
 		$ids = array_wrap($id);
-		
+
 		DB::transaction(function() use ($ids) {
 			WechatUser::destroy($ids);
 		});

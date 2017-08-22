@@ -62,14 +62,14 @@ class ReplyController extends Controller
 	{
 		$keys = 'keywords,match_type,wdid,reply_count';
 		$this->_data = [];
-		$this->_validates = $this->censorScripts('wechat-reply.store', $keys);
+		$this->_validates = $this->censorScripts('wechat::wechat-reply.store', $keys);
 		return $this->view('wechat::admin.wechat.reply.create');
 	}
 
 	public function store(Request $request, Account $account)
 	{
 		$keys = 'keywords,match_type,wdid,reply_count';
-		$data = $this->censor($request, 'wechat-reply.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-reply.store', $keys);
 
 		$wdid = $data['wdid'];unset($data['wdid']);
 		$reply = WechatReply::create($data + ['waid' => $account->getAccountID()]);
@@ -84,7 +84,7 @@ class ReplyController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'keywords,match_type,wdid,reply_count';
-		$this->_validates = $this->censorScripts('wechat-reply.store', $keys);
+		$this->_validates = $this->censorScripts('wechat::wechat-reply.store', $keys);
 		$this->_data = $reply;
 		return $this->view('wechat::admin.wechat.reply.edit');
 	}
@@ -96,7 +96,7 @@ class ReplyController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'keywords,match_type,wdid,reply_count';
-		$data = $this->censor($request, 'wechat-reply.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-reply.store', $keys);
 		$wdid = $data['wdid'];unset($data['wdid']);
 		$reply->update($data);
 		$reply->depots()->sync($wdid);
@@ -107,7 +107,7 @@ class ReplyController extends Controller
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
 		$ids = array_wrap($id);
-		
+
 		DB::transaction(function() use ($ids) {
 			WechatReply::destroy($ids);
 		});

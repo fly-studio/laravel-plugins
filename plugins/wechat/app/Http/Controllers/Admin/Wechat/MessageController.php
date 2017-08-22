@@ -70,8 +70,8 @@ class MessageController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'type,content';
-		$data = $this->censor($request, 'wechat-message.store', $keys);
-	
+		$data = $this->censor($request, 'wechat::wechat-message.store', $keys);
+
 		//发送消息
 		$media = null;
 		if ($data['type'] == 'text')
@@ -88,7 +88,7 @@ class MessageController extends Controller
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
 		$ids = array_wrap($id);
-		
+
 		DB::transaction(function() use ($ids) {
 			WechatMessage::destroy($ids);
 		});

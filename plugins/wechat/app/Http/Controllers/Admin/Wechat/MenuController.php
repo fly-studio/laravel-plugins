@@ -17,7 +17,7 @@ class MenuController extends Controller
 {
 	use ApiTrait;
 	public $permissions = ['wechat-menu'];
-	
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -41,7 +41,7 @@ class MenuController extends Controller
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
-		
+
 		return $this->api($data);
 	}
 
@@ -58,7 +58,7 @@ class MenuController extends Controller
 			return $this->failure('wechat.failure_menu_overflow');
 
 		$keys = 'title,pid,type,event,url,wdid';
-		$data = $this->censor($request, 'wechat-menu.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-menu.store', $keys);
 
 		$menu = WechatMenu::create($data + ['waid' => $account->getAccountID(), 'order' => intval($menus->max('order')) + 1]);
 		$menu->event_key = 'key-' . $menu->getKey();$menu->save();
@@ -72,7 +72,7 @@ class MenuController extends Controller
 			return $this->failure_notexists();
 
 		$keys = 'title,type,event,url,wdid';
-		$data = $this->censor($request, 'wechat-menu.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-menu.store', $keys);
 
 		$menu->update($data);
 		return $this->success('', FALSE, $menu->toArray());
@@ -82,7 +82,7 @@ class MenuController extends Controller
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
 		$ids = array_wrap($id);
-		
+
 		DB::transaction(function() use ($ids) {
 			WechatMenu::destroy($ids);
 		});
@@ -97,8 +97,8 @@ class MenuController extends Controller
 			$id = (array) $id;
 			foreach ($id as $v)
 				WechatMenu::destroy($v);
-		} 
-		
+		}
+
 		return $this->publishToWechat($account);
 	}
 
@@ -112,7 +112,7 @@ class MenuController extends Controller
 		else
 			return $this->success('', false, $data);
 	}
-	
+
 	public function publishToWechat(Account $account)
 	{
 		$menu_data = ['button'=>[]];
@@ -135,7 +135,7 @@ class MenuController extends Controller
 
 		$account = WechatAccount::findOrFail($account->getAccountID());
 		$api = new API($account->toArray(), $account->getKey());
-		
+
 		if($menulist->count() <= 0 ? $api->deleteMenu() : $api->createMenu($menu_data))
 			return $this->success('wechat::wechat.menu_created_success', TRUE, $menu_data);
 		else
@@ -145,7 +145,7 @@ class MenuController extends Controller
 	public function publishJson(Request $request, Account $account)
 	{
 		$keys = 'content';
-		$data = $this->censor($request, 'wechat-menu.store', $keys);
+		$data = $this->censor($request, 'wechat::wechat-menu.store', $keys);
 
 		$json = json_decode($data['content'], true);
 		if (empty($json) || empty($json['button']))
@@ -153,7 +153,7 @@ class MenuController extends Controller
 		else {
 			$account = WechatAccount::findOrFail($account->getAccountID());
 			$api = new API($account->toArray(), $account->getKey());
-		
+
 			if($api->createMenu($json))
 				return $this->success('wechat::wechat.menu_created_success', TRUE, $json);
 			else

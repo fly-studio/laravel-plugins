@@ -30,7 +30,7 @@ return [
 			'name' => 'Token',
 			'rules' => 'required|min:1',
 		],
-		'avatar_aid' => [
+		'qr_aid' => [
 			'name' => '二维码',
 			'rules' => 'nullable|numeric',
 		],
