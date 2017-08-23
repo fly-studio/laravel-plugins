@@ -1,6 +1,7 @@
 <?php
 namespace Plugins\Helpers\App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class PlaceholderController extends Controller {
@@ -15,9 +16,16 @@ class PlaceholderController extends Controller {
 	 * @param  [type] $fontsize [description]
 	 * @return [type]           [description]
 	 */
-	public function index($size = '100x100', $bgcolor = 'ccc', $color = '555', $text = '', $fontsize = NULL)
+	public function index(Request $request)
 	{
-		$cache_filepath = storage_path('placeholders/'.md5(serialize(func_get_args())).'.png');
+		$size = $request->input('size', '100x100');
+		$bgcolor = $request->input('bgcolor', 'ccc');
+		$color = $request->input('color', '555');
+		$text = $request->input('text', '');
+		$fontsize = $request->input('fontsize', null);
+
+		$cache_filepath = storage_path('placeholders/'.md5(serialize(compact('size', 'bgcolor', 'color', 'text', 'fontsize'))).'.png');
+
 		if (!file_exists($cache_filepath))
 		{
 			// Dimensions
@@ -47,6 +55,7 @@ class PlaceholderController extends Controller {
 			imagepng($image, $cache_filepath);
 			imagedestroy($image);
 		}
+
 		return response()->preview($cache_filepath, ['Content-Type' => 'image/png']);
 	}
 }

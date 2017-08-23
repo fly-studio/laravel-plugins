@@ -4,6 +4,7 @@ namespace Plugins\Helpers\App\Http\Controllers;
 use Image;
 use PHPQRCode\QRcode;
 use PHPQRCode\Constants;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class QrController extends Controller {
@@ -15,13 +16,17 @@ class QrController extends Controller {
 	 * @param  string  $watermark [description]
 	 * @return [type]             [description]
 	 */
-	public function index($text, $size = 25, $watermark = '')
+	public function index(Request $request)
 	{
-		return $this->png($text, $size, $watermark);
+		return $this->png($request);
 	}
 
-	public function png($text, $size = 25, $watermark = '')
+	public function png(Request $request)
 	{
+		$text = $request->input('text');
+		$size = $request->input('size', 25);
+		$watermark = $request->input('watermark', '');
+
 		if (empty($watermark) || !file_exists(base_path($watermark)))
 		{
 			return response()->stream(function() use ($text, $size, $watermark){
@@ -41,10 +46,15 @@ class QrController extends Controller {
 		}
 	}
 
-	public function svg($text, $element_id = FALSE, $width = FALSE, $size = FALSE)
+	public function svg(Request $request)
 	{
+		$text = $request->input('text');
+		$element_id = $request->input('element_id', false);
+		$width = $request->input('width', false);
+		$size = $request->input('size', false);
+
 		return response(
-			QRcode::svg($text, $element_id, FALSE, Constants::QR_ECLEVEL_H, $width, $size, 0 ),
+			QRcode::svg($text, $element_id, FALSE, Constants::QR_ECLEVEL_H, $width, $size, 0),
 			200,
 			['Content-Type' => 'image/svg']
 		);
