@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Tools\App\Http\Controllers;
+namespace Plugins\Helpers\App\Http\Controllers;
 
 use Image;
 use PHPQRCode\QRcode;

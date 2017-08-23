@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Tools;
+namespace Plugins\Helpers;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 

@@ -1,12 +1,11 @@
 <?php
-namespace Plugins\Tools\App\Http\Controllers;
+namespace Plugins\Helpers\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Addons\Censor\Validation\ValidatesRequests;
 
 class LoadingController extends Controller {
+
 	protected $disableUser = true;
 
 	public function index($folders = [], $style = '', $url = '', $tips = '')
@@ -31,6 +30,6 @@ class LoadingController extends Controller {
 		$this->_loading_divs= $styles[$style] ?: 1;
 		$this->_url = url($url);
 		$this->_tips = $tips;
-		return $this->view('tools::system.loading');
+		return $this->view('helpers::loading');
 	}
 }

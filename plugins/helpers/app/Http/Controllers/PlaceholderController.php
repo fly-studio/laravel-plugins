@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Tools\App\Http\Controllers;
+namespace Plugins\Helpers\App\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 
@@ -7,7 +7,7 @@ class PlaceholderController extends Controller {
 
 	/**
 	 * 输出图片
-	 * 
+	 *
 	 * @param  string $size     [description]
 	 * @param  string $bgcolor  [description]
 	 * @param  string $color    [description]
