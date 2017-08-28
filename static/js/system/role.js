@@ -18,7 +18,7 @@
 			$('#name,#display_name,#description,#url').prop('disabled', false).val('');
 			$('#pid').val(parentRoleId).trigger('change').prop('disabled', true);
 			$('#pid1').val(parentRoleId);
-			$('#edit-form').attr('action', $.baseuri + 'admin/role').find('[name="_method"]').val('POST');
+			$('#edit-form').attr('action', LP.baseuri + 'admin/role').find('[name="_method"]').val('POST');
 		};
 		method.edit = function(roleId)
 		{
@@ -35,14 +35,14 @@
 			$('#pid1').val(0); //无法修改父组
 			$('#name').prop('disabled', true);
 
-			$('#edit-form').attr('action', $.baseuri + 'admin/role/'+roleId).find('[name="_method"]').val('PUT');
+			$('#edit-form').attr('action', LP.baseuri + 'admin/role/'+roleId).find('[name="_method"]').val('PUT');
 		};
 		method.remove = function(roleId)
 		{
 			method.show(roleId);
 			var $container = $('#role-' + roleId);
 			$('#delete-modal').modal({backdrop: 'static'});
-			$('#delete-form').attr('action', $.baseuri + 'admin/role/'+roleId);
+			$('#delete-form').attr('action', LP.baseuri + 'admin/role/'+roleId);
 			$('#role_name').text($container.data('role_name'));
 			$('#original_role_id').val($(this).data('role_id'));
 		};
