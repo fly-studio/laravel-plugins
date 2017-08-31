@@ -88,7 +88,7 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 		method.beforeDrop = function(treeId, treeNodes, targetNode, moveType) {
 			if (!treeNodes.length || !targetNode) return false;
 			var node = treeNodes[0];
-			if (node.parentTId != targetNode.parentTId) return false; //如果父级不一致
+			//if (node.parentTId != targetNode.parentTId) return false; //如果父级不一致
 
 			LP.queryTip('PUT', urlPrefix + '/move', {original_id: node.id , target_id: targetNode.id, move_type: moveType }).done(function(json){
 				var src_node = $zTree.getNodeByParam("id", json.data.original_id, null);
