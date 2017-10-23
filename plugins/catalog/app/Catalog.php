@@ -4,6 +4,7 @@ namespace Plugins\Catalog\App;
 
 use Addons\Core\Models\Tree;
 use Addons\Core\Models\TreeCacheTrait;
+use Illuminate\Database\Eloquent\Builder;
 
 class Catalog extends Tree {
 
