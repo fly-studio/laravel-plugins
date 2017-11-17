@@ -1,7 +1,7 @@
 <?php
-namespace Plugins\Wechat\App;
+namespace Plugins\Wechat\App\Models;
 
-trait WechatMessageTrait{
+trait WechatMessageTrait {
 
 	public static function bootWechatMessageMediaTrait()
 	{
@@ -12,4 +12,5 @@ trait WechatMessageTrait{
 			$message->location()->delete();
 		});
 	}
+
 }

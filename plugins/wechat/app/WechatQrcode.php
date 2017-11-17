@@ -1,10 +1,12 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
 use Plugins\Wechat\App\WechatAccount;
 
 class WechatQrcode extends Model{
+
 	protected $guarded = ['id'];
 
 	public function account()
@@ -42,5 +44,6 @@ class WechatQrcode extends Model{
 	{
 		$qr = $this->where('ticket','=',$ticket)->orderBy('updated_at','DESC')->first();
 		return empty($qr) ? false : $qr->depot()->get(); //返回数据集
- 	}
+	}
+
 }

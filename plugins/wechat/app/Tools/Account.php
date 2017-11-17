@@ -1,19 +1,18 @@
 <?php
 namespace Plugins\Wechat\App\Tools;
 
-use Plugins\Wechat\App\Tools\API;
-use Plugins\Wechat\App\Tools\User as WechatUserTool;
 use Session;
+
 class Account {
 
-	public function getAccountID()
+	public function account_id($account_id = null)
 	{
-		return Session::get('wechat-account-id', NULL);
+		if (is_null($account_id))
+			return session('wechat.account_id', null);
+		session([
+			'wechat.account_id' => $account_id
+		]);
+		session()->save();
 	}
 
-	public function setAccountID($accountid)
-	{
-		Session::put('wechat-account-id', $accountid);
-		Session::save();
-	}
 }

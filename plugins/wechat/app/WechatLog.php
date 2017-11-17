@@ -1,9 +1,11 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
 
-class WechatLog extends Model{
+class WechatLog extends Model {
+
 	protected $guarded = ['id'];
 
 	public function account()

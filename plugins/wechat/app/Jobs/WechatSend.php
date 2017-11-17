@@ -1,24 +1,24 @@
 <?php
 namespace Plugins\Wechat\App\Jobs;
 
+use Addons\Core\File\Mimes;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use Plugins\Attachment\App\Attachment;
 use Plugins\Wechat\App\Tools\API;
+use Plugins\Attachment\App\Attachment;
 use Plugins\Wechat\App\Tools\Url as UrlTool;
 use Plugins\Wechat\App\WechatAccount;
 use Plugins\Wechat\App\WechatUser;
 use Plugins\Wechat\App\WechatDepot;
-use Plugins\Wechat\App\WechatTemplate;
 use Plugins\Wechat\App\WechatMessage;
+use Plugins\Wechat\App\WechatTemplate;
 use Plugins\Wechat\App\WechatMessageText;
-use Plugins\Wechat\App\WechatMessageMedia;
 use Plugins\Wechat\App\WechatMessageLink;
+use Plugins\Wechat\App\WechatMessageMedia;
 use Plugins\Wechat\App\WechatMessageLocation;
-use Addons\Core\File\Mimes;
 
 class WechatSend implements ShouldQueue
 {

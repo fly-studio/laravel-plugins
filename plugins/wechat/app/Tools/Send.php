@@ -7,6 +7,7 @@ use Plugins\Wechat\App\WechatAccount;
 use Plugins\Wechat\App\WechatUser;
 
 use Plugins\Wechat\App\Jobs\WechatSend;
+
 class Send {
 
 	private $user,$api;

@@ -1,4 +1,5 @@
 <?php
+
 return [
 	'enable' => true,
 	'register' => [
@@ -10,6 +11,7 @@ return [
 	],
 	'routeMiddleware' => [
 		'wechat.account' => \Plugins\Wechat\App\Http\Middleware\WechatAccount::class,
+		'wechat.oauth2' => \Plugins\Wechat\App\Http\Middleware\WechatOAuth2::class,
 	],
 	'injectViews' => [
 		//'admin/sidebar.inc.tpl' => 99,

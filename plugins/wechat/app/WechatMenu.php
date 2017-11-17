@@ -1,9 +1,11 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
-use App\Tree;
+use Addons\Core\Models\Tree;
 
-class WechatMenu extends Tree{
+class WechatMenu extends Tree {
+
 	protected $guarded = ['id'];
 
 	public function account()
@@ -15,4 +17,5 @@ class WechatMenu extends Tree{
 	{
 		return $this->hasOne(get_namespace($this).'\\WechatDepot', 'id', 'wdid');
 	}
+
 }

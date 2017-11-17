@@ -3,6 +3,7 @@ namespace Plugins\Wechat\App\Tools;
 
 use Plugins\Wechat\App\Tools\API;
 use Plugins\Attachment\App\Attachment as AttachmentModel;
+
 class Attachment {
 
 	private $api;

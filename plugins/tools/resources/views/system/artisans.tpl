@@ -63,9 +63,6 @@ $().ready(function(){
 	</div>
 	<ul class="artisan">
 		<li>
-			<a href="javascript:void(0);" name="console" data-console="php artisan migrate">导入数据库(需要先建库)</a> <small>php artisan migrate</small>
-		</li>
-		<li>
 			<a href="#sql-modal" data-toggle="modal" data-backdrop="static">执行SQL语句</a> <small>可以执行任意SQL语句</small>
 		</li>
 		<li>

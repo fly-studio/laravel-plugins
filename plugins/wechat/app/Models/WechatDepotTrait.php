@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Wechat\App;
+namespace Plugins\Wechat\App\Models;
 
 trait WechatDepotTrait{
 

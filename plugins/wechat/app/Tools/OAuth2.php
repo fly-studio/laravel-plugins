@@ -1,12 +1,13 @@
 <?php
 namespace Plugins\Wechat\App\Tools;
 
-use Plugins\Wechat\App\Tools\API;
-use Plugins\Wechat\App\Tools\User as  WechatUserTool;
-use Plugins\Wechat\App\WechatUser;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use App\Role as RoleModel;
 use Session;
+use App\Role as RoleModel;
+use Plugins\Wechat\App\Tools\API;
+use Plugins\Wechat\App\WechatUser;
+use Plugins\Wechat\App\Tools\User as  WechatUserTool;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 class OAuth2 {
 	private $api;
 

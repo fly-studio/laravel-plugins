@@ -1,8 +1,8 @@
 <?php
 namespace Plugins\Wechat\App\Tools;
 
+use Cache, Session;
 use Plugins\Wechat\App\Tools\API;
-use Cache,Session;
 use Plugins\Wechat\App\WechatUser;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -64,7 +64,6 @@ class Address {
 	 */
 	public function getConfig($url = NULL)
 	{
-
 		$timeStamp = time();
 		$nonceStr = $this->api->generateNonceStr();
 		list($access_token, $code, $state) = $this->getAccessToken();

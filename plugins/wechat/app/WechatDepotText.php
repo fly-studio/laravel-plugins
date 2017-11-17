@@ -1,9 +1,11 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
 
-class WechatDepotText extends Model{
+class WechatDepotText extends Model {
+
 	protected $guarded = [];
 	public $incrementing = false;
 
@@ -11,4 +13,5 @@ class WechatDepotText extends Model{
 	{
 		return $this->belongsTo(get_namespace($this).'\\WechatDepot', 'wdid', 'id');
 	}
+
 }

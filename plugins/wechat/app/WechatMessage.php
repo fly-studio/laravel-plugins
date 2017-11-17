@@ -1,9 +1,12 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
-use Plugins\Wechat\App\WechatMessageTrait;
-class WechatMessage extends Model{
+use Plugins\Wechat\App\Models\WechatMessageTrait;
+
+class WechatMessage extends Model {
+
 	use WechatMessageTrait;
 
 	protected $guarded = ['id'];
@@ -68,4 +71,5 @@ class WechatMessage extends Model{
 	{
 		return $this->hasOne(get_namespace($this).'\\WechatMessageMedia', 'id', 'id');
 	}
+
 }

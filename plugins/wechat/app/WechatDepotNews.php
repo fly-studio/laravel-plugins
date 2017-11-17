@@ -1,9 +1,11 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
 
-class WechatDepotNews extends Model{
+class WechatDepotNews extends Model {
+
 	protected $guarded = ['id'];
 	protected $casts = [
 		'redirect' => 'boolean',

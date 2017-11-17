@@ -1,9 +1,11 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
-class WechatBill extends Model{
-	protected $guarded = ['id'];
 
+class WechatBill extends Model {
+
+	protected $guarded = ['id'];
 
 }

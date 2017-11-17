@@ -1,9 +1,11 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
 
-class WechatMessageLink extends Model{
+class WechatMessageLink extends Model {
+
 	protected $guarded = [];
 	public $incrementing = false;
 
@@ -12,5 +14,4 @@ class WechatMessageLink extends Model{
 		return $this->hasOne(get_namespace($this).'\\WechatMessage', 'id', 'id');
 	}
 
-	
 }

@@ -1,13 +1,14 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
 use Plugins\Wechat\App\WechatMessage;
 use Plugins\Wechat\App\WechatAccount;
 
-class WechatReply extends Model{
-	protected $guarded = ['id'];
+class WechatReply extends Model {
 
+	protected $guarded = ['id'];
 	public $fire_caches = ['wechat-replies'];
 
 	const MATCH_TYPE_WHOLE = 'whole';
@@ -82,4 +83,5 @@ class WechatReply extends Model{
 		$replies = $this->getReplies();
 		return isset($replies[$account->getKey()][static::MATCH_TYPE_SUBSCRIBE]) ? $replies[$account->getKey()][static::MATCH_TYPE_SUBSCRIBE]->getDepots() : $this->newCollection();
 	}
+	
 }

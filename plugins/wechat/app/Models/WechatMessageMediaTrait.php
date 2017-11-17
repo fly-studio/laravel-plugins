@@ -1,8 +1,9 @@
 <?php
-namespace Plugins\Wechat\App;
+namespace Plugins\Wechat\App\Models;
 
 use Plugins\Wechat\App\Jobs\WechatMedia;
-trait WechatMessageMediaTrait{
+
+trait WechatMessageMediaTrait {
 
 	public static function bootWechatMessageMediaTrait()
 	{
@@ -14,4 +15,5 @@ trait WechatMessageMediaTrait{
 			app('Illuminate\Contracts\Bus\Dispatcher')->dispatch($job);
 		});
 	}
+	
 }

@@ -1,9 +1,11 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
 
-class WechatAccount extends Model{
+class WechatAccount extends Model {
+
 	protected $guarded = ['id'];
 	protected $casts = [
 		'wechat_type' => 'catalog',

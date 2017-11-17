@@ -1,26 +1,20 @@
 <?php
 namespace Plugins\Wechat\App\Tools;
 
-use Plugins\Wechat\App\Tools\API;
-/*use App\User as UserModel;
-use App\Role as RoleModel;*/
-use Plugins\Attachment\App\Attachment as AttachmentModel;
-use Plugins\Wechat\App\WechatUser;
 use Cache;
 use Carbon\Carbon;
+use Plugins\Wechat\App\WechatUser;
+use Plugins\Attachment\App\Attachment as AttachmentModel;
+
 class User {
 
 	private $api;
 
 	public function __construct($options, $waid = NULL)
 	{
-		$this->api = $options instanceof API ? $options : new API($options, $waid);
+		
 	}
 
-	public function getAPI()
-	{
-		return $this->api;
-	}
 	/**
 	 * 根据OPENID查询用户资料
 	 * @param  string  $openid     OPENID
@@ -35,7 +29,8 @@ class User {
 		$result = array();
 		$hashkey = 'wechat-userinfo-' . $openid. '/'.$this->api->appid;
 
-		if (!$cache || is_null($result = Cache::get($hashkey, null))) {
+		if (!$cache || is_null($result = Cache::get($hashkey, null)))
+		{
 			$result = empty($access_token) ? $this->api->getUserInfo($openid) : $this->api->getOauthUserinfo($access_token, $openid);
 			if (!empty($access_token) && empty($result) && $this->api->errCode == '48001') //http://www.bubuko.com/infodetail-703997.html sope=snsapi_base时 未关注用户（重来没有关注或授权的微信用户）{"errcode":48001,"errmsg":"api unauthorized"}
 				$result = $this->api->getUserInfo($openid);

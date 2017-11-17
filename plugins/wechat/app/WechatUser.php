@@ -1,9 +1,11 @@
 <?php
+
 namespace Plugins\Wechat\App;
 
 use App\Model;
 
-class WechatUser extends Model{
+class WechatUser extends Model {
+
 	protected $guarded = ['id'];
 	protected $casts = [
 		'gender' => 'catalog',
@@ -16,12 +18,7 @@ class WechatUser extends Model{
 
 	public function user()
 	{
-		return $this->hasOne(config('auth.model'), 'id', 'uid');
-	}
-
-	public function _gender()
-	{
-		return $this->hasOne('App\\Field', 'id', 'gender');
+		return $this->hasOne(config('auth.providers.users.model'), 'id', 'uid');
 	}
 
 }
