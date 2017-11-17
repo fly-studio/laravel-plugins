@@ -1,8 +1,9 @@
 <?php
-namespace Plugins\Wechat\App\Tools;
+namespace Plugins\Wechat\App\Tools\Methods;
 
 use Plugins\Wechat\App\Tools\API;
 use Plugins\Wechat\App\WechatUser;
+
 class Url {
 
 	private $api;

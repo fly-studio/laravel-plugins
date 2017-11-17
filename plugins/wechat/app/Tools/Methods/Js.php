@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Wechat\App\Tools;
+namespace Plugins\Wechat\App\Tools\Methods;
 
 use Plugins\Wechat\App\Tools\Pay\JsApiPay;
 use Plugins\Wechat\App\Tools\API;

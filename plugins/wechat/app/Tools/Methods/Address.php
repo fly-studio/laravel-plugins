@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Wechat\App\Tools;
+namespace Plugins\Wechat\App\Tools\Methods;
 
 use Cache, Session;
 use Plugins\Wechat\App\Tools\API;

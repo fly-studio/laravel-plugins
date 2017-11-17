@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Wechat\App\Tools;
+namespace Plugins\Wechat\App\Tools\Methods;
 
 use Session;
 use App\Role as RoleModel;

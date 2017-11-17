@@ -1,11 +1,10 @@
 <?php
-namespace Plugins\Wechat\App\Tools;
 
-use Session;
+namespace Plugins\Wechat\App\Tools\Methods;
 
-class Account {
+class AccountSession {
 
-	public function account_id($account_id = null)
+	public function __invoke($account_id = null)
 	{
 		if (is_null($account_id))
 			return session('wechat.account_id', null);
