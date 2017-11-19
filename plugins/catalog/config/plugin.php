@@ -1,9 +1,10 @@
 <?php
+
 return [
-	'enable' => true,
+	'enabled' => true,
 	'register' => [
 		'view' => true,
-		'migrate' => true, 
+		'migrate' => true,
 		'translator' => true,
 		'router' => true,
 		'censor' => true,

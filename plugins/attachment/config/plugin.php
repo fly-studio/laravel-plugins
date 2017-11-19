@@ -1,6 +1,7 @@
 <?php
+
 return [
-	'enable' => true,
+	'enabled' => true,
 	'register' => [
 		'view' => false,
 		'migrate' => true,
@@ -9,10 +10,10 @@ return [
 		'router' => true,
 		'config' => true,
 	],
-	'config' => [
+	'configs' => [
 		'attachment'
 	],
 	'routeMiddleware' => [
-		'flash-session' => \Plugins\Attachment\App\Http\Middleware\FlashSession::class, 
+		'flash-session' => \Plugins\Attachment\App\Http\Middleware\FlashSession::class,
 	],
 ];

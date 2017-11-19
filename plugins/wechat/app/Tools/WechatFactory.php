@@ -8,9 +8,8 @@ class WechatFactory {
 
 	private $wechatAccount;
 
-	public function __construct($waid)
+	public function __construct()
 	{
-		!empty($waid) && $this->wechatAccount = WechatAccount::findOrFail($waid);
 	}
 
 	public function make($method, ...$args)
@@ -25,13 +24,18 @@ class WechatFactory {
 		return $this;
 	}
 
+	protected function options()
+	{
+		
+	}
+
 	public function accountSession($account_id = null)
 	{
 		$invoke = new Methods\AccountSession();
 		return $invoke($account_id);
 	}
 
-	public function user()
+	protected function user()
 	{
 		return new Methods\User($this->account);
 	}

@@ -1,13 +1,17 @@
 <?php
 
 return [
-	'enable' => true,
+	'enabled' => true,
 	'register' => [
 		'view' => true,
-		'migrate' => true, 
+		'migrate' => true,
 		'translator' => true,
 		'router' => true,
+		'config' => true,
 		'censor' => true,
+	],
+	'configs' => [
+		'wechat'
 	],
 	'routeMiddleware' => [
 		'wechat.account' => \Plugins\Wechat\App\Http\Middleware\WechatAccount::class,
@@ -17,4 +21,7 @@ return [
 		//'admin/sidebar.inc.tpl' => 99,
 		'admin/menubar.inc.tpl' => 99,
 	],
+	'files' => [
+		'app/Tools/WechatConfig.php'
+	]
 ];
