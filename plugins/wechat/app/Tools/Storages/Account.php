@@ -1,8 +1,8 @@
 <?php
 
-namespace Plugins\Wechat\App\Tools\Methods;
+namespace Plugins\Wechat\App\Tools\Storages;
 
-class AccountSession {
+class Account {
 
 	public function __invoke($account_id = null)
 	{

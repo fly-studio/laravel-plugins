@@ -8,7 +8,7 @@ use Addons\Core\Controllers\Controller;
 class ToolsController extends Controller {
 
 	protected $disableUser = true;
-	
+
 	public function index()
 	{
 		return $this->view('tools::system.tools');
@@ -54,7 +54,7 @@ class ToolsController extends Controller {
 
 		if (defined('LPPATH'))
 		{
-			$target_path = normalize_path(LPPATH.'static');
+			$target_path = realpath('../../../../static');
 			$link_path = rtrim(plugins_path(), DIRECTORY_SEPARATOR);
 			@$this->_symlink($target_path, $link_path);
 		}

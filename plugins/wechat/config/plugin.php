@@ -22,6 +22,6 @@ return [
 		'admin/menubar.inc.tpl' => 99,
 	],
 	'files' => [
-		'app/Tools/WechatConfig.php'
+		'app/Tools/wechat_functions.php'
 	]
 ];
