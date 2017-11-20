@@ -8,7 +8,7 @@ return [
 		],
 		'description' => [
 			'name' => '简介',
-			'rules' => [],
+			'rules' => 'nullable',
 		],
 		'wechat_type' => [
 			'name' => '类型',

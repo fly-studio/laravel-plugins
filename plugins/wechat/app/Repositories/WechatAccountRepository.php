@@ -4,9 +4,9 @@ namespace Plugins\Wechat\App\Repositories;
 
 use Plugins\Wechat\App\WechatAccount;
 
-class WecharAccountRepository {
+class WechatAccountRepository {
 
-	public function toConfig($id, $optionsName)
+	public function options($id, $optionsName)
 	{
 		$account = WechatAccount::findOrFail($id);
 

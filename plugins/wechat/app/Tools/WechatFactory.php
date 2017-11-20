@@ -42,7 +42,7 @@ class WechatFactory {
 
 	private function options($optionsName)
 	{
-		return Tools\extendsConfig($optionsName, $this->repo->options($this->waid, $optionsName));
+		return Tools\extendsConfig($optionsName, $this->repo->options($this->waid, $optionsName)) + ['id' => $this->waid];
 	}
 
 	protected function OfficialAccount()

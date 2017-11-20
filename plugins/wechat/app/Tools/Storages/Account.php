@@ -8,6 +8,8 @@ class Account {
 	{
 		if (is_null($account_id))
 			return session('wechat.account_id', null);
+		if ($user === false)
+			return session()->forget('wechat.account_id');
 		session([
 			'wechat.account_id' => $account_id
 		]);

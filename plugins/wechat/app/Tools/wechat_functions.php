@@ -16,14 +16,14 @@ function account_storage($account_id = null)
 	return $invoke($account_id);
 }
 
-function user_storage($account_id = null, $openid)
+function user_storage($account_id = null, $openid = null)
 {
 	$invoke = new Storages\User();
 	return $invoke($account_id, $openid);
 }
 
-function oauth2_storage($account_id, $openid)
+function oauth2_storage($account_id = null, $user = null)
 {
 	$invoke = new Storages\OAuth2();
-	return $invoke($account_id, $openid);
+	return $invoke($account_id, $user);
 }

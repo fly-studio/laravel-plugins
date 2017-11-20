@@ -1,7 +1,7 @@
 <?php
 
 $router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['auth', 'role:super']], function($router) {
-	
+
 	$router->crud([
 		'wechat/account' => 'Wechat\\AccountController',
 	]);
@@ -22,6 +22,7 @@ $router->group(['namespace' => 'Admin','prefix' => 'admin', 'middleware' => ['au
 		]);
 	});
 });
+$router->get('wechat/test', 'PayController@test');
 
 $ctrl = '\App\Http\Controllers\WechatController';
 $router->post('wechat/feedback/{aid}/{oid?}', $ctrl.'@feedback');

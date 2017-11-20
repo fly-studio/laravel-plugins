@@ -1,8 +1,10 @@
 <?php
+
 namespace Plugins\Wechat\App\Http\Middleware;
 
 use Closure;
-use Plugins\Wechat\App\Tools\Account;
+use Plugins\Wechat\App\Tools;
+
 class WechatAccount
 {
 	/**
@@ -18,9 +20,9 @@ class WechatAccount
 	 * @param  \Addons\Core\Tools\Wechat\Account  $auth
 	 * @return void
 	 */
-	public function __construct(Account $account)
+	public function __construct()
 	{
-		$this->account = $account;
+
 	}
 
 	/**
@@ -32,7 +34,8 @@ class WechatAccount
 	 */
 	public function handle($request, Closure $next)
 	{
-		if (empty($this->account->getAccountID()))
+
+		if (empty(Tools\account_storage()))
 		{
 			if ($request->ajax()) {
 				return response('Unauthorized.', 401);

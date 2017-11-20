@@ -16,9 +16,9 @@ class CreateWechatTable extends Migration
 		Schema::create('wechat_accounts', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('name', 150)->comment = '公众号名称'; //名称
-			$table->string('description', 255)->comment = '简介'; //简介
+			$table->string('description', 255)->nullable()->comment = '简介'; //简介
 			$table->unsignedInteger('wechat_type')->default(0)->comment = '微信类型'; //微信类型
-			$table->string('account', 100)->unique()->comment = '原始ID'; //原始ID
+			$table->string('account', 100)->nullable()->unique()->comment = '原始ID'; //原始ID
 			$table->string('appid', 50)->unique()->comment = 'APP ID'; //appid
 			$table->string('token', 150)->comment = 'TOKEN'; //token
 			$table->string('appsecret', 100)->comment = 'APP Secret'; //appsecret
@@ -175,7 +175,7 @@ class CreateWechatTable extends Migration
 			$table->string('url', 250)->nullable()->comment = '网址'; //网址
 			$table->unsignedInteger('wdid')->default(0)->comment = '素材库DepotID'; //素材库did
 			$table->string('media_id', 250)->comment = '素材库MediaID'; //素材库media id
-			
+
 			//tree
 			$table->unsignedInteger('order')->default(0)->index()->comment = 'TREE排序';
 			$table->unsignedInteger('level')->default(0)->index()->comment = 'TREE等级';
@@ -294,7 +294,7 @@ class CreateWechatTable extends Migration
 			$table->unsignedInteger('waid')->index()->comment = '公众号AccountID'; //account id
 			$table->text('url')->nullable()->comment = '来源网址'; //来源网址
 			$table->text('log')->nullable()->comment = 'log日志内容'; //log日志内容
-		
+
 			$table->timestamps();
 
 			$table->foreign('waid')->references('id')->on('wechat_accounts')

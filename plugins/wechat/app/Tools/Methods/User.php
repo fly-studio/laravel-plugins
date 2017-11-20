@@ -1,105 +1,76 @@
 <?php
+
 namespace Plugins\Wechat\App\Tools\Methods;
 
 use Cache;
 use Carbon\Carbon;
+use Overtrue\Socialite\User;
 use Plugins\Wechat\App\WechatUser;
-use Plugins\Attachment\App\Attachment as AttachmentModel;
+use Plugins\Wechat\App\Tools\Methods\Attachment;
 
 class User {
 
-	private $api;
+	private $app;
+	static $ttl = 3600; //1 hour
 
-	public function __construct($options, $waid = NULL)
+	public function __construct(OfficialAccount $app)
 	{
-		
-	}
-
-	/**
-	 * 根据OPENID查询用户资料
-	 * @param  string  $openid     OPENID
-	 * @param  string  $access_token 如果是通过OAuth2授权，则需要传递此参数
-	 * @param  boolean $cache        是否缓存该资料
-	 * @return array                 返回对应资料
-	 */
-	public function getUserInfo($openid, $access_token = NULL, $cache = TRUE) {
-		if (empty($openid))
-			return FALSE;
-
-		$result = array();
-		$hashkey = 'wechat-userinfo-' . $openid. '/'.$this->api->appid;
-
-		if (!$cache || is_null($result = Cache::get($hashkey, null)))
-		{
-			$result = empty($access_token) ? $this->api->getUserInfo($openid) : $this->api->getOauthUserinfo($access_token, $openid);
-			if (!empty($access_token) && empty($result) && $this->api->errCode == '48001') //http://www.bubuko.com/infodetail-703997.html sope=snsapi_base时 未关注用户（重来没有关注或授权的微信用户）{"errcode":48001,"errmsg":"api unauthorized"}
-				$result = $this->api->getUserInfo($openid);
-			if (isset($result['nickname'])) { //订阅号 无法获取昵称，则不加入缓存
-				$attachment = (new AttachmentModel)->download(0, $result['headimgurl'], 'wechat-avatar-'.$openid, 'jpg');
-				$result['avatar_aid'] = $attachment->getKey();
-				Cache::put($hashkey, $result, 12 * 60); //0.5 day
-			}
-		}
-		return $result;
+		$this->app = $app;
 	}
 
 	/**
 	 * 更新微信资料(如果没有则添加用户资料)
-	 * 
+	 *
 	 * @param  string $openid      	OPENID
 	 * @param  string $access_token     如果是通过OAuth2授权，则需要传递此参数
 	 * @param  string $role_name        组名，只在添加用户时有效
 	 * @param  integer $update_expire 	多少分钟更新一次?
 	 * @return integer                  返回UID
 	 */
-	public function updateWechatUser($openid, $access_token = NULL, $cache = TRUE)
+	public function updateWechatUser(User $user)
 	{
-		if (empty($openid))
-			return FALSE;
-		$wechatUser = FALSE;
-		$hashkey = 'update-wechatuser-'.$openid. '/'.$this->api->appid;
-		if (!$cache || is_null($wechatUser = Cache::get($hashkey, null)))
+		$waid = $this->app['config']->get('id');
+		$app_id = $this->app['config']->get('app_id');
+		$wechat = $user->getOriginal();
+
+		$wechatUser = WechatUser::firstOrCreate([
+			'openid' => $user['id'],
+			'waid' => $waid,
+		]);
+
+		//update the unionid
+		!empty($wechat['unionid']) && $wechatUser->update(['unionid' => $wechat['unionid']]);
+
+		// break in 1hr
+		if ($wechatUser->updated_at->diffInSeconds() < static::$ttl) return $wechatUser;
+
+		if (isset($wechat['nickname'])) //有详细资料
 		{
-			$wechatUser = WechatUser::firstOrCreate([
-				'openid' => $openid,
-				'waid' => $this->api->waid,
-			]);
-			$wechat = $this->getUserInfo($wechatUser->openid, $access_token, $cache);
-			/*
-			无授权的OAuth2是无法获取资料的
-			if (empty($wechat))
-				throw new \Exception("Get wechat's user failure:" .$this->api->errCode .' '.$this->api->errMsg);*/
-		
-			//公众号绑定开放平台,可获取唯一ID
-			if (empty($wechatUser->unionid) || !empty($wechat['unionid']))
-				$wechatUser->update(['unionid' => isset($wechat['unionid']) ? $wechat['unionid'] : $wechatUser->openid.'/'.$this->api->appid]);
-			if (isset($wechat['nickname']))
+			$avatar_aid = Attachment::downloadAvatar($user->getAvatar());
+
+			//将所有唯一ID匹配的资料都更新
+			foreach(!empty($wechat['unionid']) ? WechatUser::where('unionid', $wechat['unionid'])->get() : [$wechatUser] as $v)
 			{
-				//将所有唯一ID匹配的资料都更新
-				$wechatUsers = WechatUser::where('unionid', $wechatUser->unionid)->get();
-				foreach($wechatUsers as $v)
-					$v->update([
-						'nickname' => $wechat['nickname'], 
-						'gender' => $wechat['sex'],
-						'is_subscribed' => !empty($wechat['subscribe']) , //没有打开开发者模式 无此字段
-						'subscribed_at' => !empty($wechat['subscribe_time']) ? Carbon::createFromTimestamp($wechat['subscribe_time']) : NULL,
-						'country' => $wechat['country'],
-						'province' => $wechat['province'],
-						'city' => $wechat['city'],
-						'language' => $wechat['language'],
-						'remark' => !empty($wechat['remark']) ? $wechat['remark'] : NULL,//没有打开开发者模式 无此字段
-						'groupid' => !empty($wechat['groupid']) ? $wechat['groupid'] : NULL,//没有打开开发者模式 无此字段
-						'avatar_aid' => $wechat['avatar_aid'],
-					]);
-				
+				$v->update([
+					'nickname' => $wechat['nickname'],
+					'gender' => $wechat['sex'],
+					'is_subscribed' => !empty($wechat['subscribe']) , //没有打开开发者模式 无此字段
+					'subscribed_at' => !empty($wechat['subscribe_time']) ? Carbon::createFromTimestamp($wechat['subscribe_time']) : null,
+					'country' => $wechat['country'],
+					'province' => $wechat['province'],
+					'city' => $wechat['city'],
+					'language' => $wechat['language'],
+					'remark' => !empty($wechat['remark']) ? $wechat['remark'] : null,//没有打开开发者模式 无此字段
+					'groupid' => !empty($wechat['groupid']) ? $wechat['groupid'] : null,//没有打开开发者模式 无此字段
+					'avatar_aid' => $avatar_aid,
+				]);
 			}
-			$wechatUser = WechatUser::where('openid', $openid)->where('waid', $this->api->waid)->get()->first();
-			Cache::put($hashkey, $wechatUser, config('cache.ttl'));
 		}
-		return $wechatUser;
+
+		return WechatUser::find($wechatUser->getKey());
 	}
 
-	public function bindToUser(WechatUser $wechatUser, $role_name = NULL, $cache = TRUE)
+	public function bindToUser(WechatUser $wechatUser, $role_name = null, $cache = true)
 	{
 		$userModel = config('auth.providers.users.model');
 		$user = !empty($wechatUser->uid) ? $userModel::find($wechatUser->uid) : $userModel::findByName($wechatUser->unionid);

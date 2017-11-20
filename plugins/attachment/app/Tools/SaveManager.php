@@ -53,7 +53,7 @@ class SaveManager extends Manager {
 		{
 			if (empty($this->filename))
 				throw new AttachmentException('lost_filename', 'error');
-				
+
 			return $this->filename;
 		}
 
@@ -118,7 +118,7 @@ class SaveManager extends Manager {
 		$attachment = null;
 		$chunks = $this->chunks();
 		if (!is_null($this->driver))
-			$attachment = $this->driver($this->driver)->save();		
+			$attachment = $this->driver($this->driver)->save();
 		elseif (empty($chunks) || empty($chunks['uuid']) || empty($chunks['count']) || $chunks['count'] <= 1)
 			$attachment = $this->driver('whole')->save();
 		else

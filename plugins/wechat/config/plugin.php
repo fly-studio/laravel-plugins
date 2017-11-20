@@ -9,6 +9,7 @@ return [
 		'router' => true,
 		'config' => true,
 		'censor' => true,
+		'event' =>  true,
 	],
 	'configs' => [
 		'wechat'
