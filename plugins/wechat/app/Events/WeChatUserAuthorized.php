@@ -13,6 +13,7 @@ namespace Plugins\Wechat\App\Events;
 
 use Overtrue\Socialite\User;
 use Illuminate\Queue\SerializesModels;
+use EasyWeChat\OfficialAccount\Application;
 
 class WeChatUserAuthorized
 {
@@ -28,7 +29,7 @@ class WeChatUserAuthorized
      * @param \Overtrue\Socialite\User $user
      * @param bool                     $isNewSession
      */
-    public function __construct(OfficialAccount $app, User $user, $isNewSession = false)
+    public function __construct(Application $app, User $user, $isNewSession = false)
     {
         $this->app = $app;
         $this->user = $user;

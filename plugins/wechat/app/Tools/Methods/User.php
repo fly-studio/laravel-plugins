@@ -6,6 +6,7 @@ use Cache;
 use Carbon\Carbon;
 use Overtrue\Socialite\User;
 use Plugins\Wechat\App\WechatUser;
+use EasyWeChat\OfficialAccount\Application;
 use Plugins\Wechat\App\Tools\Methods\Attachment;
 
 class User {
@@ -13,7 +14,7 @@ class User {
 	private $app;
 	static $ttl = 3600; //1 hour
 
-	public function __construct(OfficialAccount $app)
+	public function __construct(Application $app)
 	{
 		$this->app = $app;
 	}
