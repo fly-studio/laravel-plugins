@@ -2,6 +2,8 @@
 
 namespace Plugins\Wechat\App\Tools\Storages;
 
+use Overtrue\Socialite\User;
+
 class OAuth2 {
 
 	public $account_id = null;
@@ -11,7 +13,7 @@ class OAuth2 {
 		$this->account_id = $account_id;
 	}
 
-	public function __invoke($user = null)
+	public function __invoke(User $user = null)
 	{
 		if (is_null($user))
 			return session('wechat.oauth2.'.$this->account_id, null);

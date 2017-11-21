@@ -2,7 +2,15 @@
 
 namespace Plugins\Wechat\App\Tools\Storages;
 
+use Plugins\Wechat\App\Repositories\WechatAccountRepository;
+
 class Account {
+
+	public function wechatAccount()
+	{
+		$account_id = $this->__invoke();
+		return empty($account_id) ? null : app(WechatAccountRepository::class)->find($account_id);
+	}
 
 	public function __invoke($account_id = null)
 	{
