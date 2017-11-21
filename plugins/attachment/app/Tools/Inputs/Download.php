@@ -60,7 +60,7 @@ class Download extends Input {
 
 		$download_filename = $res->getHeader('Content-Disposition');
 
-		$basename = mb_basename($url);//pathinfo($url,PATHINFO_BASENAME);
+		$basename = mb_basename($this->url);//pathinfo($url,PATHINFO_BASENAME);
 		if (!empty($download_filename))
 		{
 			if (preg_match('/filename\s*=\s*(\S*)/i',  $download_filename, $matches))
