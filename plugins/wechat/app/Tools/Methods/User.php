@@ -48,7 +48,7 @@ class User {
 
 		if (isset($wechat['nickname'])) //有详细资料
 		{
-			$avatar_aid = Attachment::downloadAvatar($user->getAvatar());
+			$avatar_aid = Attachment::downloadAvatar($user->getAvatar())->getKey();
 
 			//将所有唯一ID匹配的资料都更新
 			foreach(!empty($wechat['unionid']) ? WechatUser::where('unionid', $wechat['unionid'])->get() : [$wechatUser] as $v)
