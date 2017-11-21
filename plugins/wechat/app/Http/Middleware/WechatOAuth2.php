@@ -50,6 +50,8 @@ class WechatOAuth2
 		}
 
 		$scopes = $scopes ?: $app['config']->get('oauth.scopes', ['snsapi_base']);
+		if (is_string($scopes)) $scopes = explode(',', $scopes);
+
 		$user = Tools\oauth2_storage($waid);
 
 		if (empty($user) || $this->needReauth($user, $scopes)) {

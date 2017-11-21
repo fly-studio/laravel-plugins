@@ -4,14 +4,21 @@ namespace Plugins\Wechat\App\Tools\Storages;
 
 class User {
 
-	public function __invoke($account_id = null, $user = null)
+	public $account_id = null;
+
+	public function __construct($account_id)
 	{
-		if (is_null($user))
-			return session('wechat.user.'.$account_id, null);
-		if ($user === false)
-			return session()->forget('wechat.user.'.$account_id);
+		$this->account_id = $account_id;
+	}
+
+	public function __invoke($wuid = null)
+	{
+		if (is_null($wuid))
+			return session('wechat.user.'.$this->account_id, null);
+		if ($wuid === false)
+			return session()->forget('wechat.user.'.$this->account_id);
 		session([
-			'wechat.user.'.$account_id => $user
+			'wechat.user.'.$this->account_id => $wuid
 		]);
 		session()->save();
 	}

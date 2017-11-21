@@ -69,7 +69,7 @@ class User {
 			}
 		}
 
-		return WechatUser::find($wechatUser->getKey());
+		return $wechatUser->getKey();
 	}
 
 	public function bindToUser(WechatUser $wechatUser, $role_name = null, $cache = true)
