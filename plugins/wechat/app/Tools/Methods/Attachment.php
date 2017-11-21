@@ -12,7 +12,7 @@ class Attachment {
 	public static function downloadAvatar($url)
 	{
 		app(InputManager::class)
-			->download($url)
+			->download($url, 'avatar.jpg')
 			->save();
 	}
 }

@@ -18,7 +18,7 @@ class Download extends Input {
 		set_time_limit(0);
 	}
 
-	public function download($url)
+	public function download($url, $downloadName = null)
 	{
 		$this->url = $url;
 		if (empty($url) || !filter_var($url, FILTER_VALIDATE_URL))
@@ -27,7 +27,7 @@ class Download extends Input {
 		$filePath = tempnam(sys_get_temp_dir(),'download-');
 		try {
 			$originalName = $this->GuzzleHttp($filePath);
-			return $this->newSave()->file(new File($filePath, $originalName))->deleteFileAfterSaved();
+			return $this->newSave()->file(new File($filePath, $downloadName ?? $originalName))->deleteFileAfterSaved();
 		} catch (\Exception $e) {
 			@unlink($filePath);
 			throw $e;
