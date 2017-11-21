@@ -43,7 +43,8 @@ class User {
 		!empty($wechat['unionid']) && $wechatUser->update(['unionid' => $wechat['unionid']]);
 
 		// break in 1hr
-		if ($wechatUser->updated_at->diffInSeconds() < static::$ttl) return $wechatUser;
+		$delta = $wechatUser->updated_at->diffInSeconds();
+		if ($delta < static::$ttl && $delta > 5) return $wechatUser;
 
 		if (isset($wechat['nickname'])) //有详细资料
 		{

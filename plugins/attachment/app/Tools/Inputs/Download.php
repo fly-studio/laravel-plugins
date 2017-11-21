@@ -15,13 +15,13 @@ class Download extends Input {
 	public function __construct()
 	{
 		ignore_user_abort(true);
-		set_time_limit(0);		
+		set_time_limit(0);
 	}
 
 	public function download($url)
 	{
 		$this->url = $url;
-		if (empty($url) || !filter_var($url, 'FILTER_VALIDATE_URL'))
+		if (empty($url) || !filter_var($url, FILTER_VALIDATE_URL))
 			throw new AttachmentException('url_invalid');
 
 		$filePath = tempnam(sys_get_temp_dir(),'download-');
@@ -34,7 +34,7 @@ class Download extends Input {
 			return false;
 		}
 	}
-	
+
 	protected function GuzzleHttp($toPath)
 	{
 		$stack = HandlerStack::create();
