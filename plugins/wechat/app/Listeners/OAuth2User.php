@@ -13,7 +13,7 @@ class OAuth2User {
 
 		//更新到系统
 		$user = new User($app);
-		$user->updateWechatUser();
+		$user->updateWechatUser($app->getUser());
 	}
 
 }
