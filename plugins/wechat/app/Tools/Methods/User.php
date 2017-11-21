@@ -4,9 +4,9 @@ namespace Plugins\Wechat\App\Tools\Methods;
 
 use Cache;
 use Carbon\Carbon;
-use Overtrue\Socialite\User;
 use Plugins\Wechat\App\WechatUser;
 use EasyWeChat\OfficialAccount\Application;
+use Overtrue\Socialite\User as SocialiteUser;
 use Plugins\Wechat\App\Tools\Methods\Attachment;
 
 class User {
@@ -28,7 +28,7 @@ class User {
 	 * @param  integer $update_expire 	多少分钟更新一次?
 	 * @return integer                  返回UID
 	 */
-	public function updateWechatUser(User $user)
+	public function updateWechatUser(SocialiteUser $user)
 	{
 		$waid = $this->app['config']->get('id');
 		$app_id = $this->app['config']->get('app_id');
