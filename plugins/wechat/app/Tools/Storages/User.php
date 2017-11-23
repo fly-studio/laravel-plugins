@@ -19,12 +19,18 @@ class User {
 		return empty($wuid) ? null : app(WechatUserRepository::class)->find($wuid);
 	}
 
-	public function __invoke($wuid = null)
+	public function forget()
 	{
-		if (is_null($wuid))
-			return session('wechat.user.'.$this->account_id, null);
-		if ($wuid === false)
-			return session()->forget('wechat.user.'.$this->account_id);
+		return session()->forget('wechat.user.'.$this->account_id);
+	}
+
+	public function get()
+	{
+		return session('wechat.user.'.$this->account_id, null);
+	}
+
+	public function put($wuid)
+	{
 		session([
 			'wechat.user.'.$this->account_id => $wuid
 		]);

@@ -13,16 +13,21 @@ class OAuth2 {
 		$this->account_id = $account_id;
 	}
 
-	public function __invoke(User $user = null)
+	public function forget()
 	{
-		if (is_null($user))
-			return session('wechat.oauth2.'.$this->account_id, null);
-		if ($user === false)
-			return session()->forget('wechat.oauth2.'.$this->account_id);
+		return session()->forget('wechat.oauth2.'.$this->account_id);
+	}
+
+	public function get()
+	{
+		return session('wechat.oauth2.'.$this->account_id, null);
+	}
+
+	public function put(User $user)
+	{
 		session([
 			'wechat.oauth2.'.$this->account_id => $user
 		]);
 		session()->save();
 	}
-
 }
