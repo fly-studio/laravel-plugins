@@ -15,7 +15,7 @@ class User {
 
 	public function wechatUser()
 	{
-		$wuid = $this->__invoke();
+		$wuid = $this->get();
 		return empty($wuid) ? null : app(WechatUserRepository::class)->find($wuid);
 	}
 
