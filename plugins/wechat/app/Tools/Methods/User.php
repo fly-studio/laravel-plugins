@@ -40,7 +40,7 @@ class User {
 		$wechatUser = $this->repo->findOrCreate($waid, $user['id']);
 
 		//update the unionid
-		!empty($wechat['unionid']) && $this->repo->update($wechatUser, ['unionid' => $wechat['unionid']]);
+		!empty($wechat['unionid']) && empty($wechatUser->unionid) && $this->repo->update($wechatUser, ['unionid' => $wechat['unionid']]);
 
 		// break in 1hr
 		$delta = $wechatUser->updated_at->diffInSeconds();
