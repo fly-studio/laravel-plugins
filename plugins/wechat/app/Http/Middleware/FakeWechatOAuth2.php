@@ -3,11 +3,12 @@
 namespace Plugins\Wechat\App\Http\Middleware;
 
 use Closure, Log, Event;
+use Overtrue\Socialite\User;
 use Plugins\Wechat\App\Tools;
 use Plugins\Wechat\App\Tools\WechatFactory;
 use Plugins\Wechat\App\Events\WeChatUserAuthorized;
 
-class WechatOAuth2
+class FakeWechatOAuth2
 {
 	/**
 	 * The Plugins\Wechat\App\Tools\WechatFactory.
@@ -34,7 +35,7 @@ class WechatOAuth2
 	 * @param  \Closure  $next
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next, $waid, $scopes = null)
+	public function handle($request, Closure $next, $waid, $openid = null)
 	{
 		$app = $this->wechat->accountID($waid)->make('OfficialAccount');
 
@@ -49,56 +50,29 @@ class WechatOAuth2
 			return $next($request);
 		}
 
-		$scopes = $scopes ?: $app['config']->get('oauth.scopes', ['snsapi_base']);
-		if (is_string($scopes)) $scopes = explode(',', $scopes);
-
 		$user = Tools\oauth2_storage($waid);
 
-		if (empty($user) || $this->needReauth($user, $scopes)) {
-			//微信回执
-			if ($request->has('code')) {
-				$user = $app->oauth->user();
+		if (empty($user)) {
+			// 伪造数据
+			if (empty($openid)) $openid = 'fake-'.mt_rand(100000, 999999);
+			$user = new User([
+				'id' => $openid,
+				'username' => $openid,
+				'nickname' => null,
+				'email' => null,
+				'avatar' => null,
+				'original' => [
 
-				Tools\oauth2_storage($waid, $user);
-				$isNewSession = true;
+				]
+			]);
 
-				Event::fire(new WeChatUserAuthorized($app, $user, $isNewSession));
-
-				return redirect()->to($this->getTargetUrl($request));
-			}
-			Tools\oauth2_storage($waid, false); //forget it
-			return $app->oauth->scopes($scopes)->redirect($request->fullUrl());
+			Tools\oauth2_storage($waid, $user);
+			$isNewSession = true;
 		}
 
 		Event::fire(new WeChatUserAuthorized($app, $user, $isNewSession));
 
 		return $next($request);
-	}
-
-	/**
-	 * Build the target business url.
-	 *
-	 * @param Request $request
-	 *
-	 * @return string
-	 */
-	protected function getTargetUrl($request)
-	{
-		$queries = array_except($request->query(), ['code', 'state']);
-
-		return $request->url().(empty($queries) ? '' : '?'.http_build_query($queries));
-	}
-
-	/**
-	 * Is different scopes.
-	 *
-	 * @param array $scopes
-	 *
-	 * @return bool
-	 */
-	protected function needReauth($user, $scopes)
-	{
-		return 'snsapi_base' == array_get($user, 'original.scope') && in_array('snsapi_userinfo', $scopes);
 	}
 
 	/**

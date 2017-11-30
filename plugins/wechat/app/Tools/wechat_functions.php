@@ -12,18 +12,33 @@ function extendsConfig($template_name, array $values = []) {
 
 function account_storage($account_id = null)
 {
-	$invoke = new Storages\Account();
-	return $invoke($account_id);
+	$instance = new Storages\Account();
+	if (is_null($account_id))
+		return $instance->get();
+	else if ($account_id === false)
+		return $instance->forget();
+	else
+		$instance->put($account_id);
 }
 
-function user_storage($account_id = null, $openid = null)
+function user_storage($account_id, $wuid = null)
 {
-	$invoke = new Storages\User();
-	return $invoke($account_id, $openid);
+	$instance = new Storages\User($account_id);
+	if (is_null($wuid))
+		return $instance->get();
+	else if ($wuid === false)
+		return $instance->forget();
+	else
+		$instance->put($wuid);
 }
 
-function oauth2_storage($account_id = null, $user = null)
+function oauth2_storage($account_id, $user = null)
 {
-	$invoke = new Storages\OAuth2();
-	return $invoke($account_id, $user);
+	$instance = new Storages\OAuth2($account_id);
+	if (is_null($user))
+		return $instance->get();
+	else if ($user === false)
+		return $instance->forget();
+	else
+		$instance->put($user);
 }
