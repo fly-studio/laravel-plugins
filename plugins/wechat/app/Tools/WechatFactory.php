@@ -3,6 +3,7 @@
 namespace Plugins\Wechat\App\Tools;
 
 use Plugins\Wechat\App\Tools;
+use Plugins\Wechat\App\Tools\CacheBridge;
 use EasyWeChat\Work\AgentFactory as Work;
 use EasyWeChat\Payment\Application as Payment;
 use EasyWeChat\MiniProgram\Application as MiniProgram;
@@ -27,8 +28,8 @@ class WechatFactory {
 			throw new InvalidArgumentException('Set accountID first.');
 
 		$app = $this->{$method}(...$args);
-		if (config('wechat.defaults.use_laravel_cache'))
-			$app['cache'] = app('cache.store');
+		if (config('wechat.defaults.use_laravel_cache', false))
+			$app['cache'] = new CacheBridge(app('cache.store'));
 		$app['request'] = app('request');
 		return $app;
 	}
