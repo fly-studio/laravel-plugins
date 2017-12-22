@@ -13,10 +13,6 @@
 <script type="text/javascript" src="<{'js/zTree/jquery.ztree.exedit.min.js'|static}>"></script>
 <link rel="stylesheet" href="<{'css/zTree/zTreeStyle/zTreeStyle.css'|static}>"/>
 <{/block}>
-<{block "head-scripts-vue"}>
-<script src="<{'js/vue/vue.min.js'|static nofilter}>"></script>
-<script src="<{'js/vue/vuex.min.js'|static nofilter}>"></script>
-<{/block}>
 <{if !empty($_table_data)}>
 <{block "head-scripts-inner-data"}>
 <script>
@@ -26,11 +22,9 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 </script>
 <{/block}>
 <link rel="stylesheet" href="<{'css/catalog/catalog.css'|plugins nofilter}>">
-<{block "head-script-before-vue"}><{/block}>
-<{block "head-scripts-vue"}>
+
 <script src="<{'js/catalog/catalog.min.js'|plugins nofilter}>"></script>
 <{/block}>
-<{block "head-script-after-vue"}><{/block}>
 <{/if}>
 <{/block}>
 
@@ -63,7 +57,7 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 		</nav>
 		<div class="clearfix"></div>
 	</div>
-		
+
 	<div class="block-content">
 	<{if empty($_table_data)}>
 		<div class="well well-lg col-sm-10 col-sm-offset-1">
@@ -102,7 +96,7 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 	<{/if}>
 	</div>
 	<div class="clearfix"></div>
-	
+
 </div>
 
 <{/block}>
