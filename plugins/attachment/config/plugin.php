@@ -8,7 +8,6 @@ return [
 		'censor' => false,
 		'translator' => true,
 		'router' => true,
-		'config' => true,
 	],
 	'configs' => [
 		'attachment'

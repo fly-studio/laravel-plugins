@@ -2,8 +2,11 @@
 
 namespace Plugins\OAuth2;
 
+use DateInterval;
 use Carbon\Carbon;
 use Laravel\Passport\Passport;
+use Plugins\OAuth2\App\Grant\AuthCodeGrant;
+use League\OAuth2\Server\AuthorizationServer;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
@@ -36,6 +39,38 @@ class ServiceProvider extends BaseServiceProvider
 		Passport::refreshTokensExpireIn(Carbon::now()->addDays(config('oauth2.refreshTokensExpireIn', 14 * 86400)));
 		if (config('oauth2.pruneRevokedTokens', false)) //删除过期令牌
 			Passport::pruneRevokedTokens();
+
+		$server = $this->app->make(AuthorizationServer::class);
+		$server->enableGrantType(
+			$this->makeAuthCodeGrant(), Passport::tokensExpireIn()
+		);
+
+	}
+
+	/**
+	 * Create and configure an instance of the Auth Code grant.
+	 *
+	 * @return \League\OAuth2\Server\Grant\AuthCodeGrant
+	 */
+	protected function makeAuthCodeGrant()
+	{
+		return tap($this->buildAuthCodeGrant(), function ($grant) {
+			$grant->setRefreshTokenTTL(Passport::refreshTokensExpireIn());
+		});
+	}
+
+	/**
+	 * Build the Auth Code grant instance.
+	 *
+	 * @return \League\OAuth2\Server\Grant\AuthCodeGrant
+	 */
+	protected function buildAuthCodeGrant()
+	{
+		return new AuthCodeGrant(
+			$this->app->make(\Laravel\Passport\Bridge\AuthCodeRepository::class),
+			$this->app->make(\Laravel\Passport\Bridge\RefreshTokenRepository::class),
+			new DateInterval('PT10M')
+		);
 	}
 
 	/**

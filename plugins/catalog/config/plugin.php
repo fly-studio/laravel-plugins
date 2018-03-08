@@ -8,6 +8,5 @@ return [
 		'translator' => true,
 		'router' => true,
 		'censor' => true,
-		'config' => false,
 	],
 ];

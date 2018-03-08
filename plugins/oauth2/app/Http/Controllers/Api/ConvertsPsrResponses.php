@@ -5,6 +5,7 @@ namespace Plugins\OAuth2\App\Http\Controllers\Api;
 use Illuminate\Http\Response;
 use Psr\Http\Message\ResponseInterface;
 use Addons\Core\Http\Response\TextResponse;
+use Addons\Core\Http\Response\ApiResponse;
 
 trait ConvertsPsrResponses
 {
@@ -21,26 +22,31 @@ trait ConvertsPsrResponses
 
         if (empty($data))
         {
-            return new TextResponse(
+            return new ApiResponse(
                 $body,
                 $psrResponse->getStatusCode(),
                 $psrResponse->getHeaders()
             );
         }
-
-        $response = new TextResponse(
-            '',
-            $psrResponse->getStatusCode(),
-            $psrResponse->getHeaders()
-        );
-
+        $response = null;
         if (isset($data['error']))
         {
-            $response->setResult('failure');
-            $response->setMessage(['title' => $data['error'], 'content' => $data['message']]);
+            $response = new TextResponse(
+                null,
+                $psrResponse->getStatusCode(),
+                $psrResponse->getHeaders()
+            );
+
+            $response->setResult('failure')->setMessage(['title' => $data['error'], 'content' => isset($data['hint']) ? $data['hint'] : $data['message']]);
+        } else {
+            $response = new ApiResponse(
+                null,
+                $psrResponse->getStatusCode(),
+                $psrResponse->getHeaders()
+            );
         }
 
-        $response->setData(array_except($data, ['error', 'message']));
+        $response->setData(array_except($data, ['error', 'message', 'hint']));
 
         return $response->setFormatter('json');
     }
