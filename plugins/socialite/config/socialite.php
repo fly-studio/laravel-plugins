@@ -9,6 +9,12 @@ return [
 			'client_secret' => env('QQ_SECRET'),
 		],
 
+		'weixin' => [
+			'enable' => true,
+			'client_id' => env('WEIXIN_KEY'),
+			'client_secret' => env('WEIXIN_SECRET'),
+		],
+
 		'weixin-web' => [
 			'enable' => true,
 			'driver_name' => 'weixinweb',

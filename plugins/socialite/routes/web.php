@@ -1,5 +1,5 @@
 <?php
 
-$router->get('socialite/login/{name}', 'LoginController@index');
+$router->get('socialite/login/{nameOrId}', 'LoginController@index');
 
-$router->get('socialite/callback/{name}', 'FeedbackController@index');
+$router->get('socialite/feedback/{nameOrId}', 'FeedbackController@index');
