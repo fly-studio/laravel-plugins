@@ -1,8 +1,9 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools;
 
 use Illuminate\Support\Manager;
-use \Illuminate\Foundation\Application;
+use Illuminate\Foundation\Application;
 
 class SyncManager extends Manager {
 

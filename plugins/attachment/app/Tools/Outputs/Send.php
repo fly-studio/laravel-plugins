@@ -5,8 +5,8 @@ use Plugins\Attachment\App\Contracts\Tools\Output;
 use Plugins\Attachment\App\Exceptions\AttachmentException;
 
 class Send extends Output {
-	
-	public function send($cache = true)
+
+	public function send($cached = true)
 	{
 		$attachment = $this->attachment();
 

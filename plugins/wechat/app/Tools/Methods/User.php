@@ -48,7 +48,11 @@ class User {
 
 		if (isset($wechat['nickname'])) //有详细资料
 		{
-			$avatar_aid = Attachment::downloadAvatar($user->getAvatar())->getKey();
+			try {
+				$attachment = Attachment::downloadAvatar($user->getAvatar());
+			} catch (\Exception $e) {
+
+			}
 			$updates = [
 				'nickname' => $wechat['nickname'],
 				'gender' => $wechat['sex'],
@@ -60,7 +64,7 @@ class User {
 				'language' => $wechat['language'],
 				'remark' => !empty($wechat['remark']) ? $wechat['remark'] : null,//没有打开开发者模式 无此字段
 				'groupid' => !empty($wechat['groupid']) ? $wechat['groupid'] : null,//没有打开开发者模式 无此字段
-				'avatar_aid' => $avatar_aid,
+				'avatar_aid' => !empty($attachment) ? $attachment->getKey() : 0,
 			];
 
 			//将所有唯一ID匹配的资料都更新

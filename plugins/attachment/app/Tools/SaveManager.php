@@ -1,9 +1,10 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools;
 
 use Illuminate\Support\Manager;
 use Plugins\Attachment\App\Tools\File;
-use \Illuminate\Foundation\Application;
+use Illuminate\Foundation\Application;
 use Plugins\Attachment\App\Tools\Utils\Path;
 use Plugins\Attachment\App\Exceptions\AttachmentException;
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App;
 
 use App\Model;
@@ -9,7 +10,7 @@ class AttachmentFile extends Model{
 
 	protected $guarded = ['id'];
 	protected $hidden = ['basename', 'path'];
-	
+
 	public function attachments()
 	{
 		return $this->hasMany(get_namespace($this).'\\Attachment', 'afid', 'id');
@@ -18,7 +19,7 @@ class AttachmentFile extends Model{
 	/**
 	 * 得到附件的完整路径
 	 * 同下
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getFullPathAttribute()
@@ -29,7 +30,7 @@ class AttachmentFile extends Model{
 	/**
 	 * 得到附件的完整路径
 	 * 同上
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getRealPathAttribute()
@@ -39,7 +40,7 @@ class AttachmentFile extends Model{
 
 	/**
 	 * 得到附件相对base_path()的相对路径
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getRelativePathAttribute()

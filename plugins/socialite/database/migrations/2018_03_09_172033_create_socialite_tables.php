@@ -30,7 +30,10 @@ class CreateSocialiteTables extends Migration
             $table->increments('id');
             $table->unsignedInteger('sid')->comment = 'socialites ID';
             $table->string('openid', 100)->index();
-            $table->string('nickname', 100);
+            $table->string('nickname', 100)->nullable();
+            $table->string('name', 100)->nullable();
+            $table->string('email', 150)->nullable();
+            $table->string('avatar', 250)->nullable()->comment = '头像Url';
             $table->unsignedInteger('avatar_aid')->nullable()->default(0)->comment = '头像AID'; //头像
             $table->json('profile')->nullable()->comment = '其它资料';
 

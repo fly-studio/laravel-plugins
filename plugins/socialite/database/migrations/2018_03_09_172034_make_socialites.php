@@ -19,8 +19,8 @@ class MakeSocialites extends Migration
 				'socialite|社交平台' => [
 					'type|社交平台类型' => [
 						'qq|QQ' => [],
-						'wechat|微信公众号' => [],
-						'wechat-web|微信网页授权(二维码)' => [],
+						'weixin|微信公众号' => [],
+						'weixin-web|微信网页授权(二维码)' => [],
 						'weibo|新浪微博' => [],
 						'douban|豆瓣网' => [],
 						'github|Github' => [],

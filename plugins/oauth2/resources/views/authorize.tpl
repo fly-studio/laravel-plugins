@@ -24,6 +24,7 @@
 
                 <input type="hidden" name="state" value="<{ $request->state }>">
                 <input type="hidden" name="client_id" value="<{ $client->id }>">
+                <input type="hidden" name="redirect_uri" value="<{$request->redirect_uri}>">
                 <button type="submit" class="btn btn-success btn-approve  btn-block"><i class="glyphicon glyphicon-ok"></i> 确认登录</button>
             </form>
         </div>
@@ -34,7 +35,8 @@
 
                 <input type="hidden" name="state" value="<{ $request->state }>">
                 <input type="hidden" name="client_id" value="<{ $client->id }>">
-                <button class="btn btn-danger btn-link">拒绝</button>
+                <input type="hidden" name="redirect_uri" value="<{$request->redirect_uri}>">
+                <button type="submit" class="btn btn-link">拒绝</button>
             </form>
         </div>
 

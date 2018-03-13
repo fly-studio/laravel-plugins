@@ -15,5 +15,9 @@ class Socialite extends Model {
 		'client_extra' => 'array',
 	];
 
+	public function socialite_users()
+	{
+		return $this->hasMany('Plugins\Socialite\App\SocialiteUser', 'sid', 'id');
+	}
 
 }

@@ -6,8 +6,8 @@ use Plugins\Attachment\App\Contracts\Tools\Output;
 use Plugins\Attachment\App\Exceptions\AttachmentException;
 
 class Resize extends Output {
-	
-	public function resize($width, $height, $cache = true)
+
+	public function resize($width, $height, $cached = true)
 	{
 		$attachment = $this->attachment();
 

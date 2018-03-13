@@ -1,12 +1,12 @@
 <?php
+
 namespace Plugins\Attachment\App\Http\Controllers;
 
 use Agent, Auth, Mimes;
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
+use Plugins\Attachment\App\Tools\Helpers;
 use Addons\Core\Http\Response\TextResponse;
-use Plugins\Attachment\App\Tools\InputManager;
-use Plugins\Attachment\App\Tools\OutputManager;
 use Plugins\Attachment\App\Tools\SyncManager;
 use Plugins\Attachment\App\Exceptions\AttachmentException;
 
@@ -20,6 +20,9 @@ class AttachmentController extends Controller {
 	public function __construct()
 	{
 		$this->middleware('flash-session');
+
+		if (strpos(url()->previous(), '/admin') !== false)
+			Auth::shouldUse('admin');
 	}
 
 	public function index(Request $request)
@@ -83,15 +86,15 @@ class AttachmentController extends Controller {
 				return $this->phone($request, $id);
 			else
 				return $this->preview($request, $id);
-		} else 
-			return $this->download($request, $id);		
+		} else
+			return $this->download($request, $id);
 	}
 
 	public function download(Request $request, $id)
 	{
 		$attachment = $this->factory($id);
 
-		return app(OutputManager::class)->attachment($attachment)->send();
+		return Helpers::send($attachment);
 	}
 
 	public function info(Request $request, $id)
@@ -107,7 +110,7 @@ class AttachmentController extends Controller {
 		if ($attachment->file_type != 'image')
 			throw new AttachmentException('image_invalid', 'error');
 
-		return app(OutputManager::class)->attachment($attachment)->resize($width, $height);
+		return Helpers::resize($attachment, $width, $height);
 	}
 
 	public function phone(Request $request, $id)
@@ -124,7 +127,7 @@ class AttachmentController extends Controller {
 	{
 		$attachment = $this->factory($id);
 
-		return app(OutputManager::class)->attachment($attachment)->preview();
+		return Helpers::preview($attachment);
 	}
 
 	public function watermark(Request $request, $id, $watermark, $width = 0, $height = 0)
@@ -137,7 +140,7 @@ class AttachmentController extends Controller {
 		if (empty($watermark) || !file_exists($watermark->full_path) || $watermark->file_type != 'image')
 			throw new AttachmentException('watermark_invalid', 'errror');
 
-		return app(OutputManager::class)->attachment($attachment)->watermark($watermark, $width, $height);
+		return Helpers::watermark($attachment, $watermark, $width, $height);
 	}
 
 	public function hashQuery(Request $request)
@@ -150,10 +153,7 @@ class AttachmentController extends Controller {
 		if (empty($hash) || empty($size) || empty($filename))
 			return $this->error_param()->setStatusCode(404);
 
-		$attachment = app(InputManager::class)
-			->hash($hash, $size, $filename)
-			->user($request->user())
-			->save();
+		$attachment = Helpers::hash($hash, $size, $filename, ['user' => $request->user()]);
 		return $this->api($attachment);
 	}
 
@@ -167,11 +167,7 @@ class AttachmentController extends Controller {
 		$end = $request->input('end', 0);
 		$hash = $request->input('hash', '');
 
-		$attachment = app(InputManager::class)
-			->upload('Filedata')
-			->chunks(compact('uuid', 'count', 'index', 'start', 'end', 'total', 'hash'))
-			->user($request->user())
-			->save();
+		$attachment = Helpers::upload('Filedata', ['user' => $request->user(), 'chunks' => compact('uuid', 'count', 'index', 'start', 'end', 'total', 'hash')]);
 
 		return $this->api($attachment);
 	}
@@ -180,16 +176,12 @@ class AttachmentController extends Controller {
 	{
 		$data = ['success' => 1, 'message' => ''];
 		try {
-			$attachment = app(InputManager::class)
-				->upload('editormd-image-file')
-				->user($request->user())
-				->save();
+			$attachment = Helpers::upload('editormd-image-file', ['user' => $request->user()]);
 			$data['url'] = $attachment->url;
-			
 		} catch (\Exception $e) {
 			$data = ['success' => 0, 'message' => $e->getMessage()];
 		}
-		
+
 		return (new TextResponse)->setData($data, true);
 	}
 
@@ -197,10 +189,7 @@ class AttachmentController extends Controller {
 	{
 		$data = ['error' => 0, 'url' => ''];
 		try {
-			$attachment = app(InputManager::class)
-				->upload('Filedata')
-				->user($request->user())
-				->save();
+			$attachment = Helpers::upload('Filedata', ['user' => $request->user()]);
 			$data['url'] = $attachment->url;
 		} catch (\Exception $e) {
 			$data = ['error' => 1, 'message' => $e->getMessage()];
@@ -266,10 +255,7 @@ class AttachmentController extends Controller {
 			/* 上传文件 */
 			case 'uploadfile':
 				try {
-					$attachment = app(InputManager::class)
-						->upload('Filedata')
-						->user($request->user())
-						->save();
+					$attachment = Helpers::upload('Filedata', ['user' => $request->user()]);
 					$data = [
 						'state' => 'SUCCESS',
 						'url' => $attachment->url,
@@ -285,10 +271,7 @@ class AttachmentController extends Controller {
 			/* 上传涂鸦 */
 			case 'uploadscrawl':
 				try {
-					$attachment = app(InputManager::class)
-						->raw(base64_decode($request->input('Filedata')), 'scrawl_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.png')
-						->user($request->user())
-						->save();
+					$attachment = Helpers::uploadRaw(base64_decode($request->input('Filedata')), 'scrawl_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.png', ['user' => $request->user()]);
 					$data = [
 						'state' => 'SUCCESS',
 						'url' => $attachment->url,
@@ -307,11 +290,7 @@ class AttachmentController extends Controller {
 				$list = [];
 				foreach ($urls as $url) {
 					try {
-						$attachment = app(InputManager::class)
-						->download($url)
-						->extra(['url' => $url])
-						->user($request->user())
-						->save();
+						$attachment = Helpers::download($url, null, ['user' => $request->user(), 'extra' => ['url' => $url]]);
 						$list[] = [
 							'state' => 'SUCCESS',
 							'url' => $attachment->url,
@@ -334,7 +313,7 @@ class AttachmentController extends Controller {
 			/* 列出文件 */
 			case 'listfile':
 				$list = Attachment::whereIn('ext', $_config['file_type']['image'])->orderBy('created_at', 'DESC')->paginate($size, ['*'], 'page', $page);
-				
+
 				$urls = [];
 				foreach($list as $v)
 					$urls[] = [ 'url' => $v->url ];
@@ -359,10 +338,7 @@ class AttachmentController extends Controller {
 		if (isset($_FILES['__source']))
 		{
 			try {
-				$attachment = app(InputManager::class)
-					->upload('__source')
-					->user($request->user())
-					->save();
+				$attachment = Helpers::upload('__source', ['user' => $request->user()]);
 				$result['original_aid'] = $attachment['id'];
 			} catch (\Exception $e) {
 				$result = ['success' => false, 'message' => $e->getMessage()];
@@ -374,11 +350,7 @@ class AttachmentController extends Controller {
 			if (isset($_FILES[$v]) && is_uploaded_file($_FILES[$v]["tmp_name"]) && !$_FILES[$v]["error"]){
 
 				try {
-					$attachment = app(InputManager::class)
-						->upload($v)
-						->user($request->user())
-						->filename($v.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.jpg')
-						->save();
+					$attachment = Helpers::upload($v, ['user' => $request->user(), 'filename' => $v.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.jpg']);
 					$result['avatar_aids'][] = $attachment['id'];
 				} catch (Exception $e) {
 					$result = ['success' => false, 'message' => $e->getMessage()];
@@ -393,13 +365,10 @@ class AttachmentController extends Controller {
 	public function dataurlQuery(Request $request)
 	{
 		$dataurl = $request->post('DataURL');
-		
+
 		$part = parse_dataurl($dataurl);
 		$ext = Mimes::getInstance()->ext_by_mime($part['mine']);
-		$attachment = app(InputManager::class)
-			->raw($part['data'], 'datauri_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.'.$ext)
-			->user($request->user())
-			->save();
+		$attachment = Helpers::uploadRaw($part['data'], 'datauri_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.'.$ext, ['user' => $request->user()]);
 		unset($dataurl, $part);
 		return $this->success('', $url, array('id' => $attachment->getKey(), 'url' => $attachment->url));
 	}

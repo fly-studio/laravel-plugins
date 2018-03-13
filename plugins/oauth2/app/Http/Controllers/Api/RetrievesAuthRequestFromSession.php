@@ -25,7 +25,10 @@ trait RetrievesAuthRequestFromSession
 
             $authRequest->setUser(new User($request->user()->getKey()));
 
+            $authRequest->setRedirectUri($request->input('redirect_uri'));
+
             $authRequest->setAuthorizationApproved(true);
+
         });
     }
 }

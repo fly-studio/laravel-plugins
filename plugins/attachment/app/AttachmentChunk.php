@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App;
 
 use App\Model;
@@ -18,7 +19,7 @@ class AttachmentChunk extends Model{
 	/**
 	 * 得到附件的完整路径
 	 * 同下
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getFullPathAttribute()
@@ -29,7 +30,7 @@ class AttachmentChunk extends Model{
 	/**
 	 * 得到附件的完整路径
 	 * 同上
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getRealPathAttribute()

@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App;
 
 use DB, Cache;
@@ -13,7 +14,7 @@ use Plugins\Attachment\App\AttachmentFile;
 use Plugins\Attachment\App\AttachmentChunk;
 
 class Attachment extends Model {
-	
+
 	protected $guarded = ['id'];
 	protected $hidden = ['full_path', 'real_path', 'relative_path', 'afid', 'basename', 'path', 'cdn_at', 'chunk_count', 'created_at', 'deleted_at', 'updated_at', 'uuid', 'extra'];
 	protected $casts = [
@@ -28,7 +29,7 @@ class Attachment extends Model {
 	/**
 	 * 得到附件的文件类型
 	 * @example image, office, video, text
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getFileTypeAttribute()
@@ -39,7 +40,7 @@ class Attachment extends Model {
 	/**
 	 * 得到附件的mime
 	 * @example image/png, image/jpeg, video/mp4
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getMimeAttribute()
@@ -50,7 +51,7 @@ class Attachment extends Model {
 	/**
 	 * 得到附件的完整路径
 	 * 同下
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getFullPathAttribute()
@@ -61,7 +62,7 @@ class Attachment extends Model {
 	/**
 	 * 得到附件的完整路径
 	 * 同上
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getRealPathAttribute()
@@ -71,7 +72,7 @@ class Attachment extends Model {
 
 	/**
 	 * 得到附件相对base_path()的相对路径
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getRelativePathAttribute()
@@ -81,7 +82,7 @@ class Attachment extends Model {
 
 	/**
 	 * 构造一个符合router标准的URL
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getUrlAttribute()
@@ -91,7 +92,7 @@ class Attachment extends Model {
 
 	/**
 	 * 获取软连接的网址
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getSymlinkUrlAttribute()

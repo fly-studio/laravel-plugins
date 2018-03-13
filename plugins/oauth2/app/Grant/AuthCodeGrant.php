@@ -95,7 +95,7 @@ class AuthCodeGrant extends AbstractAuthorizeGrant
 			}
 
 			// The redirect URI is required in this request
-			/*
+			/* 取消redirectUri的验证
 			$redirectUri = $this->getRequestParameter('redirect_uri', $request, null);
 			if (empty($authCodePayload->redirect_uri) === false && $redirectUri === null) {
 				throw OAuthServerException::invalidRequest('redirect_uri');

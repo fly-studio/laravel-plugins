@@ -3,10 +3,12 @@
 namespace Plugins\Socialite\App\Repositories;
 
 use DB;
+use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use Addons\Core\Contracts\Repository;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Catalog;
 use Plugins\Socialite\App\Socialite;
 
 class SocialiteRepository extends Repository {
@@ -19,6 +21,17 @@ class SocialiteRepository extends Repository {
 	public function find($id)
 	{
 		return Socialite::find($id);
+	}
+
+	public function findEnableDrivers($is_wechat_client = false)
+	{
+		$enable_drivers = array_diff(config('socialite.enable_drivers'), $is_wechat_client ? ['weixin-web'] : ['weixin']);
+
+		$types = array_map(function($v) {
+			return $v['id'];
+		}, array_only(Catalog::getCatalogsByName('fields.socialite.type.children'), $enable_drivers));
+
+		return Socialite::whereIn('socialite_type', array_values($types))->get();
 	}
 
 	public function settings($id)

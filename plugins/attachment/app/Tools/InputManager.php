@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools;
 
 use Illuminate\Support\Manager;
