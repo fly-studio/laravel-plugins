@@ -5,12 +5,15 @@ return [
 	'namespace' => 'Plugins\\OAuth2',
 	'register' => [
 		'view' => true,
-		'migrate' => false,
+		'migrate' => true,
 		'translator' => true,
 		'router' => true,
-		'censor' => false,
+		'censor' => true,
 	],
 	'configs' => [
 		'oauth2',
+	],
+	'injectViews' => [
+		'admin/sidebar.inc.tpl' => 9998,
 	],
 ];

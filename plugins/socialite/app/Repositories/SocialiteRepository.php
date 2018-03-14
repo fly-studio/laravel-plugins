@@ -3,7 +3,6 @@
 namespace Plugins\Socialite\App\Repositories;
 
 use DB;
-use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use Addons\Core\Contracts\Repository;
 use Illuminate\Database\Eloquent\Model;

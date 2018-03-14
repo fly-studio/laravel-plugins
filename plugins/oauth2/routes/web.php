@@ -59,3 +59,10 @@ $router->group(['prefix' => 'api/oauth', 'namespace' => 'Api', 'middleware' => [
 	]);
 
 });
+
+
+$router->group(['prefix' => 'admin/oauth', 'namespace' => 'Admin\\OAuth', 'middleware' => ['auth:admin', 'role:administrator']], function($router) {
+	$router->crud([
+		'client' => 'ClientController',
+	]);
+});
