@@ -3,7 +3,7 @@
 return [
 	'store' => [
 		'user_id' => [
-			'name' => '绑定用户',
+			'name' => '捆绑用户',
 			'rules' => 'required|numeric',
 		],
 		'name' => [
@@ -15,12 +15,18 @@ return [
 			'rules' => 'required|alpha_num|min:40|max:128',
 		],
 		'redirect' => [
-			'name' => '跳转地址',
-			'rules' => 'required|url',
+			'name' => '来源网址',
+			'rules' => 'required|url|regex:/.*\/$/',
+			'message' => [
+				'regex' => '[:attribute] 必须以 / 结尾'
+			]
 		],
 		'callback' => [
-			'name' => '回调地址',
-			'rules' => 'required|url',
+			'name' => '支付回调',
+			'rules' => 'required|url|regex:/.*\/$/',
+			'message' => [
+				'regex' => '[:attribute] 必须以 / 结尾'
+			]
 		],
 		'personal_access_client' => [
 			'name' => '个人OAuth客户端',

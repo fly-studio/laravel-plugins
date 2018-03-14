@@ -88,7 +88,7 @@ class ClientController extends Controller
 		if (empty($oAuth))
 			return $this->failure_notexists();
 
-		$data = $this->censor($request, 'oauth2::client.store', $this->keys, $oAuth);
+		$data = $this->censor($request, 'oauth2::client.store', array_diff($this->keys, ['user_id']), $oAuth);
 
 		$oAuth = $this->repo->update($oAuth, $data);
 		return $this->success();
