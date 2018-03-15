@@ -22,6 +22,11 @@ class SocialiteRepository extends Repository {
 		return Socialite::find($id);
 	}
 
+	public function findOrFail($id)
+	{
+		return Socialite::findOrFail($id);
+	}
+
 	public function findEnableDrivers($is_wechat_client = false)
 	{
 		$enable_drivers = array_diff(config('socialite.enable_drivers'), $is_wechat_client ? ['weixin-web'] : ['weixin']);
@@ -52,6 +57,7 @@ class SocialiteRepository extends Repository {
 
 	public function store(array $data)
 	{
+		if (isset($data['client_extra'])) $data['client_extra'] = json_decode($data['client_extra'], true);
 		return DB::transaction(function() use ($data) {
 			$socialite = Socialite::create($data);
 			return $socialite;
@@ -60,6 +66,7 @@ class SocialiteRepository extends Repository {
 
 	public function update(Model $socialite, array $data)
 	{
+		if (isset($data['client_extra'])) $data['client_extra'] = json_decode($data['client_extra'], true);
 		return DB::transaction(function() use ($socialite, $data){
 			$socialite->update($data);
 			return $socialite;
@@ -76,7 +83,7 @@ class SocialiteRepository extends Repository {
 	public function data(Request $request)
 	{
 		$socialite = new Socialite;
-		$builder = $socialite->newQuery();
+		$builder = $socialite->newQuery()->with(['default_role']);
 
 		$total = $this->_getCount($request, $builder, FALSE);
 		$data = $this->_getData($request, $builder);

@@ -20,6 +20,7 @@ class CreateSocialiteTables extends Migration
             $table->string('client_id', 100)->comment = '应用ID';
             $table->string('client_secret', 100)->comment = '应用密钥';
             $table->json('client_extra')->nullable()->comment = '其它配置';
+            $table->unsignedInteger('default_role_id')->index()->comment = '默认用户组';
             $table->timestamps();
 
             $table->unique(['socialite_type', 'client_id']);

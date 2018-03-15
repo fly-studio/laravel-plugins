@@ -44,4 +44,4 @@
 
 <{/block}>
 
-<{block "table-td-options-delete-confirm"}>您确定删除这个微信用户：{{full.openid}}吗？<{/block}>
+<{block "table-td-options-delete-confirm"}>您确定删除这个OAuth客户端：{{full.name}}吗？<{/block}>

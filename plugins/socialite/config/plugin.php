@@ -7,10 +7,13 @@ return [
 		'migrate' => true,
 		'translator' => true,
 		'router' => true,
-		'censor' => false,
+		'censor' => true,
 		'event' => true,
 	],
 	'configs' => [
 		'socialite',
+	],
+	'injectViews' => [
+		'admin/sidebar.inc.tpl' => 9997,
 	],
 ];

@@ -20,4 +20,9 @@ class Socialite extends Model {
 		return $this->hasMany('Plugins\Socialite\App\SocialiteUser', 'sid', 'id');
 	}
 
+	public function default_role()
+	{
+		return $this->hasOne('App\Role', 'id', 'default_role_id');
+	}
+
 }

@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Plugins\Attachment\App\Tools\Helpers;
 
 use App\User;
+use App\Role;
+use Plugins\Socialite\App\Socialite;
+use Plugins\Attachment\App\Attachment;
 use Plugins\Socialite\App\SocialiteUser;
 
 class SocialiteUserRepository extends Repository {
@@ -37,7 +40,7 @@ class SocialiteUserRepository extends Repository {
 		});
 	}
 
-	public function storeFrom($sid, AbstractUser $user)
+	public function storeFrom(Socialite $socialite, AbstractUser $user)
 	{
 		// try download avatar
 		try {
@@ -47,7 +50,7 @@ class SocialiteUserRepository extends Repository {
 		}
 
 		return SocialiteUser::updateOrCreate([
-			'sid' => $sid,
+			'sid' => $socialite->getKey(),
 			'openid' => $user->id,
 		],
 		[
@@ -60,14 +63,14 @@ class SocialiteUserRepository extends Repository {
 		]);
 	}
 
-	public function attachToUser($id)
+	public function attachToUser(SocialiteUser $socialiteUser, Role $role)
 	{
-		$socialiteUser = $this->findOrFail($id);
-
 		if (empty($socialiteUser->uid))
 		{
 			$username = $socialiteUser->getKey().'-'.$socialiteUser->openid;
-			$user = User::firstOrCreate(compact('username'), ['nickname' => $socialiteUser->nickname, 'password' => '', 'avatar_aid' => $socialiteUser->avatar_aid]);
+			if (!($user = User::findByUsername($username)))
+				$user = User::add(['username' => $username, 'nickname' => $socialiteUser->nickname, 'password' => '', 'avatar_aid' => Attachment::decode($socialiteUser->avatar_aid)], $role);
+
 			$this->update($socialiteUser, ['uid' => $user->getKey()]);
 			return $user;
 		} else {
