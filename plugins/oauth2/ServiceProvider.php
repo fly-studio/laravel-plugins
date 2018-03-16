@@ -46,9 +46,14 @@ class ServiceProvider extends BaseServiceProvider
 		$server->enableGrantType(
 			$this->makeAuthCodeGrant(), Passport::tokensExpireIn()
 		);
-
+		
 		$this->app->singleton(AccessTokenFactory::class, function(){
-			return new AccessTokenFactory(Passport::tokensExpireIn(), $this->makeCryptKey('oauth-private.key'));
+			return new AccessTokenFactory(
+				Passport::tokensExpireIn(),
+				Passport::refreshTokensExpireIn(),
+				$this->makeCryptKey('oauth-private.key'),
+				app('encrypter')->getKey()
+			);
 		});
 
 	}
