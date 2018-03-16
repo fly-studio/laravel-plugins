@@ -5,6 +5,8 @@ namespace Plugins\OAuth2;
 use DateInterval;
 use Carbon\Carbon;
 use Laravel\Passport\Passport;
+use League\OAuth2\Server\CryptKey;
+use Plugins\OAuth2\App\AccessTokenFactory;
 use Plugins\OAuth2\App\Grant\AuthCodeGrant;
 use League\OAuth2\Server\AuthorizationServer;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
@@ -45,6 +47,10 @@ class ServiceProvider extends BaseServiceProvider
 			$this->makeAuthCodeGrant(), Passport::tokensExpireIn()
 		);
 
+		$this->app->singleton(AccessTokenFactory::class, function(){
+			return new AccessTokenFactory(Passport::tokensExpireIn(), $this->makeCryptKey('oauth-private.key'));
+		});
+
 	}
 
 	/**
@@ -70,6 +76,21 @@ class ServiceProvider extends BaseServiceProvider
 			$this->app->make(\Laravel\Passport\Bridge\AuthCodeRepository::class),
 			$this->app->make(\Laravel\Passport\Bridge\RefreshTokenRepository::class),
 			new DateInterval('PT10M')
+		);
+	}
+
+	/**
+	 * Create a CryptKey instance without permissions check
+	 *
+	 * @param string $key
+	 * @return \League\OAuth2\Server\CryptKey
+	 */
+	protected function makeCryptKey($key)
+	{
+		return new CryptKey(
+			'file://'.Passport::keyPath($key),
+			null,
+			false
 		);
 	}
 
