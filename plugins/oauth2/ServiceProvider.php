@@ -6,6 +6,7 @@ use DateInterval;
 use Carbon\Carbon;
 use Laravel\Passport\Passport;
 use League\OAuth2\Server\CryptKey;
+use Plugins\OAuth2\App\CodeFactory;
 use Plugins\OAuth2\App\AccessTokenFactory;
 use Plugins\OAuth2\App\Grant\AuthCodeGrant;
 use League\OAuth2\Server\AuthorizationServer;
@@ -46,12 +47,19 @@ class ServiceProvider extends BaseServiceProvider
 		$server->enableGrantType(
 			$this->makeAuthCodeGrant(), Passport::tokensExpireIn()
 		);
-		
+
 		$this->app->singleton(AccessTokenFactory::class, function(){
 			return new AccessTokenFactory(
 				Passport::tokensExpireIn(),
 				Passport::refreshTokensExpireIn(),
 				$this->makeCryptKey('oauth-private.key'),
+				app('encrypter')->getKey()
+			);
+		});
+
+		$this->app->singleton(CodeFactory::class, function(){
+			return new CodeFactory(
+				new DateInterval('PT10M'),
 				app('encrypter')->getKey()
 			);
 		});

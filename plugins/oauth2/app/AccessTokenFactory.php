@@ -4,9 +4,7 @@ namespace Plugins\OAuth2\App;
 
 use Laravel\Passport\Bridge\User;
 use League\OAuth2\Server\CryptKey;
-use League\OAuth2\Server\CryptTrait;
-use Laravel\Passport\Bridge\ScopeRepository;
-use Laravel\Passport\Bridge\ClientRepository;
+use Plugins\OAuth2\App\Contracts\AbstractFactory;
 use Laravel\Passport\Bridge\AccessTokenRepository;
 use Laravel\Passport\Bridge\RefreshTokenRepository;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -14,12 +12,8 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 
-class AccessTokenFactory
+class AccessTokenFactory extends AbstractFactory
 {
-	use CryptTrait;
-
-	const MAX_RANDOM_TOKEN_GENERATION_ATTEMPTS = 10;
-
 	/**
 	 * @var \DateInterval
 	 */
@@ -30,22 +24,19 @@ class AccessTokenFactory
 	 * @var \League\OAuth2\Server\CryptKey
 	 */
 	protected $privateKey;
-
-	protected $clientRepository;
-	protected $scopeTokenRepository;
 	protected $accessTokenRepository;
 	protected $refreshTokenRepository;
 
 	public function __construct(\DateInterval $accessTokenTTL, \DateInterval $refreshTokenTTL, $privateKey, $encryptionKey)
 	{
+		parent::__construct($encryptionKey);
+
 		$this->setAccessTokenTTL($accessTokenTTL);
 		$this->setRefreshTokenTTL($refreshTokenTTL);
 		$this->setPrivateKey($privateKey);
-		$this->setEncryptionKey($encryptionKey);
-		$this->clientRepository = app(ClientRepository::class);
 		$this->accessTokenRepository = app(AccessTokenRepository::class);
 		$this->refreshTokenRepository = app(RefreshTokenRepository::class);
-		$this->scopeTokenRepository = app(ScopeRepository::class);
+
 	}
 
 	/**
@@ -86,6 +77,14 @@ class AccessTokenFactory
 		return 'instant';
 	}
 
+	/**
+	 * [make description]
+	 * @param  [integer]       $client_id
+	 * @param  [integer]       $user_id
+	 * @param  ScopeEntityInterface[]        $scopes
+	 * @param  bool|boolean $withRefreshToken
+	 * @return [array]
+	 */
 	public function make($client_id, $user_id, array $scopes = [], bool $withRefreshToken = true)
 	{
 		$client = $this->clientRepository->getClientEntity(
@@ -96,6 +95,7 @@ class AccessTokenFactory
 		);
 
 		$user = new User($user_id);
+
 		$accessToken = $this->issueAccessToken(
 			$this->accessTokenTTL,
 			$client,
@@ -204,28 +204,4 @@ class AccessTokenFactory
 		}
 	}
 
-	/**
-	 * Generate a new unique identifier.
-	 *
-	 * @param int $length
-	 *
-	 * @throws OAuthServerException
-	 *
-	 * @return string
-	 */
-	protected function generateUniqueIdentifier($length = 40)
-	{
-		try {
-			return bin2hex(random_bytes($length));
-			// @codeCoverageIgnoreStart
-		} catch (\TypeError $e) {
-			throw OAuthServerException::serverError('An unexpected error has occurred');
-		} catch (\Error $e) {
-			throw OAuthServerException::serverError('An unexpected error has occurred');
-		} catch (\Exception $e) {
-			// If you get this message, the CSPRNG failed hard.
-			throw OAuthServerException::serverError('Could not generate a random string');
-		}
-		// @codeCoverageIgnoreEnd
-	}
 }
