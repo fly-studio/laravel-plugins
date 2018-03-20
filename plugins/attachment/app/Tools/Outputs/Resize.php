@@ -32,7 +32,7 @@ class Resize extends Output {
 			$new_path = $full_path;
 		$mime_type = $attachment->mime;
 		$content_length = null;//$attachment->size;
-		$last_modified = true;
+		$last_modified = $attachment->created_at;
 		$etag = $attachment->hash; //为什么可以输出源文件的hash，因为etag是区分网址的
 		return response()->preview($new_path, [], compact('mime_type', 'etag', 'last_modified', 'content_length', 'cached'));
 	}

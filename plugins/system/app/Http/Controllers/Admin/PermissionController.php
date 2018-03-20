@@ -1,9 +1,9 @@
 <?php
+
 namespace Plugins\System\App\Http\Controllers\Admin;
 
+use DB;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Permission;
@@ -104,7 +104,7 @@ class PermissionController extends Controller
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
 		$ids = array_wrap($id);
-		
+
 		DB::transaction(function() use ($ids) {
 			Permission::destroy($ids);
 		});

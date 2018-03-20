@@ -1,8 +1,6 @@
 <{extends file="admin/extends/edit.block.tpl"}>
 
 <{block "head-plus"}>
-<script src="<{'js/vue/vue.min.js'|static nofilter}>"></script>
-<script src="<{'js/vue/vuex.min.js'|static nofilter}>"></script>
 <script src="<{'js/vue/json_editor/vue-json-editor-block-view.min.js'|static nofilter}>"></script>
 <{/block}>
 
