@@ -52,7 +52,7 @@ class AttachmentController extends Controller {
 
 	private function factory($id, $strict = true)
 	{
-		$_id = Attachment::decode($id);
+		$_id = Helpers::decode($id);
 		if ($_id === false && $strict)
 			throw (new AttachmentException('attachment::attachment.failure_invalid_id'))->setStatusCode(404);
 		else if ($_id !== false)

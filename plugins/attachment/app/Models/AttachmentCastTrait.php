@@ -1,12 +1,12 @@
 <?php
 namespace Plugins\Attachment\App\Models;
 
-use Plugins\Attachment\App\Attachment;
+use Plugins\Attachment\App\Tools\Helpers;
 
 trait AttachmentCastTrait {
 
 	public function asAttachment($value) {
-		return Attachment::encode($value);
+		return Helpers::encode($value);
 	}
 
 }

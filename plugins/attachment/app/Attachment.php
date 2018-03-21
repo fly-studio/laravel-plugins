@@ -5,6 +5,7 @@ namespace Plugins\Attachment\App;
 use DB, Cache;
 use App\Model;
 use Illuminate\Support\Str;
+use Plugins\Attachment\App\Tools\Helpers;
 use Plugins\Attachment\App\Tools\Utils\Path;
 use Plugins\Attachment\App\Tools\Utils\Type;
 use Plugins\Attachment\App\Tools\Utils\Mime;
@@ -23,8 +24,6 @@ class Attachment extends Model {
 	protected $appends = [
 		'url'
 	];
-
-	private static $cipher;
 
 	/**
 	 * 得到附件的文件类型
@@ -87,7 +86,7 @@ class Attachment extends Model {
 	 */
 	public function getUrlAttribute()
 	{
-		return url()->route('attachment', ['id' => static::encode($this->id), 'filename' => $this->original_name]);
+		return Helpers::getUrl($this->id, $this->original_name);
 	}
 
 	/**
@@ -102,32 +101,6 @@ class Attachment extends Model {
 			return false;
 
 		return url(str_replace(base_path(), '', $path));
-	}
-
-	public static function getCipher()
-	{
-		if (empty(static::$cipher))
-		{
-			static::$cipher = new \phpseclib\Crypt\DES();
-			static::$cipher->setPassword(config('attachment.key'));
-			//static::$cipher->setIV(crypt_random_string(static::$cipher->getBlockLength() >> 3));
-		}
-		return static::$cipher;
-	}
-
-	public static function encode($id)
-	{
-		return empty($id) ? '0' : 'gF'.base64_urlencode(static::getCipher()->encrypt(pack('V', $id)));
-	}
-
-	public static function decode($id)
-	{
-		if (empty($id) || !preg_match('@^gF[a-z0-9\-_]+$@i', $id) ) //starts at gF
-			return false;
-		$result = @unpack('Vid', static::getCipher()->decrypt(base64_urldecode(substr($id, 2))));
-		if (!isset($result['id']))
-			return false;
-		return $result['id'];
 	}
 
 	public function file()

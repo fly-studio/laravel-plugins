@@ -9,6 +9,8 @@ use Plugins\Attachment\App\Attachment;
 
 class Helpers {
 
+	private static $cipher;
+
 	public static function send(Attachment $attachment, $cached = true)
 	{
 		return app(OutputManager::class)->attachment($attachment)->send();
@@ -67,5 +69,36 @@ class Helpers {
 			$upload->$key($value);
 
 		return $upload->save();
+	}
+
+	public static function getCipher()
+	{
+		if (empty(static::$cipher))
+		{
+			static::$cipher = new \phpseclib\Crypt\DES();
+			static::$cipher->setPassword(config('attachment.key'));
+			//static::$cipher->setIV(crypt_random_string(static::$cipher->getBlockLength() >> 3));
+		}
+		return static::$cipher;
+	}
+
+	public static function encode($id)
+	{
+		return empty($id) ? '0' : 'gF'.base64_urlencode(static::getCipher()->encrypt(pack('V', $id)));
+	}
+
+	public static function decode($id)
+	{
+		if (empty($id) || !preg_match('@^gF[a-z0-9\-_]+$@i', $id) ) //starts at gF
+			return false;
+		$result = @unpack('Vid', static::getCipher()->decrypt(base64_urldecode(substr($id, 2))));
+		if (!isset($result['id']))
+			return false;
+		return $result['id'];
+	}
+
+	public static function getUrl($aid, $original_name = 'normal.jpg')
+	{
+		return url()->route('attachment', ['id' => is_numeric($aid) ? static::encode($aid) : $aid, 'filename' => $original_name]);
 	}
 }
