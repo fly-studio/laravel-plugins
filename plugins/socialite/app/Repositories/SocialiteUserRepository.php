@@ -12,7 +12,6 @@ use Plugins\Attachment\App\Tools\Helpers;
 use App\User;
 use App\Role;
 use Plugins\Socialite\App\Socialite;
-use Plugins\Attachment\App\Attachment;
 use Plugins\Socialite\App\SocialiteUser;
 
 class SocialiteUserRepository extends Repository {
@@ -68,8 +67,11 @@ class SocialiteUserRepository extends Repository {
 		if (empty($socialiteUser->uid))
 		{
 			$username = $socialiteUser->getKey().'-'.$socialiteUser->openid;
+			if (in_array($socialiteUser->socialite->socialite_type->name, ['weixin', 'weixin-web']) && !empty($socialiteUser['profile']['unionid'])) // find unionid
+				$username = 'wechat-'.$socialiteUser['profile']['unionid'];
+
 			if (!($user = User::findByUsername($username)))
-				$user = User::add(['username' => $username, 'nickname' => $socialiteUser->nickname, 'password' => '', 'avatar_aid' => Attachment::decode($socialiteUser->avatar_aid)], $role);
+				$user = User::add(['username' => $username, 'nickname' => $socialiteUser->nickname, 'password' => '', 'avatar_aid' => Helpers::decode($socialiteUser->avatar_aid)], $role);
 
 			$this->update($socialiteUser, ['uid' => $user->getKey()]);
 			return $user;

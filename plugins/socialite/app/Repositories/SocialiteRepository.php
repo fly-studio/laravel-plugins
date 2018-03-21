@@ -48,7 +48,7 @@ class SocialiteRepository extends Repository {
 				config('socialite.drivers.'.$name),
 				[
 					'client_id' => $socialite->client_id,
-					'client_secrect' => $socialite->client_secrect,
+					'client_secret' => $socialite->client_secret,
 				],
 				$socialite->client_extra
 			),
