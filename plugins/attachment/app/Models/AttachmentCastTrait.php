@@ -5,7 +5,11 @@ use Plugins\Attachment\App\Tools\Helpers;
 
 trait AttachmentCastTrait {
 
-	public function asAttachment($value) {
+	public function asAttachmentUrl($value, $key) {
+		return Helpers::getUrl($value);
+	}
+
+	public function asAttachment($value, $key) {
 		return Helpers::encode($value);
 	}
 
