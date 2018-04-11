@@ -36,6 +36,9 @@ class ServiceProvider extends BaseServiceProvider
 	 */
 	public function boot()
 	{
+		if (!file_exists(Passport::keyPath('oauth-private.key')))
+			return ;
+
 		if (config('oauth2.enableImplicitGrant', false)) //隐式授权令牌
 			Passport::enableImplicitGrant();
 		Passport::tokensExpireIn(Carbon::now()->addSeconds(config('oauth2.tokensExpireIn', 7 * 86400)));
