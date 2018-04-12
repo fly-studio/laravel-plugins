@@ -22,9 +22,7 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 </script>
 <{/block}>
 <link rel="stylesheet" href="<{'css/catalog/catalog.css'|plugins nofilter}>">
-
 <script src="<{'js/catalog/catalog.min.js'|plugins nofilter}>"></script>
-<{/block}>
 <{/if}>
 <{/block}>
 
