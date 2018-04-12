@@ -1,6 +1,6 @@
 <template>
 	<div class="container12">
-		<action v-for="(v, k) in list" :k="k" v-model="list[k]"  @remove="remove" :name="name + '-' + k"></action>
+		<action v-for="(v, k) in list" :k="k" :key="k" v-model="list[k]"  @remove="remove" :name="name + '-' + k"></action>
 		<a href="javascript:void(0);" @click="create" v-if="multiple"><i class="glyphicon glyphicon-plus"></i> 新增一条</a>
 		<textarea class="form-control hidden" v-model="json" rows="10" :name="name"></textarea>
 	</div>
@@ -23,7 +23,7 @@
 
 		return JSON.parse(JSON.stringify(json instanceof Array ? json : []));
 	};
-	const store = () => 
+	const store = () =>
 		new Vuex.Store({
 			state: {
 				list: [],
@@ -66,19 +66,19 @@
 						return ;
 					state.fields[k] = fields;
 					let parameters = {};
-					let p = JSON.parse(JSON.stringify(state.list[k].parameters)); 
+					let p = JSON.parse(JSON.stringify(state.list[k].parameters));
 					for(let f in fields)
 					{
-						parameters[f] = p && p[f] ? p[f] : 
-							(typeof fields[f] == 'string' ? null : 
+						parameters[f] = p && p[f] ? p[f] :
+							(typeof fields[f] == 'string' ? null :
 								(typeof fields[f].defaultValue != 'undefined' ? fields[f].defaultValue : null)
 							);
 					}
-					state.list[k].parameters = parameters; 
+					state.list[k].parameters = parameters;
 				},
 			}
 		});
-	
+
 
 	export default {
 		props: ['value', 'name', 'multiple'],

@@ -38,7 +38,7 @@
 				<button type="submit" class="btn btn-success" :disabled="typeof node.parent.id == 'undefined'">保存</button>
 			</div>
 		</div>
-	</form>	
+	</form>
 </template>
 
 <script>
@@ -65,7 +65,7 @@
 		},
 		methods: {
 			get(id) {
-				return LP.get(this.urlPrefix + '/' + id + '?of=json').done(json => {
+				return LP.http.jQueryAjax.get(this.urlPrefix + '/' + id + '?of=json').then(json => {
 					if (typeof json.data != 'undefined' && !json.data.extra)
 						json.data.extra = {};
 					let parents = [json.data.name];
@@ -73,6 +73,7 @@
 						parents.push(v.name);
 					parents.reverse();
 					this.extraTemplate(parents);
+					return json;
 				});
 			},
 			extraTemplate(parents) {
@@ -89,7 +90,7 @@
 				this.catalogExtra = '';
 			},
 			create (pid) {
-				this.get(pid).done(response => {
+				this.get(pid).then(response => {
 					this.action = this.urlPrefix;
 					this.method = 'POST';
 					this.node = {
@@ -99,11 +100,14 @@
 				});
 			},
 			edit(id) {
-				this.get(id).done(response => {
+				this.get(id).then(response => {
 					this.action =  this.urlPrefix + '/' + id;
 					this.method = 'PUT';
 					this.node = response.data;
 				});
+			},
+			hide() {
+				this.node.parent.id = undefined;
 			}
 		}
 	};

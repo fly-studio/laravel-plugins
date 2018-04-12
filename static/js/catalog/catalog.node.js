@@ -13,6 +13,7 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 (function($){
 	$().ready(function(){
 		$('a[method]').query();
+		let ajax = new LP.http.jQueryAjax();
 		let urlPrefix = $('#catalog-form').attr('url-prefix');
 		let catalogForm = new Vue({
 			el: '#catalog-form',
@@ -28,6 +29,9 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 				},
 				edit(id, tId) {
 					this.$refs['catalog-form-container'].edit(id, tId);
+				},
+				hide() {
+					this.$refs['catalog-form-container'].hide();
 				}
 			},
 			mounted() {
@@ -70,7 +74,7 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 			return true;
 		};
 		method.dropNext = method.dropPrev;
-		
+
 		method.beforeDrag = function(treeId, treeNodes) {
 			for (var i=0,l=treeNodes.length; i<l; i++) {
 				if (treeNodes[i].drag === false) {
@@ -90,23 +94,21 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 			var node = treeNodes[0];
 			//if (node.parentTId != targetNode.parentTId) return false; //如果父级不一致
 
-			LP.queryTip('PUT', urlPrefix + '/move', {original_id: node.id , target_id: targetNode.id, move_type: moveType }).done(function(json){
+			ajax.put(urlPrefix + '/move', {original_id: node.id , target_id: targetNode.id, move_type: moveType }).then(function(json){
 				var src_node = $zTree.getNodeByParam("id", json.data.original_id, null);
 				var target_node = $zTree.getNodeByParam("id", json.data.target_id, null);
 				$zTree.moveNode(target_node,src_node,json.data.move_type);
 			});
-			return false; //always false,manual it;
+			return false; //always false, manual it;
 		};
 		method.beforeRemove = function(treeId, treeNode) {
 			$zTree.selectNode(treeNode);
-			
-			$.confirm(
+			method.onclick({}, treeNode.tId, treeNode);
+
+			LP.tip.confirm(
 				'<p style="text-align:left;">你<b>确认删除</b>此项：<span style="color:red">[' + treeNode.title +']</span>，此操作是不可恢復的</p>',
-				function(){
-					$.LP.queryTip('DELETE', urlPrefix + '/' + treeNode.id);
-				}
-			);
-			return false;
+			).then(() => ajax.delete(urlPrefix + '/' + treeNode.id)).then(() => {$zTree.removeNode(treeNode);catalogForm.hide();});
+			return false; //always false, manual it
 		};
 		method.showRemoveBtn = function(treeId, treeNode){
 			return !treeNode.isParent && (~~treeNode.level) !== 0; //不是根,也不是父级
@@ -170,11 +172,14 @@ if (typeof Vue.options.components['catalog-extra-site'] == 'undefined')
 		if (!isNaN(config.id))
 		{
 			var node = $zTree.getNodeByParam('id', config.id);
-			$zTree.selectNode(node, false, true);
-			method.onclick({}, node.tId, node);
+			if (node)
+			{
+				$zTree.selectNode(node, false, true);
+				method.onclick({}, node.tId, node);
+			}
 		}
 		$zTree.expandNode(node, true);
 
-		
+
 	});
 })(window.jQuery);

@@ -1,6 +1,6 @@
 <template>
 <div>
-	<action-parameter v-for="(settings, key) in fields" :settings="settings" class="" v-model="value[key]"></action-parameter>
+	<action-parameter v-for="(settings, key) in fields" :key="key" :settings="settings" class="" v-model="value[key]"></action-parameter>
 </div>
 </template>
 
