@@ -97,7 +97,7 @@ class Helpers {
 		return $result['id'];
 	}
 
-	public static function getUrl($aid, $original_name = 'normal.jpg')
+	public static function getUrl($aid, $original_name = null)
 	{
 		return url()->route('attachment', ['id' => is_numeric($aid) ? static::encode($aid) : $aid, 'filename' => $original_name]);
 	}
