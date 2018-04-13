@@ -21,19 +21,21 @@ class Catalog extends Tree {
 
 	protected $guarded = ['id'];
 
-	public static function getCatalogsByName($name = NULL)
+	public static function getCatalogsByName($name = null, $subKeys = null)
 	{
 		empty(static::$cacheTree) && static::getAll('name');
 		$name = str_replace(['.', '.children.children', '.children.children'], ['.children.', '.children', '.children'], $name);
-		return is_null($name) ? static::$cacheTree['name'] :
+		$value = is_null($name) ? static::$cacheTree['name'] :
 			(empty($name) || in_array($name, ['none', 'null']) ? static::find(0)->toArray() : array_get(static::$cacheTree['name'], $name));
+		return is_null($subKeys) ? $value : array_get($value, $subKeys);
 	}
 
-	public static function getCatalogsById($id = NULL)
+	public static function getCatalogsById($id = null, $subKeys = null)
 	{
 		empty(static::$cacheTree) && static::getAll();
-		return is_null($id) ? static::$cacheTree['id'][ 0 ][ 'children' ] :
+		$value = is_null($id) ? static::$cacheTree['id'][ 0 ][ 'children' ] :
 			(empty($id) ? static::find(0)->toArray() : array_get(static::$cacheTree['id'], $id));
+		return is_null($subKeys) ? $value : array_get($value, $subKeys);
 	}
 
 	public function scope_all(Builder $builder, $keywords)
@@ -41,7 +43,6 @@ class Catalog extends Tree {
 		if (empty($keywords)) return;
 		$catalogs = static::search(null)->where(['name', 'title', 'description', 'extra'], $keywords)->take(2000)->keys();
 		return $builder->whereIn($this->getKeyName(), $catalogs);
-
 	}
 
 	public static function import(&$data, $parentNode)

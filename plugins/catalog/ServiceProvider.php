@@ -1,9 +1,9 @@
 <?php
 namespace Plugins\Catalog;
 
-use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use App\Catalog;
 use Validator;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+
 class ServiceProvider extends BaseServiceProvider
 {
 	/**
@@ -24,45 +24,45 @@ class ServiceProvider extends BaseServiceProvider
 	{
 		//添加验证规则
 		Validator::extend('catalog', function($attribute, $value, $parameters, $validator) {
-            foreach ((array)$value as $v) {
-                 $catalogs = Catalog::getCatalogsById($v);
-                if(empty($catalogs)) return false;
-            }
-            return true;
-        });
+			foreach ((array)$value as $v) {
+				 $catalogs = catalogs_get_by_id($v);
+				if(empty($catalogs)) return false;
+			}
+			return true;
+		});
 
-        Validator::replacer('catalog', function($message, $attribute, $rule, $parameters) {
-            return str_replace([':name'], $parameters[0], $message);
-        });
+		Validator::replacer('catalog', function($message, $attribute, $rule, $parameters) {
+			return str_replace([':name'], $parameters[0], $message);
+		});
 
-        Validator::extend('catalog_name', function($attribute, $value, $parameters, $validator) {
-            foreach ((array)$value as $v) {
-                $catalogs = Catalog::getCatalogsByName((!empty($parameters[0]) ? $parameters[0] : '').'.'.$v);
-                if(empty($catalogs)) return false;
-            }
-            return true;
-        });
+		Validator::extend('catalog_name', function($attribute, $value, $parameters, $validator) {
+			foreach ((array)$value as $v) {
+				$catalogs = catalogs_get_by_name((!empty($parameters[0]) ? $parameters[0] : '').'.'.$v);
+				if(empty($catalogs)) return false;
+			}
+			return true;
+		});
 
-        Validator::replacer('catalog_name', function($message, $attribute, $rule, $parameters) {
-            return str_replace([':name'], $parameters[0], $message);
-        });
+		Validator::replacer('catalog_name', function($message, $attribute, $rule, $parameters) {
+			return str_replace([':name'], $parameters[0], $message);
+		});
 
-        Validator::extendImplicit('required_if_catalog', function($attribute, $value, $parameters, $validator) {
-            for ($i = 1; $i < count($parameters); $i++) { 
-                $catalog = Catalog::getCatalogsByName($parameters[$i]);
-                $parameters[$i] = !empty($catalog) ? strval($catalog['id']) : $parameters[$i];
-            }
-            return $validator->validateRequiredIf($attribute, $value, $parameters);
-        });
+		Validator::extendImplicit('required_if_catalog', function($attribute, $value, $parameters, $validator) {
+			for ($i = 1; $i < count($parameters); $i++) {
+				$catalog = catalogs_get_by_name($parameters[$i]);
+				$parameters[$i] = !empty($catalog) ? strval($catalog['id']) : $parameters[$i];
+			}
+			return $validator->validateRequiredIf($attribute, $value, $parameters);
+		});
 
-        Validator::replacer('required_if_catalog', function($message, $attribute, $rule, $parameters, $validator) {
-            for ($i = 1; $i < count($parameters); $i++) { 
-                $catalog = Catalog::getCatalogsByName($parameters[$i]);
-                $parameters[$i] = !empty($catalog) ? $catalog['title'].'('.$catalog['id'].')' : $parameters[$i];
-            }
-            $parameters[0] = $validator->getAttribute($parameters[0]);
-            return str_replace([':other', ':value'], $parameters, $message);
-        });
+		Validator::replacer('required_if_catalog', function($message, $attribute, $rule, $parameters, $validator) {
+			for ($i = 1; $i < count($parameters); $i++) {
+				$catalog = catalogs_get_by_name($parameters[$i]);
+				$parameters[$i] = !empty($catalog) ? $catalog['title'].'('.$catalog['id'].')' : $parameters[$i];
+			}
+			$parameters[0] = $validator->getAttribute($parameters[0]);
+			return str_replace([':other', ':value'], $parameters, $message);
+		});
 	}
 
 	/**

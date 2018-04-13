@@ -9,4 +9,7 @@ return [
 		'router' => true,
 		'censor' => true,
 	],
+	'files' => [
+		'helpers.php'
+	],
 ];
