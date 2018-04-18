@@ -55,14 +55,9 @@ class CatalogRepository extends Repository {
 		return Catalog::findByNamePid($name, $pid);
 	}
 
-	public function getCatalogsByName($name = null, $subKeys = null)
+	public function searchCatalog($name = null, $subKeys = null)
 	{
-		return Catalog::getCatalogsByName($name, $subKeys);
-	}
-
-	public function getCatalogsById($id = null, $subKeys = null)
-	{
-		return Catalog::getCatalogsById($id, $subKeys);
+		return Catalog::searchCatalog($name, $subKeys);
 	}
 
 	public function store(array $data)

@@ -19,7 +19,7 @@
 <div class="form-group">
 	<label class="col-md-3 control-label">类型</label>
 	<div class="col-md-9">
-		<{foreach 'fields.wechat.type.children'|catalogs as $v}>
+		<{foreach catalog_search('fields.wechat.type', 'children') as $v}>
 		<label class="radio-inline">
 			<input type="radio" name="wechat_type" value="<{$v.id}>" <{if !empty($_data.wechat_type) && $_data.wechat_type.id == $v.id}>checked="checked"<{/if}> > <{$v.title}>
 		</label>

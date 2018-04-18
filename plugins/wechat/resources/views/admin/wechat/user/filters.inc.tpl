@@ -36,7 +36,7 @@
 			<label class="radio-inline">
 				<input type="radio" name="f[gender]" value="0" checked="checked"> 不限
 			</label>
-		<{foreach 'fields.gender.children'|catalogs as $v}>
+		<{foreach catalog_search('fields.gender', 'children') as $v}>
 			<label class="radio-inline">
 				<input type="radio" name="f[gender]" value="<{$v.id}>" <{if $_filters.gender.eq == $v.id}>checked="checked"<{/if}> > <{$v.title}>
 			</label>

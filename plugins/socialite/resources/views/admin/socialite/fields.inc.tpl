@@ -9,7 +9,7 @@
 	<div class="col-md-9">
 		<select class="select-select2 form-control" name="socialite_type" id="socialite_type">
 			<option value="">请选择</option>
-		<{foreach 'fields.socialite.type.children'|catalogs as $v}>
+		<{foreach catalog_search('fields.socialite.type', 'children') as $v}>
 			<option type="radio" value="<{$v.id}>" <{if !empty($_data.socialite_type) && $_data.socialite_type.id == $v.id}>selected="selected"<{/if}> > <span class="icon-sn-<{$v.name}>"></span><{$v.title}> (<{$v.name}>)</option>
 		<{/foreach}>
 		</select>

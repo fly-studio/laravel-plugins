@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Builder;
 trait CatalogCastTrait {
 
 	public function asCatalog($value) {
-		$data = AppCatalog::getCatalogsById($value);
-		unset($data['children']);
-		$data['extra'] = json_encode($data['extra']);
-		return (new AppCatalog())->setRawAttributes($data);
+		$node = AppCatalog::searchCatalog($value);
+
+		return $node->fillToModel(new AppCatalog(), function($model, $data){
+			$data['extra'] = json_encode($data['extra']);
+			return $data;
+		});
 	}
 
 	public function catalogToArray($value) {
@@ -20,10 +22,12 @@ trait CatalogCastTrait {
 	}
 
 	public function asCatalogName($value) {
-		$data = AppCatalog::getCatalogsByName($value);
-		unset($data['children']);
-		$data['extra'] = json_encode($data['extra']);
-		return (new AppCatalog())->setRawAttributes($data);
+		$node = AppCatalog::searchCatalog($value);
+
+		return $node->fillToModel(new AppCatalog(), function($model, $data){
+			$data['extra'] = json_encode($data['extra']);
+			return $data;
+		});
 	}
 
 	public function catalogNameToArray($value) {
