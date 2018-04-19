@@ -25,7 +25,7 @@ class MakeOauths extends Migration
 			\App\Permission::import([
 				'oauth-client' => 'OAuth客户端',
 			]);
-			\App\Role::findByName('super')->perms()->sync(\App\Permission::all());
+			\App\Role::findByName('super')->permissions()->sync(\App\Permission::all());
 
 			\Illuminate\Database\Eloquent\Model::unguard(false);
 		});

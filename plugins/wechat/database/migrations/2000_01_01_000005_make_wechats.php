@@ -65,7 +65,7 @@ class MakeWechats extends Migration
 				'wechat-reply' => '微信自定义回复',
 				'wechat-user' => '微信用户',
 			]);
-			\App\Role::findByName('super')->perms()->sync(\App\Permission::all());
+			\App\Role::findByName('super')->permissions()->sync(\App\Permission::all());
 
 			\Illuminate\Database\Eloquent\Model::unguard(false);
 		});

@@ -18,7 +18,7 @@ return [
 			'name' => '后台路由',
 			'rules' => [],
 		],
-		'perms' => [
+		'permissions' => [
 			'name' => '权限',
 			'rules' => 'nullable|array',
 		],

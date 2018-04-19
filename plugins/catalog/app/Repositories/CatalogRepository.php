@@ -43,11 +43,11 @@ class CatalogRepository extends Repository {
 		return $catalog;
 	}
 
-	public function findDescendant($id)
+	public function findLeaves($id)
 	{
 		$root = $id instanceof Catalog ? $id : Catalog::find($id);
 
-		return !empty($root) ? $root->getDescendant()->prepend($root) : false;
+		return !empty($root) ? $root->getLeaves()->prepend($root) : false;
 	}
 
 	public function findByNamePid($name, $pid)
@@ -108,10 +108,10 @@ class CatalogRepository extends Repository {
 
 	public function tree($id)
 	{
-		$descendant = $this->findDescendant($id);
-		if (empty($descendant))
+		$leaves = $this->findLeaves($id);
+		if (empty($leaves))
 			return false;
-		return Catalog::datasetToTree($descendant->keyBy('id')->toArray(), $id, false);
+		return Catalog::datasetToTree($leaves->keyBy('id')->toArray(), false);
 	}
 
 	public function data(Request $request)
@@ -125,7 +125,7 @@ class CatalogRepository extends Repository {
 			{
 				$items = $page->getCollection()->keyBy($catalog->getKeyName())->toArray();
 				unset($items[0]);
-				$page->setCollection(new Collection(Catalog::datasetToTree($items, 0, false)));
+				$page->setCollection(new Collection(Catalog::datasetToTree($items, false)));
 			}
 		});
 		$data['recordsTotal'] = $total; //不带 f q 条件的总数

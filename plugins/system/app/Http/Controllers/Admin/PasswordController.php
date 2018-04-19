@@ -1,11 +1,11 @@
 <?php
+
 namespace Plugins\System\App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Auth;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 class PasswordController extends Controller
 {
 	public function index(Request $request)
@@ -23,6 +23,6 @@ class PasswordController extends Controller
 		$data['password'] = bcrypt($data['password']);
 		Auth::user()->update($data);
 		Auth::logout();
-		return $this->success('', 'auth');
+		return $this->success(null, 'admin-login');
 	}
 }

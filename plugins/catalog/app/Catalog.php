@@ -28,13 +28,6 @@ class Catalog extends Tree {
 			(is_null($subKeys) ? $node : $node[$subKeys]);
 	}
 
-	public function scope_all(Builder $builder, $keywords)
-	{
-		if (empty($keywords)) return;
-		$catalogs = static::search(null)->where(['name', 'title', 'description', 'extra'], $keywords)->take(2000)->keys();
-		return $builder->whereIn($this->getKeyName(), $catalogs);
-	}
-
 	public static function import(&$data, $parentNode)
 	{
 		foreach($data as $k => $v)

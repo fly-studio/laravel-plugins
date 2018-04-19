@@ -38,7 +38,7 @@ class MakeSocialites extends Migration
 			\App\Permission::import([
 				'socialite' => '社交平台',
 			]);
-			\App\Role::findByName('super')->perms()->sync(\App\Permission::all());
+			\App\Role::findByName('super')->permissions()->sync(\App\Permission::all());
 
 			\Illuminate\Database\Eloquent\Model::unguard(false);
 		});

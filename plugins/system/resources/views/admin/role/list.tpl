@@ -41,7 +41,7 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 					<ul id="tree" class="ztree">
 					</ul>
 					<div>
-						
+
 					</div>
 				</div>
 				<div class="col-md-10 col-xs-12">
@@ -81,9 +81,9 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 						<{/if}>
 						<h4 class="sub-header">权限</h4>
 						<div class="row">
-						<{foreach $_perms_data as $name => $perms}>
+						<{foreach $_permissions_data as $name => $permissions}>
 							<h5 class="page-header clearfix"><{$name}></h5>
-							<{foreach $perms as $perm}>
+							<{foreach $permissions as $perm}>
 							<div class="col-md-3 col-xs-6">
 								<div class="col-md-8">
 									<{$perm->display_name}>
@@ -92,7 +92,7 @@ var TreeData = <{$_table_data->toArray()|json_encode nofilter}>;
 									</p>
 								</div>
 								<div class="col-md-3">
-									<label class="switch switch-info"><input type="checkbox" name="perms[<{$item->getKey()}>][]" value="<{$perm->getKey()}>" <{if $item->perms->has($perm->getKey())}>checked="checked"<{/if}>><span></span></label>
+									<label class="switch switch-info"><input type="checkbox" name="permissions[<{$item->getKey()}>][]" value="<{$perm->getKey()}>" <{if $item->permissions->has($perm->getKey())}>checked="checked"<{/if}>><span></span></label>
 								</div>
 							</div>
 							<{/foreach}>

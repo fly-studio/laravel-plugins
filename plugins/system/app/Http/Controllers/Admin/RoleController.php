@@ -1,10 +1,11 @@
 <?php
+
 namespace Plugins\System\App\Http\Controllers\Admin;
 
+use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
-use Addons\Core\ApiTrait;
 
 use App\Role;
 use App\Permission;
@@ -12,6 +13,7 @@ use App\Permission;
 class RoleController extends Controller
 {
 	use ApiTrait;
+
 	public $permissions = ['role'];
 	/**
 	 * Display a listing of the resource.
@@ -21,32 +23,32 @@ class RoleController extends Controller
 	public function index(Request $request)
 	{
 		$role = new Role;
-		$roles = $role->newQuery()->with('perms')->withCount(['users', 'children'])->where($role->getKeyName(), '!=', 0)->orderBy($role->getKeyName())->get();
+		$roles = $role->newQuery()->with('permissions')->withCount(['users', 'children'])->where($role->getKeyName(), '!=', 0)->orderBy($role->getKeyName())->get();
 
-		$perms = [];
-		$_perms = Permission::orderBy('id', 'asc')->get();
-		foreach ($_perms as $value) {
+		$permissions = [];
+		$_permissions = Permission::orderBy('id', 'asc')->get();
+		foreach ($_permissions as $value) {
 			list($name, ) = explode('.', $value['name']);
-			$perms[$name][] = $value;
+			$permissions[$name][] = $value;
 		}
 		//view's variant
 		$this->_table_data = $roles->each(function($v){
-			$v->setRelation('perms', $v->perms->keyBy('id'));
+			$v->setRelation('permissions', $v->permissions->keyBy('id'));
 		});
-		$this->_perms_data = $perms;
+		$this->_permissions_data = $permissions;
 		return $this->view('system::admin.role.list');
 	}
 
 	public function data(Request $request)
 	{
 		$role = new Role;
-		$builder = $role->newQuery()->with('perms');
+		$builder = $role->newQuery()->with('permissions');
 		$total = $this->_getCount($request, $builder, FALSE);
 		$data = $this->_getData($request, $builder, function($page) use($request, $role) {
 			if ($request->input('tree') == 'true')
 			{
 				$items = $page->getCollection()->keyBy($role->getKeyName())->toArray();
-				$page->setCollection(new Collection(Role::datasetToTree($items, 0, false)));
+				$page->setCollection(new Collection(Role::datasetToTree($items, false)));
 			}
 		});
 
@@ -68,11 +70,11 @@ class RoleController extends Controller
 	{
 		if ($id == -1) //保存所有权限
 		{
-			$keys = ['perms'];
+			$keys = ['permissions'];
 			$data = $this->censor($request, 'system::role.store', $keys);
 
 			foreach(Role::all() as $role)
-				$role->perms()->sync(isset($data['perms'][$role->getKey()]) ? $data['perms'][$role->getKey()] : [] );
+				$role->permissions()->sync(isset($data['permissions'][$role->getKey()]) ? $data['permissions'][$role->getKey()] : [] );
 		}
 		else //修改某用户组的资料
 		{
