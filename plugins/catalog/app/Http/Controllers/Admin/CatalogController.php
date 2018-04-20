@@ -11,7 +11,7 @@ use App\Repositories\CatalogRepository;
 
 class CatalogController extends Controller
 {
-	public $permissions = ['catalog'];
+	public $permissions = ['catalog', 'orderQuery,move' => 'catalog.edit', 'tree' => 'catalog.view'];
 
 	protected $repo;
 
@@ -52,7 +52,7 @@ class CatalogController extends Controller
 
 		$this->_topNodes = $this->repo->findTops(0);
 		$this->_root = $root;
-		$this->_table_data = empty($id) ? null : $this->repo->findDescendant($root);
+		$this->_table_data = empty($id) ? null : $this->repo->findLeaves($root);
 		return $this->view('catalog::admin.catalog.list');
 	}
 
