@@ -33,7 +33,7 @@ class CatalogController extends Controller
 
 	public function tree(Request $request, $parentName)
 	{
-		$catalog = $this->repo->getCatalogsByName($parentName);
+		$catalog = catalog_search($parentName);
 		if (empty($catalog))
 			return $this->failure_notexists();
 

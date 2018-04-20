@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Addons\Core\Contracts\Repository;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Catalog;
 use Plugins\Socialite\App\Socialite;
 
 class SocialiteRepository extends Repository {
@@ -31,11 +30,9 @@ class SocialiteRepository extends Repository {
 	{
 		$enable_drivers = array_diff(config('socialite.enable_drivers'), $is_wechat_client ? ['weixin-web'] : ['weixin']);
 
-		$types = array_map(function($v) {
-			return $v['id'];
-		}, array_only(Catalog::getCatalogsByName('fields.socialite.type.children'), $enable_drivers));
+		$types = catalog_search('fields.socialite.type')->children()->whereIn('name', $enable_drivers)->pluck('id')->toArray();
 
-		return Socialite::whereIn('socialite_type', array_values($types))->get();
+		return Socialite::whereIn('socialite_type', $types)->get();
 	}
 
 	public function settings($id)
