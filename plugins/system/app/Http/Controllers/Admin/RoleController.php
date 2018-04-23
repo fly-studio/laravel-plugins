@@ -74,7 +74,7 @@ class RoleController extends Controller
 			$data = $this->censor($request, 'system::role.store', $keys);
 
 			foreach(Role::all() as $role)
-				$role->permissions()->sync(isset($data['permissions'][$role->getKey()]) ? $data['permissions'][$role->getKey()] : [] );
+				$role->syncPermissions(isset($data['permissions'][$role->getKey()]) ? $data['permissions'][$role->getKey()] : [] );
 		}
 		else //修改某用户组的资料
 		{
