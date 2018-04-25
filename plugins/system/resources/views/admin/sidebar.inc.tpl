@@ -1,3 +1,4 @@
+<{if $_permissionTable->checkUserRole('super')}>
 <li>
 	<a href="#" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-lock sidebar-nav-icon"></i>权限管理</a>
 	<ul>
@@ -13,3 +14,4 @@
 		<li><a href="<{'admin/catalog'|url}>">网站分类</a></li>
 	</ul>
 </li>
+<{/if}>
