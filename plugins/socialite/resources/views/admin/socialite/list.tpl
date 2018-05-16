@@ -32,4 +32,4 @@
 <td data-from="default_role">{{if data}}{{data.display_name}} ({{data.name}}){{/if}}</td>
 <{/block}>
 
-<{block "table-td-options-delete-confirm"}>您确定删除这个微信用户：{{full.openid}}吗？<{/block}>
+<{block "table-td-options-delete-confirm"}>您确定删除这项：{{full.name}}吗？<{/block}>

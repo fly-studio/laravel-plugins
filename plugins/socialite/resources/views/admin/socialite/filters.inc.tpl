@@ -14,6 +14,7 @@
 				<input type="text" id="created_at-min" name="f[created_at][min]" class="form-control text-center" placeholder="开始时间" value="<{$_filters.created_at.min}>">
 				<span class="input-group-addon">～</span>
 				<input type="text" id="created_at-max" name="f[created_at][max]" class="form-control text-center" placeholder="结束时间" value="<{$_filters.created_at.max}>">
+				<span class="input-group-btn" data-at-selector="created_at"></span>
 			</div>
 		</div>
 	</div>
