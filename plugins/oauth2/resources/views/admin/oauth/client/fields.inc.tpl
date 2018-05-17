@@ -27,6 +27,13 @@
 	</div>
 </div>
 <div class="form-group">
+	<label class="col-md-3 control-label" for="lang">界面语言</label>
+	<div class="col-md-9">
+		<input type="text" id="lang" name="lang" class="form-control" placeholder="请输入..." value="<{$_data.lang}>">
+		<span class="help-block">留空表示默认，填写则表示页面会优先使用配置的语言</span>
+	</div>
+</div>
+<div class="form-group">
 	<label class="col-md-3 control-label" for="callback">支付回调</label>
 	<div class="col-md-9">
 		<input type="text" id="callback" name="callback" class="form-control" placeholder="请输入..." value="<{$_data.callback}>">

@@ -14,6 +14,10 @@ return [
 			'name' => '密钥',
 			'rules' => 'required|alpha_num|min:40|max:128',
 		],
+		'lang' => [
+			'name' => '界面语言',
+			'rules' => []
+		],
 		'redirect' => [
 			'name' => '来源网址',
 			'rules' => 'required|url|regex:/.*\/$/',

@@ -14,7 +14,8 @@ class AlterOauthTables extends Migration
     public function up()
     {
         Schema::table('oauth_clients', function (Blueprint $table) {
-            $table->string('callback', 250)->nullable()->after('redirect');
+            $table->string('lang', 20)->nullable()->after('redirect');
+            $table->string('callback', 250)->nullable()->after('lang');
             $table->json('extra')->nullable()->after('callback');
         });
     }
@@ -27,6 +28,7 @@ class AlterOauthTables extends Migration
     public function down()
     {
         Schema::table('oauth_clients', function (Blueprint $table) {
+            $table->dropColumn('lang');
             $table->dropColumn('callback');
             $table->dropColumn('extra');
         });

@@ -11,7 +11,7 @@ class ClientController extends Controller
 {
 	//public $permissions = ['oauth'];
 
-	protected $keys = ['name', 'redirect', 'callback', 'user_id', 'personal_access_client', 'password_client', 'revoked'];
+	protected $keys = ['name', 'lang', 'redirect', 'callback', 'user_id', 'personal_access_client', 'password_client', 'revoked'];
 	protected $repo;
 
 	public function __construct(ClientRepository $repo)
