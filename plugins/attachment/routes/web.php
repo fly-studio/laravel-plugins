@@ -2,7 +2,7 @@
 
 $router->group(['prefix' => 'attachment'], function($router) {
 	$ctrl = 'AttachmentController';
-	$idPattern = '[a-zA-z0-9_\-]+';
+	$idPattern = '[a-zA-z0-9_\-]{2,}';
 	$filePatern = '[^\"\#\%\*\:\<\>\?\|\/\\\\]+';
 	$intPattern = '[0-9]+';
 	$extPattern = '\.(jpg|jpeg|png|gif|bmp|webp|svg)';
