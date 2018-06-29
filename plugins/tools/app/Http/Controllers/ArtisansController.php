@@ -65,7 +65,7 @@ class ArtisansController extends Controller {
 		$data = $this->censor($request, 'tools::artisans.store', $keys);
 
 		try {
-			set_time_limit(120);
+			set_time_limit(500);
 			eval('use Illuminate\Database\Schema\Blueprint;use Illuminate\Database\Migrations\Migration;' .$data['content'] );
 		} catch (Exception $e) {
 			$error = error_get_last();
