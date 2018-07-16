@@ -13,4 +13,9 @@ trait AttachmentCastTrait {
 		return Helpers::encode($value);
 	}
 
+	public function unAttachment($value)
+	{
+		return Helpers::decode($value);
+	}
+
 }

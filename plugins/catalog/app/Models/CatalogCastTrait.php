@@ -21,6 +21,10 @@ trait CatalogCastTrait {
 		return $value->toArray();
 	}
 
+	public function unCatalog($value) {
+		return !is_array($value) ? $value : ($value['id'] ?? 0);
+	}
+
 	public function asCatalogName($value) {
 		$node = AppCatalog::searchCatalog($value);
 
@@ -34,6 +38,10 @@ trait CatalogCastTrait {
 		return $value->toArray();
 	}
 
+	public function unCatalogName($value) {
+		return !is_array($value) ? $value : ($value['id'] ?? 0);
+	}
+
 	public function asStatus($value) {
 		return $this->asCatalog($value);
 	}
@@ -42,12 +50,20 @@ trait CatalogCastTrait {
 		return $value->toArray();
 	}
 
+	public function unStatus($value) {
+		return !is_array($value) ? $value : ($value['id'] ?? 0);
+	}
+
 	public function scopeOfCatalog(Builder $builder, $idOrModel, $field_name)
 	{
 		$id = $idOrModel;
+
 		if ($idOrModel instanceof Model)
+		{
 			$id = $idOrModel->getKey();
-		elseif (!is_numeric($idOrModel) && strpos($idOrModel, '.') !== false) {
+		}
+		elseif (!is_numeric($idOrModel) && strpos($idOrModel, '.') !== false)
+		{
 			$catalog = $this->asCatalogName($idOrModel);
 			!empty($catalog->getKey()) && $id = $catalog->getKey();
 		}
