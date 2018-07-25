@@ -11,10 +11,10 @@ trait CatalogCastTrait {
 	public function asCatalog($value) {
 		$node = AppCatalog::searchCatalog($value);
 
-		return $node->fillToModel(new AppCatalog(), function($model, $data){
+		return !empty($node) ? $node->fillToModel(new AppCatalog(), function($model, $data){
 			$data['extra'] = json_encode($data['extra']);
 			return $data;
-		});
+		}) : null;
 	}
 
 	public function catalogToArray($value) {
