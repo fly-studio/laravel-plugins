@@ -15,6 +15,12 @@ class FeedbackController extends Controller {
 
 	public function index(Request $request, SocialiteRepository $repo, SocialiteUserRepository $userRepo, $id)
 	{
+		$schema = $request->input('schema');
+		if (!empty($schema))
+		{
+			return redirect(url('app-redirect').'?'.$_SERVER['QUERY_STRING']);
+		}
+
 		try {
 			$socialite = $repo->findOrFail($id);
 			$user = $this->getSocialite($id)->user();
