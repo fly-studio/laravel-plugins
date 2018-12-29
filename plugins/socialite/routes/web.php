@@ -2,6 +2,8 @@
 
 $router->get('socialite/login/{id}', 'LoginController@index');
 
+$router->get('socialite/app-redirect', 'FeedbackController@appRedirect');
+
 $router->get('socialite/feedback/{id}', 'FeedbackController@index');
 
 $router->group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth:admin', 'role:administrator.**']], function($router) {

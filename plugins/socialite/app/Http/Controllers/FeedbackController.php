@@ -18,7 +18,7 @@ class FeedbackController extends Controller {
 		$schema = $request->input('schema');
 		if (!empty($schema))
 		{
-			return redirect(url('app-redirect').'?'.$_SERVER['QUERY_STRING']);
+			return redirect(url('socialite/app-redirect').'?'.$request->getQueryString());
 		}
 
 		try {
@@ -41,5 +41,23 @@ class FeedbackController extends Controller {
 		Auth::login($user, true);
 		//redirect back
 		return redirect()->intended('');
+	}
+
+	public function appRedirect(Request $request)
+	{
+		$schema = $request->input('schema');
+		$redirect_uri = $request->input('redirect_uri');
+
+		$request->offsetUnset('schema');
+		$request->offsetUnset('redirect_uri');
+
+		$redirect_uri .= (strpos($redirect_uri, '?') === false ? '?' : '&') . http_build_query($request->query->all());
+
+		if (empty($schema))
+			abort(404, 'No schema');
+
+		$this->_schema = $schema. (strpos($schema, '?') === false ? '?' : '&').'redirect_uri=' . urlencode($redirect_uri);
+
+		return $this->view('socialite::app-redirect');
 	}
 }
