@@ -15,6 +15,7 @@ $router->group(['prefix' => 'attachment'], function($router) {
 	$router->get('{id}~{watermark}/{width}x{height}{ext?}', $ctrl.'@watermark')->where(['width' => $intPattern, 'height' => $intPattern, 'watermark' => $idPattern, 'id' => $idPattern, 'ext' => $extPattern])->name('attachment-watermark-resize');
 	$router->get('{id}/{filename?}', $ctrl.'@show')->where(['filename' => '.+', 'id' => $idPattern])->name('attachment');
 	$router->put('hash', $ctrl.'@hashQuery');
+	$router->post('temp', $ctrl.'@tempQuery');
 	$router->post('uploader', $ctrl.'@uploaderQuery');
 	$router->post('dataurl', $ctrl.'@dataurlQuery');
 	$router->post('editormd', $ctrl.'@editormdQuery');

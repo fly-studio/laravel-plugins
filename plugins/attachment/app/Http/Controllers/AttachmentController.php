@@ -157,6 +157,13 @@ class AttachmentController extends Controller {
 		return $this->api($attachment);
 	}
 
+	public function tempQuery(Request $request)
+	{
+		$attachment = Helpers::tempUpload('Filedata', ['user' => $request->user()]);
+
+		return $this->api($attachment);
+	}
+
 	public function uploaderQuery(Request $request)
 	{
 		$uuid = $request->input('uuid', '');

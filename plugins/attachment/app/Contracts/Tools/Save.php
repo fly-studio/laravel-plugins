@@ -29,31 +29,51 @@ abstract class Save {
 		return true;
 	}
 
-	protected function forceSaveToLocal($fromPath, $hashPath)
+	public function doSave($fromPath, $toPath)
 	{
 		$result = false;
-		$localPath = Path::realPath($hashPath);
-		$dir = dirname($localPath);
+
+		$dir = dirname($toPath);
 		Path::mkLocalDir($dir);
 		if ($this->manager->deleteAfter())
 		{
 			if(is_uploaded_file($fromPath))
-				$result = @move_uploaded_file($fromPath, $localPath);
+				$result = @move_uploaded_file($fromPath, $toPath);
 			else
-				$result = @rename($fromPath, $localPath);
+				$result = @rename($fromPath, $toPath);
 		} else
-			$result = @copy($fromPath, $localPath);
+			$result = @copy($fromPath, $toPath);
 
 		if ($result)
-			Path::chLocalMod($localPath);
+			Path::chLocalMod($toPath);
 		else
 			throw new AttachmentException('write_no_permission');
 		return true;
 	}
 
+	protected function forceSaveToLocal($fromPath, $hashPath)
+	{
+		$localPath = Path::realPath($hashPath);
+		return $this->doSave($fromPath, $localPath);
+	}
+
 	protected function saveToSync($fromPath, $hashPath)
 	{
 		return app(SyncManager::class)->send($fromPath, $hashPath);
+	}
+
+	public function saveToTempFile(File $file)
+	{
+		if ($file->isFile())
+		{
+			$tempPath = tempnam(storage_path('attachments'), 'upload-');
+
+			$this->doSave($file->getPathName(), $tempPath);
+
+			return $tempPath;
+		}
+
+		return false;
 	}
 
 	public function saveToAttachmentFile(File $file)

@@ -128,7 +128,7 @@ class SaveManager extends Manager {
 		if ($this->deleteAfter)
 			@unlink($this->file()->getPathName());
 
-		return Attachment::mix($attachment->getKey());
+		return !empty($attachment) && !empty($attachment->getKey()) ? Attachment::mix($attachment->getKey()) : $attachment;
 	}
 
 	public function createWholeDriver()
@@ -144,6 +144,11 @@ class SaveManager extends Manager {
 	public function createHashDriver()
 	{
 		return new Save\Hash($this);
+	}
+
+	public function createTempDriver()
+	{
+		return new Save\Temp($this);
 	}
 
 	public function getDefaultDriver()

@@ -29,6 +29,11 @@ class InputManager extends Manager {
 		return new Inputs\Upload($this->app['request']);
 	}
 
+	public function createTempUploadDriver()
+	{
+		return new Inputs\TempUpload($this->app['request']);
+	}
+
 	public function createRawDriver()
 	{
 		return new Inputs\Raw();

@@ -9,6 +9,9 @@
 	<{$_schema}>
 	<script>
 		window.location.href='<{$_schema}>';
+		setTimeout(function(){
+			window.close();
+		}, 2000);
 	</script>
 </body>
 </html>

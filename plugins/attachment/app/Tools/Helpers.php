@@ -51,6 +51,16 @@ class Helpers {
 		return $upload->save();
 	}
 
+	public static function tempUpload($field_name, array $options = [])
+	{
+		$upload = app(InputManager::class)->tempUpload($field_name);
+
+		foreach($options as $key => $value)
+			$upload->$key($value);
+
+		return $upload->save();
+	}
+
 	public static function hash($hash, $size, $originalName, $options = [])
 	{
 		$hash = app(InputManager::class)->hash($hash, $size, $originalName);
