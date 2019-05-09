@@ -1,12 +1,15 @@
 <?php
+
 namespace Plugins\Wechat\App\Http\Controllers;
 
 use Addons\Core\Controllers\Controller;
+
 use App\Role;
 use Plugins\Wechat\App\WechatAccount;
 use Plugins\Wechat\App\Tools\API;
 use Plugins\Wechat\App\Tools\OAuth2;
 use Plugins\Wechat\App\Tools\Js;
+
 class WechatOAuth2Controller extends Controller {
 
 	protected $wechat_oauth2_account = NULL;
@@ -26,7 +29,7 @@ class WechatOAuth2Controller extends Controller {
 			if (empty($this->wechatUser))
 			{
 				//ajax 请求则报错
-				if (app('request')->ajax()) 
+				if (app('request')->ajax())
 					return $this->failure('wechat::wechat.failure_ajax_oauth2');
 
 				$this->wechatUser = $oauth2->authenticate(NULL, $this->wechat_oauth2_type, $this->wechat_oauth2_bindUserRole);

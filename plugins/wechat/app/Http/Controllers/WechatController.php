@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Wechat\App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -45,7 +46,7 @@ abstract class WechatController extends Controller {
 	}
 	/**
 	 * 微信推送接口，自动添加用户
-	 * 
+	 *
 	 * @return string|response
 	 */
 	public function push(Request $request, $id = 0)
@@ -68,7 +69,7 @@ abstract class WechatController extends Controller {
 			$account = WechatAccount::findOrFail($id);
 			$api = new API($account->toArray() + $_config, $account->getKey());
 		}
-		
+
 		$wechatUserTool = new WechatUserTool($api);
 
 		$api->valid();
@@ -113,7 +114,7 @@ abstract class WechatController extends Controller {
 				return $this->link($api, $wechatUser, $message, $link);
 			case API::MSGTYPE_EVENT: //事件
 				$event = $rev->getRevEvent();
-				switch ($event['event']) { 
+				switch ($event['event']) {
 					case 'subscribe':
 						if (empty($event['key']))//关注微信
 							return $this->subscribe($api, $wechatUser, $account);
@@ -141,7 +142,7 @@ abstract class WechatController extends Controller {
 						return $this->pic_weixin($api, $wechatUser, $account, $event['key'], $rev->getRevSendPicsInfo());
 					case 'location_select': //弹出微信地址选择的事件推送
 						return $this->location_select($api, $wechatUser, $account, $event['key'], $rev->getRevSendGeoInfo());
-					
+
 				}
 				break;
 		}
@@ -203,10 +204,10 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 文字消息
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\Tools\API $api  微信API
 	 * @param  Plugins\Wechat\App\WechatMessage $message  消息
-	 * @param  Plugins\Wechat\App\WechatMessageText $text 文本  
+	 * @param  Plugins\Wechat\App\WechatMessageText $text 文本
 	 * @return string|response
 	 */
 	protected function text(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageText $text)
@@ -217,7 +218,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 图片消息
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\Tools\API $api  微信API
 	 * @param  Plugins\Wechat\App\WechatMessage $message  消息
 	 * @param  Plugins\Wechat\App\WechatMessageMedia $images  图片
@@ -230,10 +231,10 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 音频消息
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\Tools\API $api  微信API
 	 * @param  Plugins\Wechat\App\WechatMessage $message  消息
-	 * @param  Plugins\Wechat\App\WechatMessageMedia $voice 音频  
+	 * @param  Plugins\Wechat\App\WechatMessageMedia $voice 音频
 	 * @return string|response
 	 */
 	protected function voice(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageMedia $voice)
@@ -243,10 +244,10 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 视频消息
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\Tools\API $api  微信API
 	 * @param  Plugins\Wechat\App\WechatMessage $message  消息
-	 * @param  Plugins\Wechat\App\WechatMessageMedia $video 视频  
+	 * @param  Plugins\Wechat\App\WechatMessageMedia $video 视频
 	 * @return string|response
 	 */
 	protected function video(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageMedia $video)
@@ -256,10 +257,10 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 小视频消息
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\Tools\API $api  微信API
 	 * @param  Plugins\Wechat\App\WechatMessage $message  消息
-	 * @param  Plugins\Wechat\App\WechatMessageMedia $video 视频  
+	 * @param  Plugins\Wechat\App\WechatMessageMedia $video 视频
 	 * @return string|response
 	 */
 	protected function shortvideo(API $api, WechatUser $wechatUser, WechatMessage $message, WechatMessageMedia $shortvideo)
@@ -269,7 +270,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 地址消息
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\Tools\API $api  微信API
 	 * @param  Plugins\Wechat\App\WechatMessage $message  消息
 	 * @param  Plugins\Wechat\App\WechatMessageLocation $location  地址
@@ -282,7 +283,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 链接消息
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\Tools\API $api  微信API
 	 * @param  Plugins\Wechat\App\WechatMessage $message  消息
 	 * @param  Plugins\Wechat\App\WechatMessageLink $link  链接
@@ -295,7 +296,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 关注
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @return string|response
@@ -308,7 +309,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 取消关注
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @return string|response
@@ -320,7 +321,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 扫描关注
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $scene_id 二维码的参数值
@@ -335,7 +336,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 扫描
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $scene_id 二维码的参数值
@@ -350,7 +351,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 上报地理位置事件
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  array $data     地理信息 ['x' => '', 'y' => '', 'precision' => '']
@@ -363,7 +364,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 自定义菜单事件
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $key     与自定义菜单接口中KEY值对应
@@ -385,7 +386,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 点击菜单跳转链接时的事件推送，由于父Controller有view函数，此处改为browser
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $url     设置的跳转URL
@@ -398,7 +399,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 扫码推事件的事件推送
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $key     由开发者在创建菜单时设定
@@ -412,7 +413,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 扫码推事件且弹出“消息接收中”提示框的事件推送
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $key     由开发者在创建菜单时设定
@@ -426,7 +427,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 弹出系统拍照发图的事件推送
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $key     由开发者在创建菜单时设定
@@ -440,7 +441,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 弹出拍照或者相册发图的事件推送
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $key     由开发者在创建菜单时设定
@@ -454,7 +455,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 弹出微信相册发图器的事件推送
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $key     由开发者在创建菜单时设定
@@ -468,7 +469,7 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 弹出地理位置选择器的事件推送
-	 * 
+	 *
 	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatAccount $account 接收者
 	 * @param  string $key     由开发者在创建菜单时设定
@@ -482,11 +483,11 @@ abstract class WechatController extends Controller {
 
 	/**
 	 * 回復消息，此處一律採用自定義發送接口發送，而不是當時回復
-	 * 
-	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者 
+	 *
+	 * @param  Plugins\Wechat\App\WechatUser $wechatUser  发送者
 	 * @param  Plugins\Wechat\App\WechatDepot    $depots  素材合集
 	 * @param  boolean     $random     隨機發送幾條，默認全發
-	 * @return 
+	 * @return
 	 */
 	protected function sendToUser(API $api, WechatUser $wechatUser, Collection $depots, $random = NULL)
 	{

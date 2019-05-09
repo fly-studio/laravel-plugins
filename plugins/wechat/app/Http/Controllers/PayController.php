@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Wechat\App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -16,7 +17,6 @@ class PayController extends Controller
 	{
 		$this->middleware('wechat.oauth2:1');
 	}
-
 
 	public function test(Request $request)
 	{

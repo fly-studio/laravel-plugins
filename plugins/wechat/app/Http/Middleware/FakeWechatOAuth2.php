@@ -70,7 +70,7 @@ class FakeWechatOAuth2
 			$isNewSession = true;
 		}
 
-		Event::fire(new WeChatUserAuthorized($app, $user, $isNewSession));
+		Event::dispatch(new WeChatUserAuthorized($app, $user, $isNewSession));
 
 		return $next($request);
 	}

@@ -62,7 +62,7 @@ class WechatOAuth2
 				Tools\oauth2_storage($waid, $user);
 				$isNewSession = true;
 
-				Event::fire(new WeChatUserAuthorized($app, $user, $isNewSession));
+				Event::dispatch(new WeChatUserAuthorized($app, $user, $isNewSession));
 
 				return redirect()->to($this->getTargetUrl($request));
 			}
@@ -70,7 +70,7 @@ class WechatOAuth2
 			return $app->oauth->scopes($scopes)->redirect($request->fullUrl());
 		}
 
-		Event::fire(new WeChatUserAuthorized($app, $user, $isNewSession));
+		Event::dispatch(new WeChatUserAuthorized($app, $user, $isNewSession));
 
 		return $next($request);
 	}
