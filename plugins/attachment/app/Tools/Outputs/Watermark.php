@@ -27,7 +27,7 @@ class Watermark extends Output {
 		if (!file_exists($new_path))
 		{
 			$img = Image::make($full_path);
-			!is_dir($path = dirname($new_path)) && mkdir($path, 0777, TRUE);
+			!is_dir($path = dirname($new_path)) && mkdir($path, 0777, true);
 			($size[0] != $width || $size[1] != $height) &&
 				$img->resize($width, $height, function ($constraint) {
 					$constraint->aspectRatio();

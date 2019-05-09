@@ -151,7 +151,7 @@ class AttachmentController extends Controller {
 		$ext = $request->input('ext');
 
 		if (empty($hash) || empty($size) || empty($filename))
-			return $this->error_param()->setStatusCode(404);
+			return $this->error('server.error_param')->setStatusCode(404);
 
 		$attachment = Helpers::hash($hash, $size, $filename, ['user' => $request->user()]);
 		return $this->api($attachment);
