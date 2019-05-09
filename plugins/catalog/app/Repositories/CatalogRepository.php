@@ -18,17 +18,17 @@ class CatalogRepository extends Repository {
 		return config('size.models.'.(new Catalog)->getTable(), config('size.common'));
 	}
 
-	public function find($id)
+	public function find($id, array $columns = ['*'])
 	{
-		return Catalog::find($id);
+		return Catalog::find($id, $columns);
 	}
 
-	public function findTops($id = 0)
+	public function findTops($id = 0, array $columns = ['*'])
 	{
-		return $this->findWithChildren($id)->children->where('name', '>', '')->where('title', '>', '');
+		return $this->findWithChildren($id, $columns)->children->where('name', '>', '')->where('title', '>', '');
 	}
 
-	public function findWithParents($id)
+	public function findWithParents($id, array $columns = ['*'])
 	{
 		$catalog = Catalog::with('parent')->find($id);
 		!empty($catalog) && $catalog->parents = $catalog->getParents();
@@ -36,23 +36,23 @@ class CatalogRepository extends Repository {
 		return $catalog;
 	}
 
-	public function findWithChildren($id)
+	public function findWithChildren($id, array $columns = ['*'])
 	{
-		$catalog = Catalog::with('children')->find($id);
+		$catalog = Catalog::with('children')->find($id, $columns);
 
 		return $catalog;
 	}
 
-	public function findLeaves($id)
+	public function findLeaves($id, array $columns = ['*'])
 	{
-		$root = $id instanceof Catalog ? $id : Catalog::find($id);
+		$root = $id instanceof Catalog ? $id : Catalog::find($id, $columns);
 
 		return !empty($root) ? $root->getLeaves()->prepend($root) : false;
 	}
 
-	public function findByNamePid($name, $pid)
+	public function findByNamePid($name, $pid, array $columns = ['*'])
 	{
-		return Catalog::findByNamePid($name, $pid);
+		return Catalog::findByNamePid($name, $pid, $columns);
 	}
 
 	public function searchCatalog($name = null, $subKeys = null)
@@ -114,7 +114,7 @@ class CatalogRepository extends Repository {
 		return Catalog::datasetToTree($leaves->keyBy('id')->toArray(), false);
 	}
 
-	public function data(Request $request)
+	public function data(Request $request, callable $callback = null, array $columns = ['*'])
 	{
 		$catalog = new Catalog;
 		$builder = $catalog->newQuery();
@@ -127,20 +127,20 @@ class CatalogRepository extends Repository {
 				unset($items[0]);
 				$page->setCollection(new Collection(Catalog::datasetToTree($items, false)));
 			}
-		});
+		}, $columns);
 		$data['recordsTotal'] = $total; //不带 f q 条件的总数
 		$data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
 
 		return $data;
 	}
 
-	public function export(Request $request)
+	public function export(Request $request, callable $callback = null, array $columns = ['*'])
 	{
 		$catalog = new Catalog;
 		$builder = $catalog->newQuery();
 		$size = $request->input('size') ?: config('size.export', 1000);
 
-		$data = $this->_getExport($request, $builder);
+		$data = $this->_getExport($request, $builder, $callback, $columns);
 
 		return $data;
 	}
