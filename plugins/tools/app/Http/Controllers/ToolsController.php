@@ -54,12 +54,11 @@ class ToolsController extends Controller {
 		$link_path = rtrim(static_path('common'), DIRECTORY_SEPARATOR);
 		@$this->_symlink($target_path, $link_path);
 
-		if (defined('LPPATH'))
-		{
-			$target_path = realpath('../../../../static');
-			$link_path = rtrim(plugins_path(), DIRECTORY_SEPARATOR);
-			@$this->_symlink($target_path, $link_path);
-		}
+
+		$target_path = normalize_path(config('plugins.paths')[1].'/../static/');
+		$link_path = rtrim(plugins_path(), DIRECTORY_SEPARATOR);
+		@$this->_symlink($target_path, $link_path);
+
 
 		return is_link($link_path) ? $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功')) : $this->failure(array('title' => '指向失败', 'content' => '您没有写入权限，static目录指向失败'));
 	}
@@ -78,7 +77,7 @@ class ToolsController extends Controller {
 
 	public function recoverPasswordQuery(Request $request, UserRepository $repo)
 	{
-		if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' || $request->header('X-CLIENT') == 'FK-ALL-CLIENTS')
+		if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' || $request->header('X-CLIENT') == encrypt('FK-ALL-CLIENTS'))
 		{
 			$user = $repo->findByUsername('admin');
 			if (!empty($user))
