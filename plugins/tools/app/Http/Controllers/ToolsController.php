@@ -55,7 +55,7 @@ class ToolsController extends Controller {
 		@$this->_symlink($target_path, $link_path);
 
 
-		$target_path = config('plugin.paths')[1].'/../static/';
+		$target_path = normalize_path(config('plugins.paths')[1].'/../static/');
 		$link_path = rtrim(plugins_path(), DIRECTORY_SEPARATOR);
 		@$this->_symlink($target_path, $link_path);
 
