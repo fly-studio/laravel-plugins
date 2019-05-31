@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Helpers\App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class PlaceholderController extends Controller {
 		$text = $request->input('text', '');
 		$fontsize = $request->input('fontsize', null);
 
-		$cache_filepath = storage_path('placeholders/'.md5(serialize(compact('size', 'bgcolor', 'color', 'text', 'fontsize'))).'.png');
+		$cache_filepath = utils_path('placeholders/'.md5(serialize(compact('size', 'bgcolor', 'color', 'text', 'fontsize'))).'.png');
 
 		if (!file_exists($cache_filepath))
 		{

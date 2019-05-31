@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools\Inputs;
 
 use Illuminate\Http\Request;

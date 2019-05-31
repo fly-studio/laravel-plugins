@@ -66,7 +66,7 @@ abstract class Save {
 	{
 		if ($file->isFile())
 		{
-			$tempPath = tempnam(storage_path('attachments'), 'upload-');
+			$tempPath = tempnam(utils_path('attachments'), 'upload-');
 
 			$this->doSave($file->getPathName(), $tempPath);
 

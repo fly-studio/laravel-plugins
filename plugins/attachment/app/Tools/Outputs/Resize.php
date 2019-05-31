@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools\Outputs;
 
 use Image;
@@ -17,7 +18,7 @@ class Resize extends Output {
 		{
 			$wh = aspect_ratio($size[0], $size[1], $width, $height);
 			extract($wh);
-			$new_path = storage_path(str_replace('.', '[dot]', $attachment->relative_path.';'.$width.'x'.$height).'.'.$attachment->ext);
+			$new_path = utils_path(str_replace('.', '[dot]', $attachment->relative_path.';'.$width.'x'.$height).'.'.$attachment->ext);
 			if (!file_exists($new_path))
 			{
 				$img = Image::make($full_path);

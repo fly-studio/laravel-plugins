@@ -33,12 +33,12 @@ class DatabaseController extends Controller {
 			$data[] = [$name. ' '. $table->TABLE_COMMENT]; // title
 			$merges[] = count($data);
 			//$cols = DB::getDoctrineSchemaManager()->listTableColumns($name);
-			
+
 			$pk = DB::select('select * from INFORMATION_SCHEMA.KEY_COLUMN_USAGE  where TABLE_NAME=\''. $name.'\' AND CONSTRAINT_SCHEMA = \''.$database_name.'\' ');
 			$pk_fields = [];
 			foreach($pk as $p)
 				$pk_fields[$p->COLUMN_NAME] = !empty($p->REFERENCED_TABLE_NAME) ? $p->REFERENCED_TABLE_NAME.'.'.$p->REFERENCED_COLUMN_NAME : $p->CONSTRAINT_NAME . ' ' . $p->ORDINAL_POSITION;
-			
+
 			$cols = DB::select('SHOW FULL COLUMNS FROM '. $name);
 
 
@@ -97,7 +97,7 @@ class DatabaseController extends Controller {
 			$sheet->getRowDimension($row)->setRowHeight(25);
 		}
 
-		$filepath = tempnam(storage_path('utils'),'excel');
+		$filepath = tempnam(utils_path('files'),'excel-');
 		@chmod($filepath, 0777);
 
 		$write->save($filepath);

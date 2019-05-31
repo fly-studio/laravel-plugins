@@ -1,39 +1,43 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools;
+
+use Plugins\Attachment\App\Attachment;
 
 class Link {
 
 	/**
-	 * 在cache目录下创建一个软连接
-	 * 
+	 * 在utils目录下创建一个软连接
+	 *
 	 * @param  integer $id AID
 	 * @return string
 	 */
-	public function create_symlink($path = null, $life_time = 86400)
+	public static function createSymlink(Attachment $attachment, string $toPath = null, int $life_time = 86400)
 	{
-		//将云端数据同步到本地
-		$this->remote && $this->sync();
-		$path = !empty($path) ? $path : storage_path($this->_config['local']['path'].'attachment,'.md5($this->getKey()).'.'.$this->ext);
+
+		$path = !empty($toPath) ? $toPath : utils_path('attachments/'.'attachment-'.md5($attachment->getKey()).'.'.$attachment->ext);
 		@unlink($path);
-		symlink($this->full_path(), $path);
+
+		symlink($attachment->full_path, $path);
 
 		//!empty($life_time) && delay_unlink($path, $life_time);
 		return $path;
 	}
 
 	/**
-	 * 在cache目录下创建一个硬连接
-	 * 
+	 * 在utils目录下创建一个硬连接
+	 *
 	 * @param  integer $id AID
 	 * @return string
 	 */
-	public function create_link($path = null, $life_time = 86400)
+	public static function createLink(Attachment $attachment, string $toPath = null, int $life_time = 86400)
 	{
 		//将云端数据同步到本地
-		$this->remote && $this->sync();
-		$path = !empty($path) ? $path : storage_path($this->_config['local']['path'].'attachment,'.md5($this->getKey()).'.'.$this->ext);
+		//
+		$path = !empty($toPath) ? $toPath : utils_path('attachments/'.'attachment-'.md5($attachment->getKey()).'.'.$attachment->ext);
 		@unlink($path);
-		link($this->full_path(), $path);
+
+		link($attachment->full_path, $path);
 
 		//!empty($life_time) && delay_unlink($path, $life_time);
 		return $path;

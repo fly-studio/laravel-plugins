@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'key' => 'a random bytes', //上线时需要设置，如果对外上线之后再修改，会导致所有附件的对外ID，也就是URL全被改变，后果非常严重
+	'key' => 'a random bytes', //上线时需要设置，只能设置一次，如果已经上线之后再修改，会导致所有附件的对外ID，也就是URL全被改变，后果非常严重
 	'remote' => [
 		'driver' => 'null', // string: null, SSH
 
@@ -9,7 +9,7 @@ return [
 			'host' => 'SSH\'s ip', //ip only
 			//'host_fingerprint' => null,
 			'port' => 22,
-			'authentication_method' => 'PASS', //PASS KEY 
+			'authentication_method' => 'PASS', //PASS KEY
 			'user' => null, //set it if authentication_method == 'PASS'
 			'password' => null, //set it if authentication_method == 'PASS'
 			//'pub_key' => null, //set it if authentication_method == 'KEY'
@@ -28,7 +28,7 @@ return [
 	'local' => [
 		'enabled' => true,
 		'life_time' => 0, //enabled为true时无效，0表示永不过期，
-		'path' => env('ATTACHMENT_PATH', 'attachments/'), //本地存放路径
+		'path' => public_path(env('ATTACHMENT_PATH', 'attachments')), //本地存放路径，必须放在public目录下
 		'file_own' => null, //文件所属用户，比如：nobody
 		'file_grp' => null, //文件所属组，比如：nobody
 		'file_mod' => 0644,

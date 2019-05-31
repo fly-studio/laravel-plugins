@@ -25,10 +25,10 @@ class ToolsController extends Controller {
 		$smarty->clearAllCache();
 		$smarty->clearCompiledTemplate();
 		//other files
-		foreach([storage_path('attachments'), storage_path('debugbar'), storage_path('placeholders'), storage_path('utils'), storage_path('framework/cache'), storage_path('framework/views'), storage_path('smarty/compile'), ] as $value)
+		foreach([utils_path('attachments'), storage_path('debugbar'), utils_path('placeholders'), utils_path('files'), storage_path('framework/cache'), storage_path('framework/views'), storage_path('smarty/compile'), ] as $value)
 		{
 			@rename($value.'/.gitignore', $newfile = storage_path('.gitignore,'.rand()));
-			@rmdir_recursive($value, TRUE);
+			@rmdir_recursive($value, true);
 			@rename($newfile, $value.'/.gitignore');
 		}
 
@@ -45,7 +45,7 @@ class ToolsController extends Controller {
 		if (file_exists($servicesPath))
 			@unlink($servicesPath);
 
-		return $this->success(array('title' => '清理成功', 'content' => '缓存清理成功'), FALSE);
+		return $this->success(array('title' => '清理成功', 'content' => '缓存清理成功'), false);
 	}
 
 	public function createStaticFolderQuery()

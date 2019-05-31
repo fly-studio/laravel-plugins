@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools\Utils;
 
 use Addons\Core\File\Mimes;

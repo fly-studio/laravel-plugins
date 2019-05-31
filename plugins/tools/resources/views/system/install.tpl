@@ -37,11 +37,11 @@ $().ready(function(){
 		1. <kbd>Win + X</kbd> - 命令提示符(管理员)(A)
 		<p>
 		<pre><code>&gt; cd /d <{base_path()}>
-&gt; mklink /D static\common ..\..\static
-&gt; mklink /D static\plugins ..\..\l++\static</code></pre>
+&gt; mklink /D public\static\common ..\..\..\static
+&gt; mklink /D public\static\plugins ..\..\..\l++\static</code></pre>
 		</p>
 		2. 刷新本页
-		
+
 	</div>
 	<h1 class="page-header">第二步</h1>
 	<form class="form-horizontal" role="form" action="<{'install/save-query'|url}>" method="POST" id="form" confirm="您确认每一项都输入无误（系统不会深度检查输入的有效性）？">

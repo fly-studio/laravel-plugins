@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools\Outputs;
 
 use Image;
@@ -22,7 +23,7 @@ class Watermark extends Output {
 		} else
 			list($width, $height) = $size;
 
-		$new_path = storage_path(str_replace('.', '[dot]', $attachment->relative_path.';'.$width.'x'.$height.';'.md5($watermark_path)).'.'.$attachment->ext);
+		$new_path = utils_path(str_replace('.', '[dot]', $attachment->relative_path.';'.$width.'x'.$height.';'.md5($watermark_path)).'.'.$attachment->ext);
 
 		if (!file_exists($new_path))
 		{

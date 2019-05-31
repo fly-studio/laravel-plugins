@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools\Sync;
 
 use Addons\Func\Tools\SSHClient;
@@ -33,7 +34,7 @@ class SSHEngine implements Sync {
 		//过期文件 删除
 		is_null($life_time) && !config('attachment.local.enabled') && $life_time = config('attachment.local.life_time');
 		//!empty($life_time) && delay_unlink($local, $life_time);
-		
+
 		return true;
 	}
 
@@ -42,12 +43,12 @@ class SSHEngine implements Sync {
 		$ssh = new SSHClient((array)config('attachment.remote.SSH'));
 
 		$remotePath = Path::remotePath($hashPath);
-		$dir = dirname($remotePath);			
+		$dir = dirname($remotePath);
 		$this->mkRemoteDir($ssh, $dir);
 		if (!(@$ssh->send_file($fromPath, $remotePath)))
 			throw new AttachmentException('remote_no_permission');
 		$this->chRemoteMod($ssh, $remotePath);
-		
+
 		return true;
 	}
 

@@ -42,7 +42,12 @@ class InstallController extends Controller {
 		$content = file_get_contents($path);
 		$content = preg_replace('/RewriteBase(.*?)([\r\n]{1,2})/i', 'RewriteBase '.str_replace(array('\\', '$'), array('\\\\', '\\$'), $data['SESSION_PATH']).'$2', $content);
 		file_put_contents($path, $content);
-		
+		//public/.htaccess
+		$path = public_path('.htaccess');
+		$content = file_get_contents($path);
+		$content = preg_replace('/RewriteBase(.*?)([\r\n]{1,2})/i', 'RewriteBase '.str_replace(array('\\', '$'), array('\\\\', '\\$'), $data['SESSION_PATH']).'/public$2', $content);
+		file_put_contents($path, $content);
+
 
 		return $this->success(['title' => '配置成功', 'content' => '系统配置成功！']);
 	}

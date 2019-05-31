@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Attachment\App\Tools\Sync;
 
 use Plugins\Attachment\App\Contracts\Tools\Sync;
