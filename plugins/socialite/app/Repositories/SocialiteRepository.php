@@ -16,14 +16,14 @@ class SocialiteRepository extends Repository {
 		return config('size.models.'.(new Socialite)->getTable(), config('size.common'));
 	}
 
-	public function find($id)
+	public function find($id, array $columns = ['*'])
 	{
-		return Socialite::find($id);
+		return Socialite::find($id, $columns);
 	}
 
-	public function findOrFail($id)
+	public function findOrFail($id, array $columns = ['*'])
 	{
-		return Socialite::findOrFail($id);
+		return Socialite::findOrFail($id, $columns);
 	}
 
 	public function findEnableDrivers($is_wechat_client = false)
@@ -77,26 +77,26 @@ class SocialiteRepository extends Repository {
 		});
 	}
 
-	public function data(Request $request)
+	public function data(Request $request, callable $callback = null, array $columns = ['*'])
 	{
 		$socialite = new Socialite;
 		$builder = $socialite->newQuery()->with(['default_role']);
 
 		$total = $this->_getCount($request, $builder, FALSE);
-		$data = $this->_getData($request, $builder);
+		$data = $this->_getData($request, $builder, $callback, $columns);
 		$data['recordsTotal'] = $total; //不带 f q 条件的总数
 		$data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
 
 		return $data;
 	}
 
-	public function export(Request $request)
+	public function export(Request $request, callable $callback = null, array $columns = ['*'])
 	{
 		$socialite = new Socialite;
 		$builder = $socialite->newQuery();
 		$size = $request->input('size') ?: config('size.export', 1000);
 
-		$data = $this->_getExport($request, $builder);
+		$data = $this->_getExport($request, $builder, $callback, $columns);
 
 		return $data;
 	}

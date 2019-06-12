@@ -1,6 +1,7 @@
 <?php
 namespace Plugins\Helpers\App\Http\Controllers;
 
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
 
@@ -16,7 +17,7 @@ class LoadingController extends Controller {
 		$tips = $request->input('tips', '');
 
 		$files = array();
-		foreach (array_wrap($folders) as $v)
+		foreach (Arr::wrap($folders) as $v)
 		{
 			$_folder = base_path($v);
 			if (!is_dir($_folder)) continue;

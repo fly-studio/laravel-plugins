@@ -2,6 +2,7 @@
 namespace Plugins\Catalog\App\Http\Controllers\Admin;
 
 use DB;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
@@ -105,7 +106,7 @@ class CatalogController extends Controller
 	public function destroy(Request $request, $id)
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
-		$ids = array_wrap($id);
+		$ids = Arr::wrap($id);
 
 		$this->repo->destroy($ids);
 		return $this->success();

@@ -4,6 +4,7 @@ namespace Plugins\System\App;
 
 use Cache;
 use App\Model;
+use Illuminate\Support\Arr;
 
 class Setting extends Model {
 
@@ -25,7 +26,7 @@ class Setting extends Model {
 	{
 		$setting = Setting::firstOrCreate(['key' => $key], ['value' => []]);
 		$v = $setting['value'];
-		array_set($v, $subKeys, $value);
+		Arr::set($v, $subKeys, $value);
 		$setting->setAttribute('value', $v);
 		$setting->save();
 		return $setting->value;
@@ -35,7 +36,7 @@ class Setting extends Model {
 	{
 		$settings = static::getAllSettings();
 		$r = $settings->has($key) ? $settings[$key] : $default;
-		return !is_null($subKeys) ? array_get($r, $subKeys, $default) : $r;
+		return !is_null($subKeys) ? Arr::get($r, $subKeys, $default) : $r;
 	}
 
 }

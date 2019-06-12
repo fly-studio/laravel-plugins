@@ -2,6 +2,7 @@
 
 namespace Plugins\Socialite\App\Http\Controllers\Admin;
 
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -97,7 +98,7 @@ class SocialiteController extends Controller
 	public function destroy(Request $request, $id)
 	{
 		empty($id) && !empty($request->input('id')) && $id = $request->input('id');
-		$ids = array_wrap($id);
+		$ids = Arr::wrap($id);
 
 		$this->repo->destroy($ids);
 		return $this->success(null, true, ['id' => $ids]);
