@@ -49,6 +49,6 @@ class InstallController extends Controller {
 		file_put_contents($path, $content);
 
 
-		return $this->success(['title' => '配置成功', 'content' => '系统配置成功！']);
+		return $this->success('系统配置成功！');
 	}
 }

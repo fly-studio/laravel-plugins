@@ -1,4 +1,5 @@
 <?php
+
 namespace Plugins\Tools\App\Http\Controllers;
 
 use DB;
@@ -9,7 +10,9 @@ use Addons\Censor\Validation\ValidatesRequests;
 use Symfony\Component\Console\Input\StringInput;
 
 class ArtisansController extends Controller {
+
 	use ValidatesRequests;
+
 	protected $disableUser = true;
 
 	public function index()
@@ -22,7 +25,7 @@ class ArtisansController extends Controller {
 		$command = trim($request->input('command'));
 		$result = trans('tools::tools.unknow_command');
 		if (empty($command))
-			return $this->failure('', FALSE, compact('command', 'result'), TRUE);
+			return $this->error(null, compact('command', 'result'));
 
 		if (Str::startsWith($command, 'php artisan'))
 		{
@@ -34,13 +37,13 @@ class ArtisansController extends Controller {
 			try {
 				$out = $kernel->run($command);
 			} catch (Exception $e) {
-				return $this->failure('', FALSE, compact('command', 'result'), TRUE);
+				return $this->error(null, compact('command', 'result'));
 			}
-			
+
 			$result = $out->fetch();
 		}
 
-		return $this->success('', FALSE, compact('command', 'result'));
+		return $this->success(null, compact('command', 'result'))->action('back');
 	}
 
 	public function sqlQuery(Request $request)
@@ -49,14 +52,16 @@ class ArtisansController extends Controller {
 		$data = $this->censor($request, 'tools::artisans.store', $keys);
 		try {
 			set_time_limit(120);
+
 			DB::transaction(function () use ($data){
 				DB::statement($data['content']);
 			});
+
 		} catch (Exception $e) {
 			$error = error_get_last();
-			return $this->failure('tools:artisans.failure_sql', FALSE, $error);
+			return $this->error('tools:artisans.failure_sql', $error);
 		}
-		return $this->success('tools::artisans.success_sql', FALSE);
+		return $this->success('tools::artisans.success_sql')->action('back');
 	}
 
 	public function schemaQuery(Request $request)
@@ -69,9 +74,10 @@ class ArtisansController extends Controller {
 			eval('use Illuminate\Database\Schema\Blueprint;use Illuminate\Database\Migrations\Migration;' .$data['content'] );
 		} catch (Exception $e) {
 			$error = error_get_last();
-			return $this->failure('tools:artisans.failure_schema', FALSE, $error);
+
+			return $this->error('tools:artisans.failure_schema', $error);
 		}
-		
-		return $this->success('tools::artisans.success_schema', FALSE);
+
+		return $this->success('tools::artisans.success_schema')->action('back') ;
 	}
 }

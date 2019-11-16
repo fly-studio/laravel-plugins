@@ -6,7 +6,7 @@ use Agent, Auth, Mimes;
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
 use Plugins\Attachment\App\Tools\Helpers;
-use Addons\Core\Http\Response\TextResponse;
+use Addons\Core\Http\Output\ResponseFactory;
 use Plugins\Attachment\App\Tools\SyncManager;
 use Plugins\Attachment\App\Exceptions\AttachmentException;
 
@@ -28,7 +28,7 @@ class AttachmentController extends Controller {
 	public function index(Request $request)
 	{
 		if (!$request->offsetExists('id'))
-			throw (new AttachmentException('attachment::attachment.failure_notexists'))->setStatusCode(404);
+			throw (new AttachmentException('attachment::attachment.failure_notexists'))->code(404);
 		$route = 'attachment';
 		$parameters = ['id' => $request->query('id')];
 		if ($request->offsetExists('m'))
@@ -54,15 +54,15 @@ class AttachmentController extends Controller {
 	{
 		$_id = Helpers::decode($id);
 		if ($_id === false && $strict)
-			throw (new AttachmentException('attachment::attachment.failure_invalid_id'))->setStatusCode(404);
+			throw (new AttachmentException('attachment::attachment.failure_invalid_id'))->code(404);
 		else if ($_id !== false)
 			$id = $_id;
 
 		$attachment = Attachment::mix($id);
 		if (empty($attachment))
-			throw (new AttachmentException('attachment::attachment.failure_notexists'))->setStatusCode(404);
+			throw (new AttachmentException('attachment::attachment.failure_notexists'))->code(404);
 		else if(empty($attachment->afid))
-			throw (new AttachmentException('attachment::attachment.failure_file_notexists'))->setStatusCode(404);
+			throw (new AttachmentException('attachment::attachment.failure_file_notexists'))->code(404);
 		//获取远程文件
 		app(SyncManager::class)->recv($attachment->path);
 
@@ -108,7 +108,7 @@ class AttachmentController extends Controller {
 	{
 		$attachment = $this->factory($id);
 		if ($attachment->file_type != 'image')
-			throw new AttachmentException('image_invalid', 'error');
+			throw new AttachmentException('image_invalid');
 
 		return Helpers::resize($attachment, $width, $height);
 	}
@@ -134,11 +134,11 @@ class AttachmentController extends Controller {
 	{
 		$attachment = $this->factory($id);
 		if ($attachment->file_type != 'image')
-			throw new AttachmentException('image_invalid', 'error');
+			throw new AttachmentException('image_invalid');
 
 		$watermark = Attachment::mix($watermark);
 		if (empty($watermark) || !file_exists($watermark->full_path) || $watermark->file_type != 'image')
-			throw new AttachmentException('watermark_invalid', 'errror');
+			throw new AttachmentException('watermark_invalid');
 
 		return Helpers::watermark($attachment, $watermark, $width, $height);
 	}
@@ -151,7 +151,7 @@ class AttachmentController extends Controller {
 		$ext = $request->input('ext');
 
 		if (empty($hash) || empty($size) || empty($filename))
-			return $this->error('server.error_param')->setStatusCode(404);
+			return $this->error('server.error_param')->code(404);
 
 		$attachment = Helpers::hash($hash, $size, $filename, ['user' => $request->user()]);
 		return $this->api($attachment);
@@ -189,7 +189,7 @@ class AttachmentController extends Controller {
 			$data = ['success' => 0, 'message' => $e->getMessage()];
 		}
 
-		return (new TextResponse)->setData($data, true);
+		return app(ResponseFactory::class)->raw($data);
 	}
 
 	public function kindeditorQuery(Request $request)
@@ -201,7 +201,7 @@ class AttachmentController extends Controller {
 		} catch (\Exception $e) {
 			$data = ['error' => 1, 'message' => $e->getMessage()];
 		}
-		return (new TextResponse)->setData($data, true);
+		return app(ResponseFactory::class)->raw($data);
 	}
 
 	public function ueditorQuery(Request $request, $start = 0, $size = null)
@@ -335,7 +335,8 @@ class AttachmentController extends Controller {
 			default:
 				break;
 		}
-		return (new TextResponse)->setData($data, true);
+
+		return app(ResponseFactory::class)->raw($data);
 	}
 
 	public function fullavatarQuery(Request $request)
@@ -366,7 +367,7 @@ class AttachmentController extends Controller {
 			}
 		}
 
-		return (new TextResponse)->setData($result, true);
+		return app(ResponseFactory::class)->raw($result);
 	}
 
 	public function dataurlQuery(Request $request)
@@ -377,9 +378,8 @@ class AttachmentController extends Controller {
 		$ext = Mimes::getInstance()->ext_by_mime($part['mine']);
 		$attachment = Helpers::uploadRaw($part['data'], 'datauri_'.(Auth::check() ? $request->user()->getKey() : 0).'_'.date('Ymdhis').'.'.$ext, ['user' => $request->user()]);
 		unset($dataurl, $part);
-		return $this->success('', $url, array('id' => $attachment->getKey(), 'url' => $attachment->url));
+
+		return $this->success(null, ['id' => $attachment->getKey(), 'url' => $attachment->url])->action('redirect', $url);
 	}
-
-
 
 }

@@ -15,6 +15,7 @@ class RoleController extends Controller
 	use ApiTrait;
 
 	public $permissions = ['role'];
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -27,15 +28,18 @@ class RoleController extends Controller
 
 		$permissions = [];
 		$_permissions = Permission::orderBy('id', 'asc')->get();
+
 		foreach ($_permissions as $value) {
 			list($name, ) = explode('.', $value['name']);
 			$permissions[$name][] = $value;
 		}
+
 		//view's variant
 		$this->_table_data = $roles->each(function($v){
 			$v->setRelation('permissions', $v->permissions->keyBy('id'));
 		});
 		$this->_permissions_data = $permissions;
+
 		return $this->view('system::admin.role.list');
 	}
 
@@ -54,6 +58,7 @@ class RoleController extends Controller
 
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
+
 		return $this->api($data);
 	}
 
@@ -63,7 +68,8 @@ class RoleController extends Controller
 		$data = $this->censor($request, 'system::role.store', $keys);
 
 		Role::create($data);
-		return $this->success('', url('admin/role'));
+
+		return $this->success()->action('redirect', url('admin/role'));
 	}
 
 	public function update(Request $request, $id)
@@ -80,7 +86,7 @@ class RoleController extends Controller
 		{
 			$role = Role::find($id);
 			if (empty($role))
-				return $this->failure_notexists();
+				return $this->error('document.not_exists')->code(404);
 
 			$keys = ['display_name', 'description', 'url'];
 			$data = $this->censor($request, 'system::role.store', $keys);
@@ -97,9 +103,12 @@ class RoleController extends Controller
 		$data = $this->censor($request, 'system::role.destroy', $keys);
 
 		$originalRole = Role::find($data['original_role_id']);
+
 		foreach ($originalRole->users()->get(['id']) as $user)
 			$user->roles()->syncWithoutDetaching([$data['role_id']]);
+
 		$originalRole->delete(); // 外键级联删除
-		return $this->success(null, true, compact('id'));
+
+		return $this->success(null, compact('id'));
 	}
 }

@@ -36,7 +36,7 @@ class CatalogController extends Controller
 	{
 		$catalog = catalog_search($parentName);
 		if (empty($catalog))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		$data = $this->repo->tree($catalog['id']);
 		return $this->api(['data' => $data]);
@@ -46,7 +46,7 @@ class CatalogController extends Controller
 	{
 		$root = $this->repo->findWithParents($id);
 		if (empty($root))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		if ($request->offsetExists('of'))
 			return $this->api($root);
@@ -63,7 +63,7 @@ class CatalogController extends Controller
 		$data = $this->censor($request, 'catalog::catalog.store', $keys);
 
 		$this->repo->order($data['orders']);
-		return $this->success('', false);
+		return $this->success()->action('back');
 	}
 
 	public function store(Request $request)
@@ -72,7 +72,7 @@ class CatalogController extends Controller
 		$data = $this->censor($request, 'catalog::catalog.store', $keys);
 
 		if (!empty($this->repo->findByNamePid($data['name'], $data['pid'])))
-			return $this->failure('catalog::catalog.name_exists', false, $data);
+			return $this->error('catalog::catalog.name_exists', $data);
 
 		$this->repo->store($data);
 		return $this->success();
@@ -82,7 +82,7 @@ class CatalogController extends Controller
 	{
 		$catalog = $this->repo->find($id);
 		if (empty($catalog))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		$keys = ['title', 'extra'];
 		$data = $this->censor($request, 'catalog::catalog.store', $keys, $catalog);
@@ -98,9 +98,9 @@ class CatalogController extends Controller
 		$data = $this->censor($request, 'catalog::catalog.move', $keys);
 
 		if ($this->repo->move($data['target_id'], $data['original_id'], $data['move_type']) === false)
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
-		return $this->success('catalog::catalog.move_success', false, $data);
+		return $this->success('catalog::catalog.move_success', $data)->action('back');
 	}
 
 	public function destroy(Request $request, $id)

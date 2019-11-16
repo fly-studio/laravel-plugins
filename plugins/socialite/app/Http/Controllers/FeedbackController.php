@@ -16,6 +16,7 @@ class FeedbackController extends Controller {
 	public function index(Request $request, SocialiteRepository $repo, SocialiteUserRepository $userRepo, $id)
 	{
 		$schema = $request->input('schema');
+
 		if (!empty($schema))
 		{
 			return redirect(url('socialite/app-redirect').'?'.$request->getQueryString());
@@ -29,10 +30,10 @@ class FeedbackController extends Controller {
 		}
 
 		if (empty($socialite))
-			return $this->failure('socialite::socialite.not_exists');
+			return $this->error('socialite::socialite.not_exists');
 
 		if (empty($user) || empty($user->id))
-			return $this->failure('socialite::socialite.user_invalid');
+			return $this->error('socialite::socialite.user_invalid');
 
 		$socialiteUser = $userRepo->storeFrom($socialite, $user);
 		$user = $userRepo->attachToUser($socialiteUser, $socialite->default_role);

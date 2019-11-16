@@ -6,7 +6,7 @@ use Exception;
 use Throwable;
 use Illuminate\Http\Response;
 use Illuminate\Container\Container;
-use Addons\Core\Http\Response\TextResponse;
+use Addons\Core\Http\Output\ResponseFactory;
 use Illuminate\Contracts\Config\Repository;
 use Zend\Diactoros\Response as Psr7Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -34,13 +34,19 @@ trait HandlesOAuthErrors
                 $e->generateHttpResponse(new Psr7Response)
             );
         } catch (Exception $e) {
+
             $this->exceptionHandler()->report($e);
 
-            return (new TextResponse('', 500))->setResult('failure')->setMessage($this->configuration()->get('app.debug') ? $e->getMessage() : 'Error.');
+            return app(ResponseFactory::class)
+                ->error($this->configuration()->get('app.debug') ? $e->getMessage() : 'Error.')
+                ->code(500);
         } catch (Throwable $e) {
+
             $this->exceptionHandler()->report(new FatalThrowableError($e));
 
-            return (new TextResponse('', 500))->setResult('failure')->setMessage($this->configuration()->get('app.debug') ? $e->getMessage() : 'Error.');
+            return app(ResponseFactory::class)
+                ->error($this->configuration()->get('app.debug') ? $e->getMessage() : 'Error.')
+                ->code(500);
         }
     }
 

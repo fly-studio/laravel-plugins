@@ -28,6 +28,7 @@ class PermissionController extends Controller
 		$this->_size = $size;
 		$this->_filters = $this->_getFilters($request);
 		$this->_queries = $this->_getQueries($request);
+
 		return $this->view('system::admin.permission.list');
 	}
 
@@ -40,6 +41,7 @@ class PermissionController extends Controller
 		$data = $this->_getData($request, $builder);
 		$data['recordsTotal'] = $total;
 		$data['recordsFiltered'] = $data['total'];
+
 		return $this->api($data);
 	}
 
@@ -50,6 +52,7 @@ class PermissionController extends Controller
 		$size = $request->input('size') ?: config('size.export', 1000);
 
 		$data = $this->_getExport($request, $builder);
+
 		return $this->office($data);
 	}
 
@@ -64,6 +67,7 @@ class PermissionController extends Controller
 		$keys = ['name', 'display_name', 'description'];
 		$this->_data = [];
 		$this->_validates = $this->censorScripts('system::permission.store', $keys);
+
 		return $this->view('system::admin.permission.create');
 	}
 
@@ -71,21 +75,26 @@ class PermissionController extends Controller
 	{
 		$keys = ['name', 'display_name', 'description'];
 		$data = $this->censor($request, 'system::permission.store', $keys);
+
 		if (strpos($data['name'], '*') !== FALSE) //添加RESTful权限
 			Permission::import([$data['name'] => $data['display_name']], str_replace('*', '{{key}}', $data['name']));
 		else
 			Permission::create($data);
-		return $this->success('', url('admin/permission'));
+
+		return $this->success()->action('redirect', url('admin/permission'));
 	}
 
 	public function edit($id)
 	{
 		$permission = Permission::find($id);
+
 		if (empty($permission))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
+
 		$keys = ['display_name', 'description'];
 		$this->_validates = $this->censorScripts('system::permission.store', $keys);
 		$this->_data = $permission;
+
 		return $this->view('system::admin.permission.edit');
 	}
 
@@ -93,11 +102,12 @@ class PermissionController extends Controller
 	{
 		$permission = Permission::find($id);
 		if (empty($permission))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		$keys = ['display_name', 'description'];
 		$data = $this->censor($request, 'system::permission.store', $keys, $permission);
 		$permission->update($data);
+
 		return $this->success();
 	}
 
@@ -109,6 +119,7 @@ class PermissionController extends Controller
 		DB::transaction(function() use ($ids) {
 			Permission::destroy($ids);
 		});
-		return $this->success(null, count($id) > 5, compact('id'));
+
+		return $this->success(null,  compact('id'))->action(count($id) > 5 ? 'refresh': 'back');
 	}
 }

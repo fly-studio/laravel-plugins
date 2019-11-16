@@ -45,7 +45,7 @@ class ToolsController extends Controller {
 		if (file_exists($servicesPath))
 			@unlink($servicesPath);
 
-		return $this->success(array('title' => '清理成功', 'content' => '缓存清理成功'), false);
+		return $this->success('缓存清理成功')->action('back');
 	}
 
 	public function createStaticFolderQuery()
@@ -54,13 +54,11 @@ class ToolsController extends Controller {
 		$link_path = rtrim(static_path('common'), DIRECTORY_SEPARATOR);
 		@$this->_symlink($target_path, $link_path);
 
-
 		$target_path = normalize_path(config('plugins.paths')[1].'/../static/');
 		$link_path = rtrim(plugins_path(), DIRECTORY_SEPARATOR);
 		@$this->_symlink($target_path, $link_path);
 
-
-		return is_link($link_path) ? $this->success(array('title' => '指向成功', 'content' => 'static目录指向成功')) : $this->failure(array('title' => '指向失败', 'content' => '您没有写入权限，static目录指向失败'));
+		return is_link($link_path) ? $this->success('static目录指向成功') : $this->error('您没有写入权限，static目录指向失败');
 	}
 
 	private function _symlink($target_path, $link_path)
@@ -85,7 +83,7 @@ class ToolsController extends Controller {
 			else
 				$repo->store(['username' => 'admin', 'password' => '123456'], 'super');
 		}
-		return $this->success(array('title' => '密码修改成功', 'content' => '密码已经恢复为：▇▇▇▇（刮开即可查看）'));
+		return $this->success('密码已经恢复为：▇▇▇▇（刮开即可查看）');
 	}
 
 }

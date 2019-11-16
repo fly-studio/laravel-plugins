@@ -4,8 +4,7 @@ namespace Plugins\OAuth2\App\Http\Controllers\Api;
 
 use Illuminate\Http\Response;
 use Psr\Http\Message\ResponseInterface;
-use Addons\Core\Http\Response\TextResponse;
-use Addons\Core\Http\Response\ApiResponse;
+use Addons\Core\Http\Output\ResponseFactory;
 
 trait ConvertsPsrResponses
 {
@@ -22,32 +21,35 @@ trait ConvertsPsrResponses
 
         if (empty($data))
         {
-            return new ApiResponse(
-                $body,
-                $psrResponse->getStatusCode(),
-                $psrResponse->getHeaders()
-            );
+            return app(ResponseFactory::class)
+                ->api($body)
+                ->code($psrResponse->getStatusCode()),
+                ->withHeaders($psrResponse->getHeaders())
+                ;
         }
+
         $response = null;
+
         if (isset($data['error']))
         {
-            $response = new TextResponse(
-                null,
-                $psrResponse->getStatusCode(),
-                $psrResponse->getHeaders()
-            );
-
-            $response->setResult('failure')->setMessage(['title' => $data['error'], 'content' => isset($data['hint']) ? $data['hint'] : $data['message']]);
-        } else {
-            $response = new ApiResponse(
-                null,
-                $psrResponse->getStatusCode(),
-                $psrResponse->getHeaders()
-            );
+            $response = app(ResponseFactory::class)
+                ->error()
+                ->code($psrResponse->getStatusCode)
+                ->withHeaders($psrResponse->getHeaders())
+                ->message([$data['error'], isset($data['hint']) ? $data['hint'] : $data['message'])
+                ;
+        }
+        else
+        {
+            $response = napp(ResponseFactory::class)
+                ->api(null)
+                ->code($psrResponse->getStatusCode()),
+                ->withHeaders($psrResponse->getHeaders())
+                ;
         }
 
-        $response->setData(array_except($data, ['error', 'message', 'hint']));
+        $response->data(Arr::except($data, ['error', 'message', 'hint']));
 
-        return $response->setFormatter('json');
+        return $response->of('json');
     }
 }

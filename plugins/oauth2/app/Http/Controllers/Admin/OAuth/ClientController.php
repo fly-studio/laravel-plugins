@@ -49,7 +49,7 @@ class ClientController extends Controller
 	{
 		$oAuth = $this->repo->find($id);
 		if (empty($oAuth))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		$this->_data = $oAuth;
 		return !$request->offsetExists('of') ? $this->view('oauth2::admin.oauth.client.show') : $this->api($oAuth->toArray());
@@ -68,14 +68,14 @@ class ClientController extends Controller
 		$data = $this->censor($request, 'oauth2::client.store', $this->keys);
 
 		$oAuth = $this->repo->store($data);
-		return $this->success('', url('admin/oauth/client'));
+		return $this->success()->action('redirect', url('admin/oauth/client'));
 	}
 
 	public function edit($id)
 	{
 		$oAuth = $this->repo->find($id);
 		if (empty($oAuth))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		$this->_validates = $this->censorScripts('oauth2::client.store', $this->keys);
 		$this->_data = $oAuth;
@@ -86,7 +86,7 @@ class ClientController extends Controller
 	{
 		$oAuth = $this->repo->find($id);
 		if (empty($oAuth))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		$data = $this->censor($request, 'oauth2::client.store', array_diff($this->keys, ['user_id']), $oAuth);
 
@@ -100,6 +100,6 @@ class ClientController extends Controller
 		$ids = array_wrap($id);
 
 		$this->repo->destroy($ids);
-		return $this->success(null, true, ['id' => $ids]);
+		return $this->success(null, ['id' => $ids]);
 	}
 }

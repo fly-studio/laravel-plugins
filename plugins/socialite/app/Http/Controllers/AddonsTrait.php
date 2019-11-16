@@ -15,7 +15,7 @@ trait AddonsTrait {
 
 		//未启用此社交平台
 		if (!in_array($name, config('socialite.enable_drivers')))
-			throw (new OutputResponseException())->setMessage('socialite::socialite.not_exists', compact('name'));
+			throw (new OutputResponseException())->message('socialite::socialite.not_exists', compact('name'));
 
 		$redirect_uri = url('socialite/feedback/'.$id);
 		$schema = app('request')->headers->get('X-Schema');

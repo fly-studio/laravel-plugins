@@ -50,7 +50,7 @@ class SocialiteController extends Controller
 	{
 		$socialite = $this->repo->find($id);
 		if (empty($socialite))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		$this->_data = $socialite;
 		return !$request->offsetExists('of') ? $this->view('socialite::admin.socialite.show') : $this->api($socialite->toArray());
@@ -69,14 +69,14 @@ class SocialiteController extends Controller
 		$data = $this->censor($request, 'socialite::socialite.store', $this->keys);
 
 		$socialite = $this->repo->store($data);
-		return $this->success('', url('admin/socialite'));
+		return $this->success()->action('redirect', url('admin/socialite'));
 	}
 
 	public function edit($id)
 	{
 		$socialite = $this->repo->find($id);
 		if (empty($socialite))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		$this->_validates = $this->censorScripts('socialite::socialite.store', $this->keys);
 		$this->_data = $socialite;
@@ -87,7 +87,7 @@ class SocialiteController extends Controller
 	{
 		$socialite = $this->repo->find($id);
 		if (empty($socialite))
-			return $this->failure_notexists();
+			return $this->error('document.not_exists')->code(404);
 
 		$data = $this->censor($request, 'socialite::socialite.store', $this->keys, $socialite);
 
@@ -101,6 +101,6 @@ class SocialiteController extends Controller
 		$ids = Arr::wrap($id);
 
 		$this->repo->destroy($ids);
-		return $this->success(null, true, ['id' => $ids]);
+		return $this->success(null, ['id' => $ids]);
 	}
 }

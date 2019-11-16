@@ -23,6 +23,6 @@ class PasswordController extends Controller
 		$data['password'] = bcrypt($data['password']);
 		Auth::user()->update($data);
 		Auth::logout();
-		return $this->success(null, 'admin-login');
+		return $this->success()->action('redirect', 'admin-login');
 	}
 }

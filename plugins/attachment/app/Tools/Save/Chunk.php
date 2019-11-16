@@ -79,7 +79,7 @@ class Chunk extends Save {
 			$path = $chunk->full_path;
 			if (!file_exists($path) || !is_readable($path)) {
 				DB::rollback();
-				throw new AttachmentException('lost_chunk', 'error');
+				throw new AttachmentException('lost_chunk');
 			}
 			$fr = fopen($path, 'rb');
 			while(!feof($fr))
