@@ -2,6 +2,7 @@
 
 namespace Plugins\OAuth2\App\Http\Controllers\Api;
 
+use Illuminate\Support\Arr;
 use Illuminate\Http\Response;
 use Psr\Http\Message\ResponseInterface;
 use Addons\Core\Http\Output\ResponseFactory;
