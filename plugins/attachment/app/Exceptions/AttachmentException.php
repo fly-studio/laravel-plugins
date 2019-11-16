@@ -7,7 +7,7 @@ use Addons\Core\Exceptions\OutputResponseException;
 
 class AttachmentException extends OutputResponseException
 {
-	public function message($message_name, $transData = [])
+	public function message(string $message_name, array $transData = [])
 	{
 		$_config = config('attachment');
 		$transData += ['maxsize' => format_bytes($_config['maxsize']), 'ext' => implode(',', $_config['ext'])];
