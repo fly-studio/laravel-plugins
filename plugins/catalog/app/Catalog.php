@@ -2,24 +2,25 @@
 
 namespace Plugins\Catalog\App;
 
-use Addons\Core\Models\Tree;
-use Addons\Core\Models\TreeCacheTrait;
+use App\Model;
+use Addons\Core\Models\TreeTrait;
 use Illuminate\Database\Eloquent\Builder;
 
-class Catalog extends Tree {
+class Catalog extends Model {
 
-	use TreeCacheTrait;
+	use TreeTrait;
 
-	//不能批量赋值
-	public $orderKey = 'order_index';
-	public $pathKey = 'path';
-	public $levelKey = 'level';
 	protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'path', 'order_index'/*, 'level'*/];
 	protected $casts = [
 		'extra' => 'array',
 	];
 
 	protected $guarded = ['id'];
+
+	public function getOrderKeyName()
+	{
+		return 'order_index';
+	}
 
 	public static function searchCatalog($name = null, $subKeys = null)
 	{
