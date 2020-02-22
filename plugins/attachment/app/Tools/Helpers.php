@@ -92,18 +92,20 @@ class Helpers {
 		return static::$cipher;
 	}
 
-	public static function encode($id)
+	public static function encode(?int $id)
 	{
-		return empty($id) ? '0' : 'gF'.base64_urlencode(static::getCipher()->encrypt(pack('V', $id)));
+		return empty($id) ? '0' : '~'.base64_urlencode(static::getCipher()->encrypt(pack('V', $id)));
 	}
 
-	public static function decode($id)
+	public static function decode(?string $id)
 	{
-		if (empty($id) || !preg_match('@^gF[a-z0-9\-_]+$@i', $id) ) //starts at gF
+		if (empty($id) || !preg_match('@^~[a-z0-9\-_]+$@i', $id) ) //starts with ~
 			return false;
-		$result = @unpack('Vid', static::getCipher()->decrypt(base64_urldecode(substr($id, 2))));
+
+		$result = @unpack('Vid', static::getCipher()->decrypt(base64_urldecode(substr($id, 1))));
 		if (!isset($result['id']))
 			return false;
+
 		return $result['id'];
 	}
 
