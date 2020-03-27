@@ -105,7 +105,7 @@ class PermissionController extends Controller
 			return $this->error('document.not_exists')->code(404);
 
 		$keys = ['display_name', 'description'];
-		$data = $this->censor($request, 'system::permission.store', $keys, $permission);
+		$data = $this->censor($request, 'system::permission.store', $keys, $permission->toArray());
 		$permission->update($data);
 
 		return $this->success();

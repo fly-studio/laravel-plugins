@@ -25,7 +25,7 @@ class ProfileController extends Controller
 	{
 		$user = Auth::user();
 		$keys = ['nickname', 'realname', 'gender', 'email', 'phone', 'idcard', 'avatar_aid'];
-		$data = $this->censor($request, 'member.store', $keys, $user);
+		$data = $this->censor($request, 'member.store', $keys, $user->toArray());
 		$user->update($data);
 		return $this->success();
 	}

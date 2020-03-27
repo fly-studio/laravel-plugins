@@ -89,7 +89,7 @@ class SocialiteController extends Controller
 		if (empty($socialite))
 			return $this->error('document.not_exists')->code(404);
 
-		$data = $this->censor($request, 'socialite::socialite.store', $this->keys, $socialite);
+		$data = $this->censor($request, 'socialite::socialite.store', $this->keys, $socialite->toArray());
 
 		$socialite = $this->repo->update($socialite, $data);
 		return $this->success();

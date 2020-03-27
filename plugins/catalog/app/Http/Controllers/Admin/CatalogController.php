@@ -85,7 +85,7 @@ class CatalogController extends Controller
 			return $this->error('document.not_exists')->code(404);
 
 		$keys = ['title', 'extra'];
-		$data = $this->censor($request, 'catalog::catalog.store', $keys, $catalog);
+		$data = $this->censor($request, 'catalog::catalog.store', $keys, $catalog->toArray());
 
 		$this->repo->update($catalog, $data);
 
