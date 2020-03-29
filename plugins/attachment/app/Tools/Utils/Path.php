@@ -2,6 +2,8 @@
 
 namespace Plugins\Attachment\App\Tools\Utils;
 
+use Plugins\Attachment\App\Exceptions\AttachmentException;
+
 use Plugins\Attachment\App\AttachmentFile;
 
 class Path {
@@ -74,7 +76,7 @@ class Path {
 		!empty(config('attachment.local.folder_grp')) && @chgrp($dir, config('attachment.local.folder_grp'));
 
 		if (!is_dir($dir) || !is_writable($dir))
-			throw new AttachmentException('write_no_permission');
+			throw AttachmentException::create('write_no_permission')->code(403);
 	}
 
 	public static function chLocalMod(string $path)

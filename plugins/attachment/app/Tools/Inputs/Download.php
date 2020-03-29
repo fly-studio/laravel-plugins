@@ -61,11 +61,11 @@ class Download extends Input {
 			$res = $client->get($this->url);
 
 		} catch (Throwable $e) {
-			throw new AttachmentException('download_no_response');
+			throw AttachmentException::create('download_no_response')->code(500);
 		}
 
 		if ($res->getStatusCode() != 200)
-			throw new AttachmentException('download_no_response');
+			throw AttachmentException::create('download_no_response')->code(500);
 
 		$download_filename = $res->getHeader('Content-Disposition');
 

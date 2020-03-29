@@ -54,7 +54,7 @@ class SaveManager extends Manager {
 		if (is_null($filename))
 		{
 			if (empty($this->filename))
-				throw new AttachmentException('lost_filename', 'error');
+				throw new AttachmentException('lost_filename');
 
 			return $this->filename;
 		}
@@ -72,7 +72,7 @@ class SaveManager extends Manager {
 
 		$this->ext = strtolower($ext);
 		if(!in_array($this->ext, config('attachment.ext', [])))
-			throw new AttachmentException('ext_deny');
+			throw AttachmentException::create('ext_deny')->code(403);
 
 		return $this;
 	}

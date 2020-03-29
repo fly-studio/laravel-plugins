@@ -28,7 +28,7 @@ class AttachmentController extends Controller {
 	public function index(Request $request)
 	{
 		if (!$request->offsetExists('id'))
-			throw (new AttachmentException('attachment::attachment.failure_notexists'))->code(404);
+			throw AttachmentException::create('attachment::attachment.failure_notexists')->code(404);
 		$route = 'attachment';
 		$parameters = ['id' => $request->query('id')];
 		if ($request->offsetExists('m'))
@@ -54,15 +54,15 @@ class AttachmentController extends Controller {
 	{
 		$_id = Helpers::decode($id);
 		if ($_id === false && $strict)
-			throw (new AttachmentException('attachment::attachment.failure_invalid_id'))->code(404);
+			throw AttachmentException::create('attachment::attachment.failure_invalid_id')->code(404);
 		else if ($_id !== false)
 			$id = $_id;
 
 		$attachment = Attachment::mix($id);
 		if (empty($attachment))
-			throw (new AttachmentException('attachment::attachment.failure_notexists'))->code(404);
+			throw AttachmentException::create('attachment::attachment.failure_notexists')->code(404);
 		else if(empty($attachment->afid))
-			throw (new AttachmentException('attachment::attachment.failure_file_notexists'))->code(404);
+			throw AttachmentException::create('attachment::attachment.failure_file_notexists')->code(404);
 		//获取远程文件
 		app(SyncManager::class)->recv($attachment->path);
 

@@ -24,10 +24,10 @@ class SSHEngine implements Sync {
 		$ssh = new SSHClient((array)config('attachment.remote.SSH'));
 
 		if (!$ssh->file_exists($remotePath))
-			throw new AttachmentException('remote_not_exists');
+			throw AttachmentException::create('remote_not_exists')->code(404);
 
 		if (!(@$ssh->receive_file($remotePath, $localPath)))
-			throw new AttachmentException('write_no_permission');
+			throw AttachmentException::create('write_no_permission')->code(403);
 
 		Path::chLocalMod($localPath);
 
@@ -46,7 +46,7 @@ class SSHEngine implements Sync {
 		$dir = dirname($remotePath);
 		$this->mkRemoteDir($ssh, $dir);
 		if (!(@$ssh->send_file($fromPath, $remotePath)))
-			throw new AttachmentException('remote_no_permission');
+			throw AttachmentException::create('remote_no_permission')->code(403);
 		$this->chRemoteMod($ssh, $remotePath);
 
 		return true;
@@ -58,7 +58,7 @@ class SSHEngine implements Sync {
 		!empty(config('attachment.remote.SSH.folder_own')) && @$ssh->chown($dir, config('attachment.remote.SSH.folder_own'));
 		!empty(config('attachment.remote.SSH.folder_grp')) && @$ssh->chgrp($dir, config('attachment.remote.SSH.folder_grp'));
 		if (!is_dir($dir) || !is_writable($dir))
-			throw new AttachmentException('remote_no_permission');
+			throw AttachmentException::create('remote_no_permission')->code(403);
 	}
 
 	private function chRemoteMod(SSHClient $ssh, $path)

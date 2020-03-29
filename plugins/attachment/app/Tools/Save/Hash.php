@@ -32,7 +32,7 @@ class Hash extends Save {
 		$attchmentFile = AttachmentFile::findByHashSize($this->hash, $this->size);
 
 		if (empty($attchmentFile))
-			throw new AttachmentException('hash_not_exists');
+			throw AttachmentException::create('hash_not_exists')->code(404);
 
 		return Attachment::create([
 			'afid' => $attchmentFile->getKey(),

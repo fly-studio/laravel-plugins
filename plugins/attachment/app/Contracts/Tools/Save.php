@@ -48,7 +48,7 @@ abstract class Save {
 		if ($result)
 			Path::chLocalMod($toPath);
 		else
-			throw new AttachmentException('write_no_permission');
+			throw AttachmentException::create('write_no_permission')->code(403);
 
 		return true;
 	}

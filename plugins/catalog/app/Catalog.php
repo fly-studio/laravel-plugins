@@ -25,6 +25,7 @@ class Catalog extends Model {
 	public static function searchCatalog($name = null, $subKeys = null)
 	{
 		$node = static::getTreeCache()->search($name, null, 'name');
+
 		return empty($node) ? null :
 			(is_null($subKeys) ? $node : $node[$subKeys]);
 	}
@@ -34,9 +35,15 @@ class Catalog extends Model {
 		foreach($data as $k => $v)
 		{
 			@list($name, $title, $extra) = explode('|', $k);
-			!empty($extra) && $extra = json_decode($extra, true);
-			$node = $parentNode->children()->create(compact('name', 'title', 'extra'));
-			!empty($v) && static::import($v, $node);
+
+			if (!empty($extra))
+				$extra = json_decode($extra, true);
+
+			$node = $parentNode->children()
+				->create(compact('name', 'title', 'extra'));
+
+			if (!empty($v))
+				static::import($v, $node);
 		}
 	}
 }

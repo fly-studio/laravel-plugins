@@ -198,7 +198,7 @@ class Helpers {
 	 * 图片：psd jpeg jpg png gif webp
 	 * 视频：mp4 mov mkv
 	 * 音频：mp3 acc ac3 amr
-	 * 如果来源和目标的格式一致，则会返回源附件
+	 * 如果来源和目标的格式一致，则会返回原文件路径
 	 *
 	 * @param  Attachment   $fromAttachment 待操作的附件
 	 * @param  string       $toExt          待转换的后缀，比如png、mp4、mp3
