@@ -2,6 +2,7 @@
 
 namespace Plugins\Attachment\App\Tools\Inputs;
 
+use Throwable;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
@@ -19,24 +20,28 @@ class Download extends Input {
 		set_time_limit(0);
 	}
 
-	public function download($url, $downloadName = null)
+	public function download(string $url, string $downloadName = null)
 	{
 		$this->url = $url;
 		if (empty($url) || !filter_var($url, FILTER_VALIDATE_URL))
 			throw new AttachmentException('url_invalid');
 
 		$filePath = tempnam(sys_get_temp_dir(),'download-');
+
 		try {
 			$originalName = $this->GuzzleHttp($filePath);
-			return $this->newSave()->file(new File($filePath, $downloadName ?? $originalName))->deleteFileAfterSaved();
-		} catch (\Exception $e) {
+
+			return $this->newSave()
+				->file(new File($filePath, $downloadName ?? $originalName))
+				->deleteFileAfterSaved();
+
+		} catch (Throwable $e) {
 			@unlink($filePath);
 			throw $e;
-			return false;
 		}
 	}
 
-	protected function GuzzleHttp($toPath)
+	protected function GuzzleHttp(string $toPath)
 	{
 		$stack = HandlerStack::create();
 		$stack->push(
@@ -47,26 +52,31 @@ class Download extends Input {
 		);
 
 		try {
-			 $client = new \GuzzleHttp\Client([
+			$client = new \GuzzleHttp\Client([
 				'handler' => $stack,
 				'verify' => false,
 				'sink' => $toPath,
 			]);
+
 			$res = $client->get($this->url);
-		} catch (\Exception $e) {
+
+		} catch (Throwable $e) {
 			throw new AttachmentException('download_no_response');
 		}
+
 		if ($res->getStatusCode() != 200)
 			throw new AttachmentException('download_no_response');
 
 		$download_filename = $res->getHeader('Content-Disposition');
 
 		$basename = mb_basename($this->url);//pathinfo($url,PATHINFO_BASENAME);
+
 		if (!empty($download_filename))
 		{
 			if (preg_match('/filename\s*=\s*(\S*)/i',  $download_filename, $matches))
 				$basename = mb_basename(trim($matches[1],'\'"'));
 		}
+
 		return $basename;
 	}
 }

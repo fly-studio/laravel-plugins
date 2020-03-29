@@ -6,12 +6,12 @@ use Addons\Core\File\Mimes;
 
 class Mime {
 
-	public static function byExt($ext)
+	public static function byExt(string $ext)
 	{
 		return Mimes::getInstance()->mime_by_ext($ext);
 	}
 
-	public static function byHeader($path)
+	public static function byHeader(string $path)
 	{
 		//
 	}

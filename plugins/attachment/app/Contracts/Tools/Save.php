@@ -21,7 +21,7 @@ abstract class Save {
 
 	abstract function save();
 
-	protected function saveToLocal($fromPath, $hashPath)
+	protected function saveToLocal(string $fromPath, string $hashPath)
 	{
 		if (config('attachment.local.enabled')) //本地存储打开
 			return $this->forceSaveToLocal($fromPath, $hashPath);
@@ -29,12 +29,13 @@ abstract class Save {
 		return true;
 	}
 
-	public function doSave($fromPath, $toPath)
+	public function doSave(string $fromPath, string $toPath)
 	{
 		$result = false;
 
 		$dir = dirname($toPath);
 		Path::mkLocalDir($dir);
+
 		if ($this->manager->deleteAfter())
 		{
 			if(is_uploaded_file($fromPath))
@@ -48,16 +49,18 @@ abstract class Save {
 			Path::chLocalMod($toPath);
 		else
 			throw new AttachmentException('write_no_permission');
+
 		return true;
 	}
 
-	protected function forceSaveToLocal($fromPath, $hashPath)
+	protected function forceSaveToLocal(string $fromPath, string $hashPath)
 	{
 		$localPath = Path::realPath($hashPath);
+
 		return $this->doSave($fromPath, $localPath);
 	}
 
-	protected function saveToSync($fromPath, $hashPath)
+	protected function saveToSync(string $fromPath, string $hashPath)
 	{
 		return app(SyncManager::class)->send($fromPath, $hashPath);
 	}

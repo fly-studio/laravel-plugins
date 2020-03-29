@@ -17,6 +17,7 @@ class Path {
 			$hashName = uniqid(date('YmdHis,') . rand(1000000, 9999999), ',') . config('attachment.saved_ext', '');
 			$file = AttachmentFile::findByBasename($hashName);
 		} while (!empty($file));
+
 		return $hashName;
 	}
 
@@ -71,6 +72,7 @@ class Path {
 		!is_dir($dir) && @mkdir($dir, config('attachment.local.folder_mod', 0777), true);
 		!empty(config('attachment.local.folder_own')) && @chown($dir, config('attachment.local.folder_own'));
 		!empty(config('attachment.local.folder_grp')) && @chgrp($dir, config('attachment.local.folder_grp'));
+
 		if (!is_dir($dir) || !is_writable($dir))
 			throw new AttachmentException('write_no_permission');
 	}

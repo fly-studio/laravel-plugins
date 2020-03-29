@@ -39,6 +39,11 @@ class InputManager extends Manager {
 		return new Inputs\Raw();
 	}
 
+	public function createLocalDriver()
+	{
+		return new Inputs\Local();
+	}
+
 	public function getDefaultDriver()
 	{
 		return $this->driver;

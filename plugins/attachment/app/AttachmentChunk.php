@@ -6,7 +6,8 @@ use App\Model;
 use Plugins\Attachment\App\Tools\Utils\Path;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AttachmentChunk extends Model{
+class AttachmentChunk extends Model {
+
 	use SoftDeletes;
 
 	protected $guarded = ['id'];

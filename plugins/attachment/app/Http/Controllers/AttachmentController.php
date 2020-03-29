@@ -5,9 +5,9 @@ namespace Plugins\Attachment\App\Http\Controllers;
 use Agent, Auth, Mimes;
 use Illuminate\Http\Request;
 use Addons\Core\Controllers\Controller;
-use Plugins\Attachment\App\Tools\Helpers;
 use Addons\Core\Http\Output\ResponseFactory;
 use Plugins\Attachment\App\Tools\SyncManager;
+use Plugins\Attachment\App\Tools\Utils\Helpers;
 use Plugins\Attachment\App\Exceptions\AttachmentException;
 
 use Plugins\Attachment\App\Attachment;

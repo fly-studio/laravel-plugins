@@ -37,12 +37,12 @@ return [
 		'folder_mod' => 0777, //文件夹的权限，一般情况下必须要777
 	],
 	'ext' => [
-		'mov','tp','ts','mkv','webm','rmvb','rm','asf','mpeg','mpg','avi',
-		'midi','mid','wmv','wma','wav','mp4','mp3','amr','ogg',
+		'mp4','m4v','mov','tp','ts','mkv','webm','rmvb','rm','asf','mpeg','mpg','avi',
+		'midi','mid','wmv','wma','wav','mp3','amr','ogg','weba', 'aac',
 		'f4v','flv','swf',
 		'bz2','gz','7z','rar','zip',
 		'pptx','ppt','xslx','xsl','csv','docx','doc','pdf',
-		'gif','png','bmp','jpeg','jpg','svg','webp'
+		'gif','png','bmp','jpeg','jpg','svg', 'svga','webp'
 	],
 	'maxsize' => 1024 * 1024 * 100,  //最大上传 100M
 	'write_cache' => 1024 * 512, //分块写入缓存 512K
@@ -68,14 +68,14 @@ return [
 			'gif',
 			'png',
 			'webp',
-			'svg',
+			'svg', 'svga'
 		],
 		'video' => [
 			'mov',
 			'tp','ts',
 			'mkv',
 			'webm',
-			'mp4','mpeg','mpg',
+			'mp4','m4v','mpeg','mpg',
 			'wmv',
 			'avi',
 			'rm','rmvb',
@@ -85,10 +85,11 @@ return [
 		],
 		'audio' => [
 			'mp3',
-			'ogg',
+			'ogg', 'aac',
 			'wma',
 			'amr',
 			'mid','midi',
+			'weba',
 		],
 		'archive' => [
 			'7z','001','002','003','004','005',
@@ -97,7 +98,7 @@ return [
 		],
 		'document' => [
 			'pptx','ppt',
-			'xslx','xsl','csv',
+			'xslx','xsl','csv', 'tsv',
 			'docx','doc',
 			'pdf',
 		],

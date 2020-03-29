@@ -10,8 +10,11 @@ use Plugins\Attachment\App\AttachmentFile;
 
 class Hash extends Input {
 
-	public function hash($hash, $size, $originalName)
+	public function hash(string $hash, int $size, ?string $originalName)
 	{
-		return $this->newSave('hash')->filename($originalName)->hash($hash)->size($size);
+		return $this->newSave('hash')
+			->filename($originalName)
+			->hash($hash)
+			->size($size);
 	}
 }

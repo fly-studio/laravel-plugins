@@ -4,7 +4,7 @@ namespace Plugins\Attachment\App\Tools\Utils;
 
 class Type {
 
-	public static function byExt($ext)
+	public static function byExt(string $ext)
 	{
 		static $types;
 		if (empty($types[$ext]))

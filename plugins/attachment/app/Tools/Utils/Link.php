@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\Attachment\App\Tools;
+namespace Plugins\Attachment\App\Tools\Utils;
 
 use Plugins\Attachment\App\Attachment;
 

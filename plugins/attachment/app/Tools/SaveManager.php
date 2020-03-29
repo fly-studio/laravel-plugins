@@ -9,6 +9,7 @@ use Plugins\Attachment\App\Tools\Utils\Path;
 use Plugins\Attachment\App\Exceptions\AttachmentException;
 
 use Plugins\Attachment\App\Attachment;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class SaveManager extends Manager {
 
@@ -48,7 +49,7 @@ class SaveManager extends Manager {
 		return $this;
 	}
 
-	public function filename($filename = null)
+	public function filename(string $filename = null)
 	{
 		if (is_null($filename))
 		{
@@ -64,7 +65,7 @@ class SaveManager extends Manager {
 		return $this;
 	}
 
-	public function ext($ext = null)
+	public function ext(string $ext = null)
 	{
 		if (is_null($ext))
 			return $this->ext ?: strtolower(pathinfo($this->filename(), PATHINFO_EXTENSION));
@@ -76,7 +77,7 @@ class SaveManager extends Manager {
 		return $this;
 	}
 
-	public function user($user = null)
+	public function user(Authenticatable $user = null)
 	{
 		if (is_null($user))
 			return $this->user;
@@ -94,7 +95,7 @@ class SaveManager extends Manager {
 		return $this;
 	}
 
-	public function chunks($chunksConfig = null)
+	public function chunks(array $chunksConfig = null)
 	{
 		if (is_null($chunksConfig))
 			return $this->chunks;
@@ -118,6 +119,7 @@ class SaveManager extends Manager {
 	{
 		$attachment = null;
 		$chunks = $this->chunks();
+
 		if (!is_null($this->driver))
 			$attachment = $this->driver($this->driver)->save();
 		elseif (empty($chunks) || empty($chunks['uuid']) || empty($chunks['count']) || $chunks['count'] <= 1)

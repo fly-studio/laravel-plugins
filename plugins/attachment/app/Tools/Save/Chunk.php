@@ -39,7 +39,7 @@ class Chunk extends Save {
 			'uid' => $user instanceof Model ? $user->getKey() : $user,
 		]);
 
-		$hashName = Path::generateHashName(); //此函数并未检查attachment_chunks表中的basesize 是否有重复
+		$hashName = Path::generateHashName(); //此函数并未检查attachment_chunks表中的base_name是否有重复
 		$hashPath = Path::hashNameToPath($hashName);
 		$this->forceSaveToLocal($file->getPathName(), $hashPath);
 
@@ -55,12 +55,12 @@ class Chunk extends Save {
 		]);
 		DB::commit();
 
-		$this->mergeChunk($attachment->getKey());
+		$this->tryMergeChunk($attachment->getKey());
 
 		return $attachment;
 	}
 
-	private function mergeChunk($aid)
+	private function tryMergeChunk(int $aid)
 	{
 		DB::beginTransaction();
 		$attachment = Attachment::where('id', $aid)->lockForUpdate()->first();
@@ -72,24 +72,30 @@ class Chunk extends Save {
 		}
 
 		//合并文件
-		$mergedPath = tempnam(sys_get_temp_dir(), 'attachment-'.$attachment->getKey());
+		$mergedPath = tempnam(sys_get_temp_dir(), 'attachment-'.$attachment->getKey()); // auto delete if deleteAfter
 		$fw = fopen($mergedPath, 'wb');
-		foreach ($attachment->chunks()->orderBy('index', 'ASC')->get() as $chunk) //严格模式下$attachment->chunks()->count()不能有orderBy，所以将orderBy放在这里
+
+		foreach ($attachment->chunks()->orderBy('index', 'asc')->get() as $chunk) //严格模式下$attachment->chunks()->count()不能有orderBy，所以将orderBy放在这里
 		{
 			$path = $chunk->full_path;
+
 			if (!file_exists($path) || !is_readable($path)) {
 				DB::rollback();
 				throw new AttachmentException('lost_chunk');
 			}
+
 			$fr = fopen($path, 'rb');
 			while(!feof($fr))
 			{
 				$stream = fread($fr, config('attachment.write_cache'));
-				fwrite($fw, $stream);unset($stream);
+				fwrite($fw, $stream);
+				unset($stream);
 			}
+
 			fclose($fr);
 			@unlink($path); //读取完毕就删除，没有保留的必要
 		}
+
 		fclose($fw);
 
 		$attchamentFile = $this->saveToAttachmentFile(new File($mergedPath, mb_basename($mergedPath)));

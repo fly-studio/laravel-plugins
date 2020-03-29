@@ -5,11 +5,11 @@ namespace Plugins\Attachment\App;
 use DB, Cache;
 use App\Model;
 use Illuminate\Support\Str;
-use Plugins\Attachment\App\Tools\Helpers;
+use Plugins\Attachment\App\Tools\Utils\Link;
 use Plugins\Attachment\App\Tools\Utils\Path;
 use Plugins\Attachment\App\Tools\Utils\Type;
 use Plugins\Attachment\App\Tools\Utils\Mime;
-use Illuminate\Database\Eloquent\Model as BaseModel;
+use Plugins\Attachment\App\Tools\Utils\Helpers;
 
 use Plugins\Attachment\App\AttachmentFile;
 use Plugins\Attachment\App\AttachmentChunk;
@@ -17,7 +17,21 @@ use Plugins\Attachment\App\AttachmentChunk;
 class Attachment extends Model {
 
 	protected $guarded = ['id'];
-	protected $hidden = ['full_path', 'real_path', 'relative_path', 'afid', 'basename', 'path', 'cdn_at', 'chunk_count', 'created_at', 'deleted_at', 'updated_at', 'uuid', 'extra'];
+	protected $hidden = [
+		'full_path',
+		'real_path',
+		'relative_path',
+		'afid',
+		'basename',
+		'path',
+		'cdn_at',
+		'chunk_count',
+		'created_at',
+		'deleted_at',
+		'updated_at',
+		'uuid',
+		'extra'
+	];
 	protected $casts = [
 		'extra' => 'array',
 	];
@@ -96,7 +110,7 @@ class Attachment extends Model {
 	 */
 	public function getSymlinkUrlAttribute()
 	{
-		$path = $this->create_symlink(null);
+		$path = Link::createSymlink($this);
 		if (empty($path))
 			return false;
 
@@ -113,15 +127,17 @@ class Attachment extends Model {
 		return $this->hasMany(get_namespace($this).'\\AttachmentChunk', 'aid', 'id');
 	}
 
-	public static function mix($id)
+	public static function mix(?int $id)
 	{
 		$attachment = static::findByCache($id);
+
 		if (!empty($attachment) && !empty($attachment->afid))
 		{
 			$result = $attachment->getAttributes() + AttachmentFile::findByCache($attachment->afid)->getAttributes();
 			//Model更新
 			$attachment->setRawAttributes($result, true);
 		}
+
 		return $attachment;
 	}
 

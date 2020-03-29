@@ -14,7 +14,7 @@ class AttachmentException extends OutputResponseException
 
 		if (strpos($message_name, '::') === false && strpos($message_name, '.') === false)
 		{
-			$message = 'attachment.'.$message_name.'.content';
+			$message = 'attachment.'.$message_name;
 
 			if (Lang::has($message))
 				$message_name = $message;

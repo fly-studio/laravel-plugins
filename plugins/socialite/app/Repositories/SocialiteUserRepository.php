@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\AbstractUser;
 use Addons\Core\Contracts\Repository;
 use Illuminate\Database\Eloquent\Model;
-use Plugins\Attachment\App\Tools\Helpers;
+use Plugins\Attachment\App\Tools\Utils\Helpers;
 
 use App\User;
 use App\Role;

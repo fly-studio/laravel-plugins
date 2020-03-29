@@ -1,7 +1,7 @@
 <?php
 namespace Plugins\Attachment\App\Models;
 
-use Plugins\Attachment\App\Tools\Helpers;
+use Plugins\Attachment\App\Tools\Utils\Helpers;
 
 trait AttachmentCastTrait {
 

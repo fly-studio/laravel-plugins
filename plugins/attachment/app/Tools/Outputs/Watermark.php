@@ -17,6 +17,7 @@ class Watermark extends Output {
 		$full_path = $attachment->full_path;
 		$watermark_path = $watermark->full_path;
 		$size = getimagesize($full_path);
+
 		if (!empty($width) || !empty($height)) {
 			$wh = aspect_ratio($size[0], $size[1], $width, $height);
 			extract($wh);
@@ -44,6 +45,7 @@ class Watermark extends Output {
 		$content_length = null;//$attachment->size;
 		$last_modified = $attachment->created_at;
 		$etag = $attachment->hash; //为什么可以输出源文件的hash，因为etag是区分网址的
+
 		return response()->preview($new_path, [], compact('mime_type', 'etag', 'last_modified', 'content_length', 'cached'));
 	}
 }

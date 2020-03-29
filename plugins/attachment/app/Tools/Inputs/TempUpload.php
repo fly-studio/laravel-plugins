@@ -2,6 +2,7 @@
 
 namespace Plugins\Attachment\App\Tools\Inputs;
 
+use Throwable;
 use Illuminate\Http\Request;
 use Plugins\Attachment\App\Tools\File;
 use Plugins\Attachment\App\Contracts\Tools\Input;
@@ -19,14 +20,19 @@ class TempUpload extends Input {
 	}
 
 
-	public function tempUpload($field_name)
+	public function tempUpload(string $field_name)
 	{
 		$file = $this->request->file($field_name);
+
 		if (!$this->request->hasFile($field_name) || !$file->isValid())
 			throw new AttachmentException($file->getError());
+
 		try {
-			return $this->newSave('temp')->file(new File($file->getPathname(), $file->getClientOriginalName()))->deleteFileAfterSaved();
-		} catch (\Exception $e) {
+			return $this->newSave('temp')
+				->file(new File($file->getPathname(), $file->getClientOriginalName()))
+				->deleteFileAfterSaved();
+
+		} catch (Throwable $e) {
 			@unlink($file->getPathname());
 			throw $e;
 		}

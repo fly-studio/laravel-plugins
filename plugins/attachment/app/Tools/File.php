@@ -8,7 +8,7 @@ class File extends UploadedFile {
 
 	private $hash = null;
 
-	public function hash($hash = null)
+	public function hash(string $hash = null)
 	{
 		if (is_null($hash))
 			return $this->hash ?: md5_file($this->getPathName());

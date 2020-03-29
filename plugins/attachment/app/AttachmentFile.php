@@ -5,7 +5,8 @@ namespace Plugins\Attachment\App;
 use App\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AttachmentFile extends Model{
+class AttachmentFile extends Model {
+
 	use SoftDeletes;
 
 	protected $guarded = ['id'];
@@ -47,6 +48,5 @@ class AttachmentFile extends Model{
 	{
 		return Path::relativePath($this->path);
 	}
-
 
 }
